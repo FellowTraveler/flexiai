@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='flexiai',
-    version='0.8.40',
+    version='0.8.41',
     packages=find_packages(include=['flexiai', 'flexiai.*']),
     include_package_data=True,
     package_data={
