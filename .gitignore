@@ -77,8 +77,3 @@ build
 dist
 flexiai.egg-info
 
-# RAG
-user_flexiai_rag/__init__.py
-user_flexiai_rag/user_function_mapping.py
-user_flexiai_rag/user_helpers.py
-user_flexiai_rag/user_task_manager.py
