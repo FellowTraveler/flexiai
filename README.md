@@ -474,7 +474,7 @@ if __name__ == "__main__":
     main()
 ```
 
-For detailed usage examples and advanced functionalities, refer to the [Usage Guide](docs/usage.md).
+For detailed usage examples and advanced functionalities, refer to the [Usage Guide](flexiai/docs/usage.md).
 
 ## Documentation
 
