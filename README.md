@@ -427,9 +427,7 @@ def main():
     flexiai = FlexiAI()
 
     # Use the given assistant ID
-    assistant_id = 'asst_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'  # Replace with the actual
-
- assistant ID
+    assistant_id = 'asst_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'  # Replace with the actual assistant ID
     
     # Create a new thread
     try:
