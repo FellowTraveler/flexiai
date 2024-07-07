@@ -5,7 +5,6 @@
 [![PyPI version](https://badge.fury.io/py/flexiai.svg)](https://badge.fury.io/py/flexiai)
 [![Python Versions](https://img.shields.io/pypi/pyversions/flexiai.svg)](https://pypi.org/project/flexiai/)
 [![Downloads](https://pepy.tech/badge/flexiai)](https://pepy.tech/project/flexiai)
-[![Coverage Status](https://coveralls.io/repos/github/SavinRazvan/flexiai/badge.svg?branch=main)](https://coveralls.io/github/SavinRazvan/flexiai?branch=main)
 [![Dependencies](https://img.shields.io/librariesio/github/SavinRazvan/flexiai)](https://libraries.io/github/SavinRazvan/flexiai)
 [![GitHub issues](https://img.shields.io/github/issues/SavinRazvan/flexiai.svg)](https://github.com/SavinRazvan/flexiai/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/SavinRazvan/flexiai.svg)](https://github.com/SavinRazvan/flexiai/pulls)
