@@ -48,7 +48,7 @@ source env/bin/activate
 
 #### Using Conda
 
-```bash
+```powershell
 conda create --name flexiai_env python=3.10
 conda activate flexiai_env
 ```
@@ -57,7 +57,7 @@ conda activate flexiai_env
 
 To install the FlexiAI framework using `pip`, run:
 
-```bash
+```powershell
 pip install flexiai
 ```
 
@@ -65,7 +65,7 @@ pip install flexiai
 
 After installing, copy the `post_install.py` file to your project root directory and run it manually to set up additional necessary directories and files.
 
-```bash
+```powershell
 python post_install.py
 ```
 
@@ -363,7 +363,7 @@ Here's an overview of the created structure:
 
 #### Run the `post_install.py` file to create your starter folders and files.
 
-```bash
+```powershell
 python post_install.py
 ```
 
@@ -371,7 +371,7 @@ python post_install.py
 
 Install the required dependencies using `pip`.
 
-```bash
+```powershell
 pip install -r requirements.txt
 ```
 
