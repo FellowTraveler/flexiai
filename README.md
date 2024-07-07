@@ -44,7 +44,7 @@ FlexiAI is a versatile and powerful AI framework designed to simplify the use of
 
 ```powershell
 python -m venv env
-env\Scripts\Activate
+source env/bin/activate
 ```
 
 #### Using Conda
