@@ -1,15 +1,11 @@
 # FlexiAI
 
+[![CI](https://github.com/SavinRazvan/flexiai/actions/workflows/workflow.yml/badge.svg)](https://github.com/SavinRazvan/flexiai/actions/workflows/workflow.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 FlexiAI is a versatile and powerful AI framework designed to simplify the use of OpenAI and Azure OpenAI APIs. By leveraging advanced Retrieval-Augmented Generation (RAG) capabilities, FlexiAI enables developers to build sophisticated, custom AI assistants efficiently and effectively.
 
 ![FlexiAI Framework](assets/flexiai_framework_01.png)
-
-## Badges
-
-[![Build Status](https://img.shields.io/github/actions/workflow/status/SavinRazvan/flexiai/build.yml)](https://github.com/SavinRazvan/flexiai/actions)
-[![License](https://img.shields.io/github/license/SavinRazvan/flexiai)](LICENSE.txt)
-[![Contributors](https://img.shields.io/github/contributors/SavinRazvan/flexiai)](https://github.com/SavinRazvan/flexiai/graphs/contributors)
-[![Issues](https://img.shields.io/github/issues/SavinRazvan/flexiai)](https://github.com/SavinRazvan/flexiai/issues)
 
 ## Table of Contents
 
