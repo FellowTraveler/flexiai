@@ -71,9 +71,34 @@ docs/_build/
 .DS_Store
 Thumbs.db
 
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Temporary Files
+*~
+*.bak
+*.swp
+
+# Editor and IDE Specific
+.idea/
+.vscode/
+.vscode/*
+*.sublime-project
+*.sublime-workspace
+
+# Environment Configuration
+.envrc
+
 # Other
 verify_install.py
 build
 dist
 flexiai.egg-info
-
