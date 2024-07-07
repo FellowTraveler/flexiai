@@ -46,6 +46,6 @@ All contributions will go through a code review process. Be prepared to make cha
 
 ## Community Guidelines
 - Be respectful and considerate of others.
-- Follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+- Follow the [Code of Conduct](https://github.com/SavinRazvan/flexiai/blob/main/CODE_OF_CONDUCT.md).
 
 Thank you for contributing to FlexiAI!

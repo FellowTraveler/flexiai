@@ -68,17 +68,18 @@ python post_install.py
 
 For more detailed instructions and guides, refer to the following documentation:
 
-- [Installation Guide](docs/setup.md): Step-by-step installation instructions.
-- [Usage Guide](docs/usage.md): Comprehensive usage examples and advanced functionalities.
-- [API Reference](docs/api_reference.md): Detailed API reference for FlexiAI.
+- [Installation Guide](flexiai/docs/setup.md): Step-by-step installation instructions.
+- [Usage Guide](flexiai/docs/usage.md): Comprehensive usage examples and advanced functionalities.
+- [API Reference](flexiai/docs/api_reference.md): Detailed API reference for FlexiAI.
 
 ## Contributing
 
-We welcome contributions from the community. If you want to contribute to FlexiAI, please read our [Contributing Guide](docs/contributing.md) to get started.
+We welcome contributions from the community. If you want to contribute to FlexiAI, please read our [Contributing Guide](flexiai/docs/contributing.md) to get started.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE.txt) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/SavinRazvan/flexiai/blob/main/LICENSE.txt) file for details.
+
 
 ## Contact
 

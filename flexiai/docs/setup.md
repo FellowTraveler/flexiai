@@ -323,15 +323,15 @@ Before using FlexiAI, set up your environment variables. The `post_install.py` s
 # ========================== #
 
 # Your OpenAI API key
-OPENAI_API_KEY='your_openai_api_key_here'
+OPENAI_API_KEY=your_openai_api_key_here
 # Your Azure OpenAI API key
-AZURE_OPENAI_API_KEY='your_azure_openai_api_key_here'
+AZURE_OPENAI_API_KEY=your_azure_openai_api_key_here
 # Your Azure OpenAI endpoint
-AZURE_OPENAI_ENDPOINT='your_azure_openai_endpoint_here'
+AZURE_OPENAI_ENDPOINT=your_azure_openai_endpoint_here
 # Azure OpenAI API version
-AZURE_OPENAI_API_VERSION='2024-05-01-preview'
+AZURE_OPENAI_API_VERSION=2024-05-01-preview
 # Credential type (either 'openai' or 'azure')
-CREDENTIAL_TYPE='openai'
+CREDENTIAL_TYPE=openai
 ```
 
 ## Directory Structure
