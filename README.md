@@ -396,7 +396,7 @@ AZURE_OPENAI_API_VERSION=2024-05-01-preview
 CREDENTIAL_TYPE=openai
 ```
 
-For more detailed setup instructions, including using virtual environments and troubleshooting, refer to the [Setup Guide](docs/setup.md).
+For more detailed setup instructions, including using virtual environments and troubleshooting, refer to the [Setup Guide](flexiai/docs/setup.md).
 
 ## Usage
 
@@ -480,14 +480,14 @@ For detailed usage examples and advanced functionalities, refer to the [Usage Gu
 
 The FlexiAI framework comes with comprehensive documentation to help you get started and make the most out of its capabilities:
 
-- [API Reference](docs/api_reference.md)
-- [Setup Guide](docs/setup.md)
-- [Usage Guide](docs/usage.md)
-- [Contributing Guide](docs/contributing.md)
+- [API Reference](flexiai/docs/api_reference.md)
+- [Setup Guide](flexiai/docs/setup.md)
+- [Usage Guide](flexiai/docs/usage.md)
+- [Contributing Guide](flexiai/docs/contributing.md)
 
 ## Contributing
 
-We welcome contributions from the community. If you want to contribute to FlexiAI, please read our [Contributing Guide](docs/contributing.md) to get started.
+We welcome contributions from the community. If you want to contribute to FlexiAI, please read our [Contributing Guide](flexiai/docs/contributing.md) to get started.
 
 ## License
 
