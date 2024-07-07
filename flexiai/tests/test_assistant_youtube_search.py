@@ -1,7 +1,7 @@
 # tests/test_assistant_youtube_search.py
 import pytest
 import subprocess
-from flexiai.user_flexiai_rag.user_task_manager import UserTaskManager
+from user_flexiai_rag.user_task_manager import UserTaskManager
 
 @pytest.fixture
 def task_manager():
