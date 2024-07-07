@@ -4,7 +4,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyPI version](https://badge.fury.io/py/flexiai.svg)](https://badge.fury.io/py/flexiai)
 [![Python Versions](https://img.shields.io/pypi/pyversions/flexiai.svg)](https://pypi.org/project/flexiai/)
-[![Downloads](https://pepy.tech/badge/flexiai)](https://pepy.tech/project/flexiai)
 [![Dependencies](https://img.shields.io/librariesio/github/SavinRazvan/flexiai)](https://libraries.io/github/SavinRazvan/flexiai)
 [![GitHub issues](https://img.shields.io/github/issues/SavinRazvan/flexiai.svg)](https://github.com/SavinRazvan/flexiai/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/SavinRazvan/flexiai.svg)](https://github.com/SavinRazvan/flexiai/pulls)
