@@ -76,6 +76,7 @@ python post_install.py
 <summary>⚠️ Attention! Click to expand and copy the code for `post_install.py` ⚠️</summary>
 
 ```python
+# post_install.py
 import os
 
 def create_logs_folder(project_root):
@@ -156,7 +157,12 @@ def create_user_flexiai_rag_folder(project_root):
             "                f\"https://www.youtube.com/results?search_query={query_encoded}\"\n"
             "            )\n"
             "            self.logger.info(f\"Opening YouTube search for query: {query}\")\n\n"
-            "            subprocess.run(['cmd.exe', '/c', 'start', '', youtube_search_url], check=True)\n\n"
+            "            # subprocess.run(['cmd.exe', '/c', 'start', '', youtube_search_url], check=True)\n\n"   
+            "            # Use PowerShell to open the URL\n"
+            "            subprocess.run(\n"
+            "                ['powershell.exe', '-Command', 'Start-Process', youtube_search_url],\n"
+            "                check=True\n"
+            "            )\n"
             "            self.logger.info(\"YouTube search page opened successfully.\")\n"
             "            return {\n"
             "                \"status\": True,\n"
@@ -330,6 +336,7 @@ if __name__ == '__main__':
         create_requirements_file(project_root)
     except Exception as e:
         print(f"Post-installation step failed: {e}")
+        
 ```
 
 </details>
