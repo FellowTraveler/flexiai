@@ -121,15 +121,15 @@ def create_env_file(project_root):
                 "# Example .env file template #\n"
                 "# ========================== #\n\n"
                 "# Your OpenAI API key\n"
-                "OPENAI_API_KEY='your_openai_api_key_here'\n"
+                "OPENAI_API_KEY=your_openai_api_key_here\n"
                 "# Your Azure OpenAI API key\n"
-                "AZURE_OPENAI_API_KEY='your_azure_openai_api_key_here'\n"
+                "AZURE_OPENAI_API_KEY=your_azure_openai_api_key_here\n"
                 "# Your Azure OpenAI endpoint\n"
-                "AZURE_OPENAI_ENDPOINT='your_azure_openai_endpoint_here'\n"
+                "AZURE_OPENAI_ENDPOINT=your_azure_openai_endpoint_here\n"
                 "# Azure OpenAI API version\n"
-                "AZURE_OPENAI_API_VERSION='2024-05-01-preview'\n"
+                "AZURE_OPENAI_API_VERSION=2024-05-01-preview\n"
                 "# Credential type (either 'openai' or 'azure')\n"
-                "CREDENTIAL_TYPE='openai'\n"
+                "CREDENTIAL_TYPE=openai\n"
             )
         print(f"Created file: {env_file}")
 
@@ -253,3 +253,4 @@ if __name__ == '__main__':
         create_requirements_file(project_root)
     except Exception as e:
         print(f"Post-installation step failed: {e}")
+        

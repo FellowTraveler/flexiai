@@ -22,6 +22,10 @@ FlexiAI is a flexible AI framework for managing interactions with OpenAI and Azu
   - [determine_action_type](#determine_action_type)
   - [execute_personal_function_with_arguments](#execute_personal_function_with_arguments)
   - [call_assistant_with_arguments](#call_assistant_with_arguments)
+- [User-Defined Functions](#user-defined-functions)
+  - [register_user_functions](#register_user_functions)
+  - [get_function_mappings](#get_function_mappings)
+  - [Example User-Defined Functions](#example-user-defined-functions)
 
 ## FlexiAI Class
 
@@ -313,16 +317,16 @@ Determines the type of action required based on the function's name.
 
 ### execute_personal_function_with_arguments
 
-Dynamically executes a function from the function_mapping based on the provided function name and supplied arguments.
+Dynam
+
+ically executes a function from the function_mapping based on the provided function name and supplied arguments.
 
 #### Parameters
 - `function_name` (str): The name of the function to execute.
 - `**arguments`: The arguments to pass to the function.
 
 #### Returns
--
-
- `tuple`: A tuple containing the status (bool), message (str), and result (any).
+- `tuple`: A tuple containing the status (bool), message (str), and result (any).
 
 #### Raises
 - `Exception`: If the function execution fails.
@@ -352,4 +356,123 @@ Routes the function call to the appropriate assistant or internal function.
 #### Example Usage
 ```python
 # This method is used internally by FlexiAI and is not typically called directly.
+```
+
+---
+
+## User-Defined Functions
+
+FlexiAI supports the integration of user-defined functions to extend its capabilities. This section provides an overview of how user functions are registered and utilized within the framework.
+
+### register_user_functions
+
+Registers user-defined functions by merging them with existing function mappings.
+
+#### Parameters
+- `personal_function_mapping` (dict): The personal function mappings to be updated.
+- `assistant_function_mapping` (dict): The assistant function mappings to be updated.
+
+#### Returns
+- `tuple`: A tuple containing the updated personal function mappings and assistant function mappings.
+
+#### Example Usage
+```python
+from flexiai.assistant.function_mapping import register_user_functions
+
+# Register user functions
+personal_function_mapping = {}
+assistant_function_mapping = {}
+personal_function_mapping, assistant_function_mapping = register_user_functions(personal_function_mapping, assistant_function_mapping)
+```
+
+---
+
+### get_function_mappings
+
+Gets the function mappings for personal and assistant functions, including both internal and user-defined functions.
+
+#### Returns
+- `tuple`: A tuple containing the personal function mappings and assistant function mappings.
+
+#### Example Usage
+```python
+from flexiai.assistant.function_mapping import get_function_mappings
+
+# Get function mappings
+personal_function_mapping, assistant_function_mapping = get_function_mappings()
+```
+
+---
+
+### Example User-Defined Functions
+
+Here are some examples of user-defined functions that can be registered with FlexiAI.
+
+```python
+# user_flexiai_rag/user_task_manager.py
+import logging
+from flexiai.config.logging_config import setup_logging
+import subprocess
+import urllib.parse
+
+# Set up logging using your custom configuration
+setup_logging(root_level=logging.INFO, file_level=logging.DEBUG, console_level=logging.ERROR)
+
+class UserTaskManager:
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+
+    def search_youtube(self, query):
+        if not query:
+            return {
+                "status": False,
+                "message": "Query cannot be empty.",
+                "result": None
+            }
+
+        try:
+            query_normalized = query.replace(" ", "+")
+            query_encoded = urllib.parse.quote(query_normalized)
+            youtube_search_url = f"https://www.youtube.com/results?search_query={query_encoded}"
+            self.logger.info(f"Opening YouTube search for query: {query}")
+
+            subprocess.run(['powershell.exe', '-Command', 'Start-Process', youtube_search_url], check=True)
+
+            self.logger.info("YouTube search page opened successfully.")
+            return {
+                "status": True,
+                "message": "YouTube search page opened successfully.",
+                "result": youtube_search_url
+            }
+        except subprocess.CalledProcessError as e:
+            error_message = f"Subprocess error: {str(e)}"
+            self.logger.error(error_message, exc_info=True)
+            return {
+                "status": False,
+                "message": error_message,
+                "result": None
+            }
+        except Exception as e:
+            error_message = f"Failed to open YouTube search for query: {query}. Error: {str(e)}"
+            self.logger.error(error_message, exc_info=True)
+            return {
+                "status": False,
+                "message": error_message,
+                "result": None
+            }
+
+# user_flexiai_rag/user_function_mapping.py
+from user_flexiai_rag.user_task_manager import UserTaskManager
+
+def register_user_tasks():
+    task_manager = UserTaskManager()
+
+    personal_function_mapping = {
+        'search_youtube': task_manager.search_youtube,
+    }
+
+    assistant_function_mapping = {
+    }
+
+    return personal_function_mapping, assistant_function_mapping
 ```

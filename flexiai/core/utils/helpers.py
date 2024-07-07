@@ -37,3 +37,35 @@ def print_run_details(run):
     except TypeError as e:
         logging.error(f"Error serializing object: {e}")
         print(run)
+        
+
+def print_messages_as_json(messages):
+    """
+    Print messages returned by the retrieve_message_object function in JSON format.
+
+    Args:
+        messages (list): List of message objects returned by retrieve_message_object.
+    """
+    def content_block_to_dict(content_block):
+        """
+        Convert a TextContentBlock object to a dictionary.
+        """
+        content_block_dict = content_block.__dict__.copy()
+        if hasattr(content_block, 'text') and isinstance(content_block.text, object):
+            content_block_dict['text'] = content_block.text.__dict__
+        return content_block_dict
+
+    def message_to_dict(message):
+        """
+        Convert a message object to a dictionary, including nested TextContentBlock objects.
+        """
+        message_dict = message.__dict__.copy()
+        if 'content' in message_dict:
+            message_dict['content'] = [content_block_to_dict(content) for content in message_dict['content']]
+        return message_dict
+
+    # Convert each message object to a dictionary
+    messages_dict = [message_to_dict(message) for message in messages]
+    # Print the messages in JSON format
+    print(json.dumps(messages_dict, indent=4))
+
