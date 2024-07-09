@@ -3,7 +3,7 @@ import logging
 from flexiai.config.logging_config import setup_logging
 
 # Set up logging using your custom configuration
-setup_logging(root_level=logging.DEBUG, file_level=logging.DEBUG, console_level=logging.ERROR)
+setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_level=logging.ERROR)
 
 
 class TaskManager:
