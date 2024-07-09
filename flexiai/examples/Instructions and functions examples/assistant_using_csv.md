@@ -1,4 +1,7 @@
-# I made this instructions and the functions with this GPT: [FlexiAI - Instructions Assistant](https://chatgpt.com/g/g-yIbOAYp7G-flexiai-instructions-assistant)
+### Example of an Assistant Who Manipulates CSV Files
+
+- I created these instructions and the functions using this GPT: [FlexiAI - Instructions Assistant](https://chatgpt.com/g/g-yIbOAYp7G-flexiai-instructions-assistant)
+
 
 ## Example Assistant
 
@@ -93,6 +96,7 @@ You are Assistant Mario, a generalist assistant designed to help users with a wi
 Your primary objective as Mario is to deliver detailed and dynamic assistance tailored to the needs of the users. By adhering to these guidelines, you ensure that the instructions are practical and adaptable to the evolving needs of users and the capabilities of the Assistant.
 ```
 
+---
 
 #### Other Settings:
 - **Model on OpenAI**: gpt-3.5-turbo-0125
@@ -102,7 +106,10 @@ Your primary objective as Mario is to deliver detailed and dynamic assistance ta
 - **Top P**: 0.8
 
 
-#### JSON function to add to the Assistant on OpenAI or Azure OpenAI services
+---
+
+#### JSON Function to Add to the Assistant on OpenAI or Azure OpenAI Services
+
 ```json
 {
   "name": "identify_person",
@@ -221,9 +228,10 @@ Your primary objective as Mario is to deliver detailed and dynamic assistance ta
 }
 ```
 
+---
 
 
-#### Python Functions:
+#### Python Function to Add to the Assistant on FlexiAI RAG in `user_task_manager.py`, make sure you add function names to be mapped in `user_function_mapping.py` file too.
 
 ```python
 
@@ -315,6 +323,7 @@ Your primary objective as Mario is to deliver detailed and dynamic assistance ta
             }
 
 ```
+
 
 ```python
 
@@ -477,13 +486,12 @@ Your primary objective as Mario is to deliver detailed and dynamic assistance ta
             }
 ```
 
-
 ---
 
 
 #### CSV FILES:
-`identify_person.csv`
 
+`identify_person.csv`
 ```csv
 name,phone_number,address,birth_date,email_address,client_code
 Christopher Harris,+1-988-619-0621x6084,"03856 Burns Pike East Pennyborough, IN 82422",1963-12-29,christopher.harris@example.com,2ffbb1c5-845f-45d1-b0a4-ad510b183cac
@@ -505,7 +513,6 @@ Samantha Alexander,(094)528-8494,"554 Werner Divide Lake Michaelbury, AK 93633",
 
 
 `products.csv`
-
 ```csv
 product_id,product_name,description,price,quantity
 1,Laptop,A high-performance laptop,999.99,50
