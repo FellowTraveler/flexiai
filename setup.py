@@ -11,7 +11,7 @@ def read_readme():
 
 setup(
     name='flexiai',
-    version='0.8.44',
+    version='0.8.45',
     packages=find_packages(include=['flexiai', 'flexiai.*']),
     include_package_data=True,
     package_data={
@@ -51,7 +51,7 @@ setup(
     url='https://github.com/SavinRazvan/flexiai',
     classifiers=[
         'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: MIT License',
+        'License :: MIT License',
         'Operating System :: OS Independent',
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
