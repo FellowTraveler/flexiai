@@ -6,8 +6,6 @@
 [![Python Versions](https://img.shields.io/pypi/pyversions/flexiai.svg)](https://pypi.org/project/flexiai/)
 [![Dependencies](https://img.shields.io/librariesio/github/SavinRazvan/flexiai)](https://libraries.io/github/SavinRazvan/flexiai)
 [![Downloads](https://static.pepy.tech/badge/flexiai)](https://pepy.tech/project/flexiai)
-[![GitHub issues](https://img.shields.io/github/issues/SavinRazvan/flexiai.svg)](https://github.com/SavinRazvan/flexiai/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/SavinRazvan/flexiai.svg)](https://github.com/SavinRazvan/flexiai/pulls)
 
 
 FlexiAI is a versatile and powerful AI framework designed to simplify the use of OpenAI and Azure OpenAI APIs. By leveraging advanced Retrieval-Augmented Generation (RAG) capabilities, FlexiAI enables developers to build sophisticated, custom AI assistants efficiently and effectively.
@@ -66,11 +64,13 @@ pip install flexiai
 
 After installing, copy the `post_install.py` file to your project root directory and run it manually to set up additional necessary directories and files.
 
+[Download post_install.py](https://github.com/SavinRazvan/flexiai/raw/main/post_install.py)
+
 
 #### Or create a new file `post_install.py` in the root directory of your project.
 
 <details>
-<summary>⚠️ Attention! Click to expand and copy the code for `post_install.py` ⚠️</summary>
+<summary> ⬇️ Expand to see the code for `post_install.py` ⬇️ </summary>
 
 ```python
 # post_install.py
