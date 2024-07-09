@@ -12,6 +12,8 @@ def register_user_tasks():
 
     personal_function_mapping = {
         'search_youtube': task_manager.search_youtube,
+        'identify_person': task_manager.identify_person,
+        'manage_product': task_manager.manage_product
         # Add other functions that call assistant personal functions
     }
 

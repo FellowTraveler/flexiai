@@ -3,6 +3,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
+
 def setup_logging(root_level=logging.DEBUG, file_level=logging.DEBUG, console_level=logging.ERROR):
     """
     Configures the logging settings for the application with user-defined log levels.
@@ -88,5 +89,3 @@ def setup_logging(root_level=logging.DEBUG, file_level=logging.DEBUG, console_le
             logger.addHandler(console_handler)
         except Exception as e:
             print(f"Error setting up logging: {e}")
-
-setup_logging(root_level=logging.DEBUG, file_level=logging.DEBUG, console_level=logging.ERROR)

@@ -3,6 +3,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def get_function_mappings():
     """
     Get the function mappings for personal and assistant functions, including both internal and user-defined functions.
@@ -15,6 +16,7 @@ def get_function_mappings():
     assistant_function_mapping = {}
 
     return personal_function_mapping, assistant_function_mapping
+
 
 def register_user_functions(personal_function_mapping, assistant_function_mapping):
     """

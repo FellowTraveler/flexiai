@@ -11,7 +11,7 @@ from flexiai.assistant.function_mapping import get_function_mappings, register_u
 
 
 # Set up logging using your custom configuration
-setup_logging(root_level=logging.DEBUG, file_level=logging.DEBUG, console_level=logging.ERROR)
+setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_level=logging.ERROR)
 
 class FlexiAI:
     """
@@ -348,7 +348,7 @@ class FlexiAI:
                     block.text.value for block in content_blocks if hasattr(block, 'text') and hasattr(block.text, 'value')
                 ])
 
-                self.logger.debug(f"Message ID: {message_id}, Role: {role}, Content: {content_blocks}")
+                self.logger.info(f"Message ID: {message_id}, Role: {role}, Content: {content_blocks}")
 
                 formatted_messages.append({
                     'message_id': message_id,
@@ -444,18 +444,18 @@ class FlexiAI:
                 function_name = tool_call.function.name
                 arguments = json.loads(tool_call.function.arguments)
 
-                self.logger.debug(f"Function Name: {function_name}")
-                self.logger.debug(f"Arguments: {arguments}")
+                self.logger.info(f"Function Name: {function_name}")
+                self.logger.info(f"Arguments: {arguments}")
 
                 # Determine the type of action to perform
                 action_type = self.determine_action_type(function_name)
 
                 # Execute the appropriate function based on the action type
                 if action_type == "call_assistant":
-                    self.logger.debug(f"Calling another assistant with arguments: {arguments}")
+                    self.logger.info(f"Calling another assistant with arguments: {arguments}")
                     status, message, result = self.call_assistant_with_arguments(function_name, **arguments)
                 else:
-                    self.logger.debug(f"Executing personal function with arguments: {arguments}")
+                    self.logger.info(f"Executing personal function with arguments: {arguments}")
                     status, message, result = self.execute_personal_function_with_arguments(function_name, **arguments)
 
                 # Prepare the tool output for submission
@@ -463,7 +463,7 @@ class FlexiAI:
                     "tool_call_id": tool_call.id,
                     "output": json.dumps({"status": status, "message": message, "result": result})
                 }
-                self.logger.debug(f"Tool output to be submitted: {tool_output}")
+                self.logger.info(f"Tool output to be submitted: {tool_output}")
                 tool_outputs.append(tool_output)
 
             # Submit the tool outputs to the OpenAI API or Azure OpenAI
@@ -494,7 +494,7 @@ class FlexiAI:
         Returns:
             str: The type of action, either 'call_assistant' or 'personal_function'.
         """
-        self.logger.debug(f"Determining action type for function: {function_name}")
+        self.logger.info(f"Determining action type for function: {function_name}")
         if function_name.endswith("_assistant"):
             action_type = "call_assistant"
         else:
@@ -518,7 +518,7 @@ class FlexiAI:
         Raises:
             Exception: If the function execution fails.
         """
-        self.logger.debug(
+        self.logger.info(
             f"Attempting to execute function: {function_name} with arguments: {arguments}")
         func = self.personal_function_mapping.get(function_name, None)
         if callable(func):
@@ -550,7 +550,7 @@ class FlexiAI:
             ValueError: If the function is not found.
             Exception: If the function execution fails.
         """
-        self.logger.debug(
+        self.logger.info(
             f"Attempting to dispatch an assistant using the function: {function_name} with arguments: {arguments}")
         func = self.assistant_function_mapping.get(function_name, None)
         if callable(func):

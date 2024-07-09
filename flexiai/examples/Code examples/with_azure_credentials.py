@@ -1,4 +1,4 @@
-# examples/test_openai_credentials.py
+# examples/with_azure_credentials.py
 import logging
 import os
 import platform
@@ -21,7 +21,7 @@ def main():
     flexiai = FlexiAI()
 
     # Use the given assistant ID
-    assistant_id = 'asst_AWAVO511bAbTVEdOvLNWitoT' # Replace with the actual assistant ID           # Alina
+    assistant_id = 'asst_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' # Replace with the actual assistant ID
     
     # Create a new thread
     try:
@@ -49,7 +49,7 @@ def main():
         # Run the thread and handle required actions
         try:
             flexiai.create_advanced_run(assistant_id, thread_id, user_message)
-            messages = flexiai.retrieve_messages(thread_id, limit=2)  
+            messages = flexiai.retrieve_messages(thread_id, limit=20)  
             
             # Store the extracted messages
             for msg in messages:
