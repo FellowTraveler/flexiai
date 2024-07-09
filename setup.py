@@ -11,7 +11,7 @@ def read_readme():
 
 setup(
     name='flexiai',
-    version='0.8.46',
+    version='0.8.47',
     packages=find_packages(include=['flexiai', 'flexiai.*']),
     include_package_data=True,
     package_data={
