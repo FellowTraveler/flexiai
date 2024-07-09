@@ -66,9 +66,6 @@ pip install flexiai
 
 After installing, copy the `post_install.py` file to your project root directory and run it manually to set up additional necessary directories and files.
 
-```powershell
-python post_install.py
-```
 
 #### Or create a new file `post_install.py` in the root directory of your project.
 
