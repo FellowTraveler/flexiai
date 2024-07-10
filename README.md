@@ -10,7 +10,7 @@
 
 FlexiAI is a versatile and powerful AI framework designed to simplify the use of OpenAI and Azure OpenAI APIs. By leveraging advanced Retrieval-Augmented Generation (RAG) capabilities, FlexiAI enables developers to build sophisticated, custom AI assistants efficiently and effectively.
 
-![FlexiAI Framework](assets/flexiai_framework_01.png)
+---
 
 ## Table of Contents
 
@@ -23,6 +23,8 @@ FlexiAI is a versatile and powerful AI framework designed to simplify the use of
 - [License](#license)
 - [Contact](#contact)
 
+---
+
 ## Features
 
 - **Multi-Platform Integration**: Supports both OpenAI and Azure OpenAI services, offering flexibility and broad compatibility.
@@ -34,7 +36,12 @@ FlexiAI is a versatile and powerful AI framework designed to simplify the use of
 - **Secure and Scalable**: Suitable for both small projects and large enterprise applications.
 - **Community-Driven**: Actively maintained and supported by a community of developers.
 
+---
+
 ## Installation
+
+### Installation Tutorial
+[![Watch the installation tutorial on YouTube](https://img.youtube.com/vi/hiEo8bED92w/0.jpg)](https://www.youtube.com/watch?v=hiEo8bED92w)
 
 ### Create a Virtual Environment
 
@@ -338,8 +345,6 @@ if __name__ == '__main__':
 
 </details>
 
----
-
 ### Enable Retrieval-Augmented Generation (RAG)
 
 Running the `post_install.py` script will automatically create the necessary structure and files to enable the Retrieval-Augmented Generation (RAG) module in your project.
@@ -380,6 +385,8 @@ Install the required dependencies using `pip`.
 pip install -r requirements.txt
 ```
 
+---
+
 ## Setup
 
 Before using FlexiAI, set up your environment variables. The `post_install.py` script will create a `.env` file in your project root directory with the following template:
@@ -402,6 +409,8 @@ CREDENTIAL_TYPE=openai
 ```
 
 For more detailed setup instructions, including using virtual environments and troubleshooting, refer to the [Setup Guide](flexiai/docs/setup.md).
+
+---
 
 ## Usage
 
@@ -481,6 +490,8 @@ if __name__ == "__main__":
 
 For detailed usage examples and advanced functionalities, refer to the [Usage Guide](flexiai/docs/usage.md).
 
+---
+
 ## Documentation
 
 The FlexiAI framework comes with comprehensive documentation to help you get started and make the most out of its capabilities:
@@ -490,13 +501,19 @@ The FlexiAI framework comes with comprehensive documentation to help you get sta
 - [Usage Guide](flexiai/docs/usage.md)
 - [Contributing Guide](flexiai/docs/contributing.md)
 
+---
+
 ## Contributing
 
 We welcome contributions from the community. If you want to contribute to FlexiAI, please read our [Contributing Guide](flexiai/docs/contributing.md) to get started.
 
+---
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE.txt) file for details.
+
+---
 
 ## Contact
 
