@@ -1,4 +1,4 @@
-# assistant/function_mapping.py
+# flexiai/assistant/function_mapping.py
 import logging
 
 logger = logging.getLogger(__name__)

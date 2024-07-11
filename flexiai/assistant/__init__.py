@@ -1,4 +1,4 @@
-# assistant/__init__.py
+# flexiai/assistant/__init__.py
 from flexiai.assistant.task_manager import TaskManager
 from flexiai.assistant.function_mapping import get_function_mappings, register_user_functions
 

@@ -1,14 +1,18 @@
-# config/config.py 
+# flexiai/config/config.py 
 import logging
-from pydantic_settings import BaseSettings
-from pydantic import ValidationError
 from dotenv import load_dotenv
+from pydantic import ValidationError
+from pydantic_settings import BaseSettings
 
 # Load environment variables from .env file
 load_dotenv()
 
 class Config(BaseSettings):
     OPENAI_API_KEY: str
+    OPENAI_API_VERSION: str
+    OPENAI_ORGANIZATION_ID: str
+    OPENAI_PROJECT_ID: str
+    OPENAI_ASSISTANT_VERSION: str
     AZURE_OPENAI_API_KEY: str
     AZURE_OPENAI_ENDPOINT: str
     AZURE_OPENAI_API_VERSION: str

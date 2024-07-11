@@ -1,4 +1,4 @@
-# assistant/task_manager.py
+# flexiai/assistant/task_manager.py
 import logging
 from flexiai.config.logging_config import setup_logging
 
@@ -20,7 +20,6 @@ class TaskManager:
         self.logger.info("Initializing TaskManager")
         self.load_user_tasks()
 
-
     def load_user_tasks(self):
         """
         Dynamically load and integrate user-defined tasks.
@@ -30,13 +29,15 @@ class TaskManager:
             from flexiai.assistant.function_mapping import register_user_functions, get_function_mappings
 
             self.personal_function_mapping, self.assistant_function_mapping = get_function_mappings()
-            self.logger.debug(f"Personal function mappings: {self.personal_function_mapping}")
-            self.logger.debug(f"Assistant function mappings: {self.assistant_function_mapping}")
-            
+            self.logger.info(f"Initial personal function mappings: {self.personal_function_mapping.keys()}")
+            self.logger.info(f"Initial assistant function mappings: {self.assistant_function_mapping.keys()}")
+
             self.personal_function_mapping, self.assistant_function_mapping = register_user_functions(
                 self.personal_function_mapping,
                 self.assistant_function_mapping
             )
             self.logger.info("User-defined tasks loaded successfully")
+            self.logger.info(f"Final personal function mappings: {self.personal_function_mapping.keys()}")
+            self.logger.info(f"Final assistant function mappings: {self.assistant_function_mapping.keys()}")
         except Exception as e:
             self.logger.error(f"Failed to load user-defined tasks: {str(e)}", exc_info=True)

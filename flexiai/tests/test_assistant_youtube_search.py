@@ -1,4 +1,4 @@
-# tests/test_assistant_youtube_search.py
+# flexiai/tests/test_assistant_youtube_search.py
 import pytest
 import subprocess
 from user_flexiai_rag.user_task_manager import UserTaskManager

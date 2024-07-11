@@ -1,17 +1,16 @@
 # flexiai/core/flexiai_client.py
 import time
-import logging
 import json
-from openai import OpenAI, OpenAIError
-from openai import AzureOpenAI
+import logging
+from openai import OpenAIError
 from flexiai.config.logging_config import setup_logging
-from flexiai.config.config import config
 from flexiai.assistant.task_manager import TaskManager
 from flexiai.assistant.function_mapping import get_function_mappings, register_user_functions
-
+from flexiai.credentials.credential_manager import CredentialManager
 
 # Set up logging using your custom configuration
-setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_level=logging.ERROR)
+setup_logging(root_level=logging.WARNING, file_level=logging.WARNING, console_level=logging.ERROR)
+
 
 class FlexiAI:
     """
@@ -40,17 +39,9 @@ class FlexiAI:
         # Initialize the logger for this class
         self.logger = logging.getLogger(__name__)
 
-        # Determine the credential type from the configuration
-        credential_type = config.CREDENTIAL_TYPE
-        self.logger.info(f"Initializing with credential type: {credential_type}")
-
-        # Initialize the appropriate OpenAI client based on the credential type
-        if credential_type == 'openai':
-            self.client = self._initialize_openai_client()
-        elif credential_type == 'azure':
-            self.client = self._initialize_azure_openai_client()
-        else:
-            raise ValueError(f"Unsupported credential type: {credential_type}")
+        # Initialize the credential manager and get the client
+        self.credential_manager = CredentialManager()
+        self.client = self.credential_manager.client
 
         # Initialize the task manager
         self.task_manager = TaskManager()
@@ -63,61 +54,6 @@ class FlexiAI:
             self.personal_function_mapping,
             self.assistant_function_mapping
         )
-
-    def _initialize_openai_client(self):
-        """
-        Initializes the OpenAI client using the API key from the configuration.
-
-        Returns:
-            OpenAI: Initialized OpenAI client.
-
-        Raises:
-            ValueError: If the OpenAI API key is not set.
-        """
-        api_key = config.OPENAI_API_KEY
-        if not api_key:
-            self.logger.error("OpenAI API key is not set.")
-            raise ValueError("OpenAI API key is not set.")
-        
-        try:
-            client = OpenAI(api_key=api_key)
-            self.logger.info("Initialized OpenAI client.")
-            return client
-        except Exception as e:
-            self.logger.error(f"Failed to initialize OpenAI client: {str(e)}", exc_info=True)
-            raise
-
-    def _initialize_azure_openai_client(self):
-        """
-        Initializes the Azure OpenAI client using the API key, endpoint, and API
-        version from the configuration.
-
-        Returns:
-            AzureOpenAI: Initialized Azure OpenAI client.
-
-        Raises:
-            ValueError: If the Azure OpenAI API key, endpoint, or API version is not set.
-        """
-        api_key = config.AZURE_OPENAI_API_KEY
-        azure_endpoint = config.AZURE_OPENAI_ENDPOINT
-        api_version = config.AZURE_OPENAI_API_VERSION
-
-        if not api_key or not azure_endpoint or not api_version:
-            self.logger.error("Azure OpenAI API key, endpoint, or API version is not set.")
-            raise ValueError("Azure OpenAI API key, endpoint, or API version is not set.")
-        
-        try:
-            client = AzureOpenAI(
-                api_key=api_key,
-                api_version=api_version,
-                azure_endpoint=azure_endpoint
-            )
-            self.logger.info("Initialized Azure OpenAI client.")
-            return client
-        except Exception as e:
-            self.logger.error(f"Failed to initialize Azure OpenAI client: {str(e)}", exc_info=True)
-            raise
-
 
     def create_thread(self):
         """
