@@ -102,6 +102,7 @@ verify_install.py
 build
 dist
 flexiai.egg-info
+TODO.md
 
 # Azure
 :Zone.Identifier

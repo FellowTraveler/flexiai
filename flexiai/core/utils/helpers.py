@@ -10,6 +10,7 @@ class HelperFunctions:
         """
         print(json.dumps(json.loads(obj.model_dump_json()), indent=4))
 
+
     @staticmethod
     def pretty_print(messages):
         """
@@ -25,6 +26,7 @@ class HelperFunctions:
         print("=" * 100)
         print()
 
+
     @staticmethod
     def print_run_details(run):
         """
@@ -38,6 +40,7 @@ class HelperFunctions:
         except TypeError as e:
             logging.error(f"Error serializing object: {e}")
             print(run)
+
 
     @staticmethod
     def print_messages_as_json(messages):
