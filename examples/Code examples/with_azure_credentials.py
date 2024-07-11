@@ -1,6 +1,6 @@
 # examples/with_azure_credentials.py
-import logging
 import os
+import logging
 import platform
 from flexiai.core.flexiai_client import FlexiAI
 from flexiai.config.logging_config import setup_logging

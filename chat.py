@@ -1,6 +1,6 @@
 # examples/test_openai_credentials.py
-import logging
 import os
+import logging
 import platform
 from flexiai.core.flexiai_client import FlexiAI
 from flexiai.config.logging_config import setup_logging
@@ -21,7 +21,7 @@ def main():
     flexiai = FlexiAI()
 
     # Use the given assistant ID
-    assistant_id = 'asst_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' # Replace with the actual assistant ID
+    assistant_id = 'asst_BkCmQ6jJnFSQFfXmVn3kbsSs' # Testing user rag to see how it works after granulation
     
     # Create a new thread
     try:

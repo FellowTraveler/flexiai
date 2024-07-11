@@ -1,1 +1,1 @@
-# tests/__init__.py
+# flexiai/tests/__init__.py

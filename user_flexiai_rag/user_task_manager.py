@@ -7,7 +7,7 @@ import urllib.parse
 from flexiai.config.logging_config import setup_logging
 
 # Set up logging using your custom configuration
-setup_logging(root_level=logging.INFO, file_level=logging.DEBUG, console_level=logging.ERROR)
+setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_level=logging.ERROR)
 
 
 class UserTaskManager:
@@ -21,6 +21,14 @@ class UserTaskManager:
         """
         self.logger = logging.getLogger(__name__)
 
+    def log_function_call(self, func_name):
+        """
+        Logs the function call.
+        
+        Args:
+            func_name (str): The name of the function being called.
+        """
+        self.logger.info(f"Function called: {func_name}")
 
     def search_youtube(self, query):
         """
@@ -33,6 +41,8 @@ class UserTaskManager:
         Returns:
             dict: A dictionary containing the status, message, and result (URL)
         """
+        self.log_function_call(__name__)
+
         if not query:
             return {
                 "status": False,
@@ -77,7 +87,6 @@ class UserTaskManager:
                 "result": None
             }
 
-
     def identify_person(self, name=None, phone_number=None, address=None, birth_date=None, email_address=None, client_code=None):
         """
         Identifies a person in the system by matching provided details against records in a CSV file.
@@ -97,6 +106,8 @@ class UserTaskManager:
             - message (str): A message detailing the result of the identification process.
             - result (dict or None): The identified person's details if successful, None otherwise.
         """
+        self.log_function_call(__name__)
+
         file_path = os.path.join(os.path.dirname(__file__), 'data', 'csv', 'identify_person.csv')
         
         if not os.path.exists(file_path):
@@ -165,7 +176,6 @@ class UserTaskManager:
                 "result": None
             }
 
-
     def manage_product(self, action, search_params=None, update_params=None, product_id=None, product_name=None, 
                        description=None, price=None, quantity=None):
         """
@@ -190,6 +200,8 @@ class UserTaskManager:
             - message (str): A message detailing the result of the operation.
             - result (dict or list or None): The product details if found or updated, None otherwise.
         """
+        self.log_function_call(__name__)
+
         file_path = os.path.join(os.path.dirname(__file__), 'data', 'csv', 'products.csv')
         
         self.logger.info(f"CSV file path: {file_path}")

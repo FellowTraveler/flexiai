@@ -1,10 +1,10 @@
 # flexiai/config/logging_config.py
+import os
 import logging
 from logging.handlers import RotatingFileHandler
-import os
 
 
-def setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_level=logging.ERROR):
+def setup_logging(root_level=logging.WARNING, file_level=logging.WARNING, console_level=logging.ERROR):
     """
     Configures the logging settings for the application with user-defined log levels.
 
