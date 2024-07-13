@@ -108,4 +108,4 @@ flexiai.egg-info
 session_manager.py
 user_flexiai_rag/data/some_text.txt
 user_flexiai_rag/data/support-vector-networks.pdf
-
+chat.py
