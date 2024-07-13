@@ -1,12 +1,7 @@
 # user_flexiai_rag/user_function_mapping.py
 import logging
-from flexiai.config.logging_config import setup_logging
 from user_flexiai_rag.user_task_manager import UserTaskManager
 
-# Set up logging using your custom configuration
-setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_level=logging.ERROR)
-
-# Initialize logger
 logger = logging.getLogger(__name__)
 
 def register_user_tasks():
@@ -20,8 +15,6 @@ def register_user_tasks():
 
     personal_function_mapping = {
         'search_youtube': task_manager.search_youtube,
-        'identify_person': task_manager.identify_person,
-        'manage_product': task_manager.manage_product
         # Add other functions that call assistant personal functions
     }
 

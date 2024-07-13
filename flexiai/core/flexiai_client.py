@@ -1,14 +1,12 @@
 # flexiai/core/flexiai_client.py
 import logging
 from flexiai.assistant.task_manager import TaskManager
-from flexiai.assistant.function_mapping import get_function_mappings, register_user_functions
 from flexiai.credentials.credential_manager import CredentialManager
 from flexiai.core.flexi_managers.message_manager import MessageManager
 from flexiai.core.flexi_managers.run_manager import RunManager
 from flexiai.core.flexi_managers.session_manager import SessionManager
 from flexiai.core.flexi_managers.thread_manager import ThreadManager
 from flexiai.core.flexi_managers.vector_store_manager import VectorStoreManager
-
 
 class FlexiAI:
     """
@@ -46,14 +44,9 @@ class FlexiAI:
         # Initialize the task manager
         self.task_manager = TaskManager()
 
-        # Get the function mappings for personal functions and assistant calling functions
-        self.personal_function_mapping, self.assistant_function_mapping = get_function_mappings()
-
-        # Register user functions
-        self.personal_function_mapping, self.assistant_function_mapping = register_user_functions(
-            self.personal_function_mapping,
-            self.assistant_function_mapping
-        )
+        # Get the function mappings from the task manager
+        self.personal_function_mapping = self.task_manager.personal_function_mapping
+        self.assistant_function_mapping = self.task_manager.assistant_function_mapping
 
         # Initialize manager classes
         self.message_manager = MessageManager(self.client, self.logger, self.personal_function_mapping, self.assistant_function_mapping)
