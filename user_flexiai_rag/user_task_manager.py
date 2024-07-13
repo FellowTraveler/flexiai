@@ -1,10 +1,10 @@
 # user_flexiai_rag/user_task_manager.py
-import csv
 import os
+import csv
 import logging
-import subprocess
 import urllib.parse
-
+import subprocess
+from threading import Lock
 
 class UserTaskManager:
     """
@@ -13,18 +13,23 @@ class UserTaskManager:
 
     def __init__(self):
         """
-        Initializes the UserTaskManager instance, setting up the logger.
+        Initializes the UserTaskManager instance, setting up the logger and a lock for thread safety.
         """
         self.logger = logging.getLogger(__name__)
+        self.lock = Lock()
 
-    def log_function_call(self, func_name):
+    def log_function_call(self, func_name, params=None):
         """
         Logs the function call.
         
         Args:
             func_name (str): The name of the function being called.
+            params (dict, optional): Parameters passed to the function.
         """
-        self.logger.info(f"Function called: {func_name}")
+        param_str = f" with params: {params}" if params else ""
+        self.logger.info(f"Function called: {func_name}{param_str}")
+
+   
 
     def search_youtube(self, query):
         """
@@ -37,7 +42,7 @@ class UserTaskManager:
         Returns:
             dict: A dictionary containing the status, message, and result (URL)
         """
-        self.log_function_call(__name__)
+        self.log_function_call('search_youtube', {'query': query})
 
         if not query:
             return {
@@ -102,7 +107,6 @@ class UserTaskManager:
             - message (str): A message detailing the result of the identification process.
             - result (dict or None): The identified person's details if successful, None otherwise.
         """
-        self.log_function_call(__name__)
 
         file_path = os.path.join(os.path.dirname(__file__), 'data', 'csv', 'identify_person.csv')
         
@@ -172,6 +176,7 @@ class UserTaskManager:
                 "result": None
             }
 
+
     def manage_product(self, action, search_params=None, update_params=None, product_id=None, product_name=None, 
                        description=None, price=None, quantity=None):
         """
@@ -196,7 +201,6 @@ class UserTaskManager:
             - message (str): A message detailing the result of the operation.
             - result (dict or list or None): The product details if found or updated, None otherwise.
         """
-        self.log_function_call(__name__)
 
         file_path = os.path.join(os.path.dirname(__file__), 'data', 'csv', 'products.csv')
         
