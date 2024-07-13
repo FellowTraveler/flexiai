@@ -1,4 +1,4 @@
-# examples/with_azure_credentials.py
+# examples/Code examples/with_azure_credentials.py
 import os
 import logging
 import platform
@@ -14,9 +14,8 @@ def clear_console():
 
 def main():
     # Set up logging using your custom configuration
-    # Adjust the logging levels as per your requirements
-    setup_logging(root_level=logging.DEBUG, file_level=logging.DEBUG, console_level=logging.ERROR)
-
+    setup_logging()
+    
     # Initialize FlexiAI
     flexiai = FlexiAI()
 
@@ -49,7 +48,7 @@ def main():
         # Run the thread and handle required actions
         try:
             flexiai.create_advanced_run(assistant_id, thread_id, user_message)
-            messages = flexiai.retrieve_messages(thread_id, limit=20)  
+            messages = flexiai.retrieve_messages(thread_id, limit=2)  
             
             # Store the extracted messages
             for msg in messages:

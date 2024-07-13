@@ -4,7 +4,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 
-def setup_logging(root_level=logging.WARNING, file_level=logging.WARNING, console_level=logging.ERROR):
+def setup_logging(root_level=logging.WARNING, file_level=logging.WARNING, console_level=logging.WARNING):
     """
     Configures the logging settings for the application with user-defined log levels.
 

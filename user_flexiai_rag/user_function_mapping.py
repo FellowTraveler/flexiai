@@ -30,7 +30,7 @@ def register_user_tasks():
     }
 
     logger.info("Registering user tasks")
-    logger.info(f"Personal Function Mappings: {personal_function_mapping.keys()}")
-    logger.info(f"Assistant Function Mappings: {assistant_function_mapping.keys()}")
+    logger.info(f"USER RAG - Personal Function Mappings: {personal_function_mapping.keys()}")
+    logger.info(f"USER RAG - Call Assistant Function Mappings: {assistant_function_mapping.keys()}")
 
     return personal_function_mapping, assistant_function_mapping

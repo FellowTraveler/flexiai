@@ -1,4 +1,4 @@
-# flexiai/utils/helpers.py
+# flexiai/core/utils/helpers.py
 import json
 import logging
 

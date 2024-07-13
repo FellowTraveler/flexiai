@@ -1,4 +1,4 @@
-# examples/test_openai_credentials.py
+# examples/Code examples/with_azure_credentials.py
 import os
 import logging
 import platform
@@ -14,14 +14,13 @@ def clear_console():
 
 def main():
     # Set up logging using your custom configuration
-    # Adjust the logging levels as per your requirements
-    setup_logging(root_level=logging.DEBUG, file_level=logging.DEBUG, console_level=logging.ERROR)
-
+    setup_logging()
+    
     # Initialize FlexiAI
     flexiai = FlexiAI()
 
     # Use the given assistant ID
-    assistant_id = 'asst_BkCmQ6jJnFSQFfXmVn3kbsSs' # Testing user rag to see how it works after granulation
+    assistant_id = 'asst_AWAVO511bAbTVEdOvLNWitoT' # Replace with the actual assistant ID
     
     # Create a new thread
     try:

@@ -1,3 +1,7 @@
+# Azure
+:Zone.Identifier
+Zone.Identifier
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -98,12 +102,10 @@ ehthumbs.db
 .envrc
 
 # Other
-verify_install.py
 build
 dist
 flexiai.egg-info
-TODO.md
+session_manager.py
+user_flexiai_rag/data/some_text.txt
+user_flexiai_rag/data/support-vector-networks.pdf
 
-# Azure
-:Zone.Identifier
-Zone.Identifier
