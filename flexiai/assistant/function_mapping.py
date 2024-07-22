@@ -4,9 +4,9 @@ import logging
 import os
 import sys
 import glob
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
-
 
 class FunctionMapping:
     """
@@ -23,7 +23,6 @@ class FunctionMapping:
         self.assistant_function_mapping = {}
         logger.info(f"User directory detected: {self.user_directory}")
 
-
     def _detect_user_directory(self):
         """
         Detects the user directory path where user-defined functions are stored.
@@ -31,10 +30,15 @@ class FunctionMapping:
         Returns:
             str: The detected user directory path.
         """
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        user_directory = os.path.join(current_dir, '..', '..', 'user_flexiai_rag')
-        return os.path.normpath(user_directory)
+        # Detect the current working directory
+        current_dir = Path.cwd()
+        # Determine the project root directory based on a known file or structure
+        project_root = current_dir
+        user_directory = project_root / 'user_flexiai_rag'
 
+        if not user_directory.is_dir():
+            raise FileNotFoundError(f"User directory {user_directory} not found")
+        return str(user_directory)
 
     def register_user_functions(self, multi_agent_system, run_manager):
         """
@@ -58,7 +62,6 @@ class FunctionMapping:
         except Exception as e:
             logger.error(f"Failed to register user functions: {e}", exc_info=True)
             raise
-
 
     def _load_user_modules(self):
         """
