@@ -4,7 +4,6 @@ import logging
 from concurrent.futures import ThreadPoolExecutor
 from flexiai.assistant.function_mapping import FunctionMapping
 
-
 class TaskManager:
     """
     TaskManager class handles the execution and management of tasks within the FlexiAI framework,
@@ -35,7 +34,6 @@ class TaskManager:
         self.personal_function_mapping = {}
         self.assistant_function_mapping = {}
 
-
     async def run_task_async(self, func, *args, **kwargs):
         """
         Runs a given task asynchronously using the ThreadPoolExecutor.
@@ -51,7 +49,6 @@ class TaskManager:
         loop = asyncio.get_running_loop()
         return await loop.run_in_executor(self.executor, func, *args, **kwargs)
 
-
     def run_task(self, func, *args, **kwargs):
         """
         Runs a given task synchronously using the ThreadPoolExecutor.
@@ -66,7 +63,6 @@ class TaskManager:
         """
         future = self.executor.submit(func, *args, **kwargs)
         return future.result()
-
 
     def load_user_tasks(self, multi_agent_system, run_manager):
         """
@@ -86,6 +82,7 @@ class TaskManager:
             self.assistant_function_mapping = self.function_mapper.assistant_function_mapping
             self.logger.info("User-defined tasks loaded successfully")
             self.logger.info(f"Assistant function mapping: {self.assistant_function_mapping}")
+            self.logger.info(f"Personal function mapping: {self.personal_function_mapping}")
         except Exception as e:
             self.logger.error(f"Failed to load user-defined tasks: {str(e)}", exc_info=True)
             raise e
