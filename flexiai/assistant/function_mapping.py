@@ -7,7 +7,8 @@ import glob
 
 logger = logging.getLogger(__name__)
 
-class FunctionMapper:
+
+class FunctionMapping:
     """
     Class to handle the function mappings for personal and assistant functions,
     including both internal and user-defined functions.
@@ -15,9 +16,13 @@ class FunctionMapper:
 
     def __init__(self):
         """
-        Initializes the FunctionMapper instance, automatically detecting the path to user-defined functions.
+        Initializes the FunctionMapping instance, automatically detecting the path to user-defined functions.
         """
         self.user_directory = self._detect_user_directory()
+        self.personal_function_mapping = {}
+        self.assistant_function_mapping = {}
+        logger.info(f"User directory detected: {self.user_directory}")
+
 
     def _detect_user_directory(self):
         """
@@ -30,42 +35,30 @@ class FunctionMapper:
         user_directory = os.path.join(current_dir, '..', '..', 'user_flexiai_rag')
         return os.path.normpath(user_directory)
 
-    def get_function_mappings(self):
-        """
-        Get the function mappings for personal and assistant functions, including both internal and user-defined functions.
 
-        Returns:
-            tuple: A tuple containing the personal function mappings and assistant function mappings.
-        """
-        personal_function_mapping = {}
-        assistant_function_mapping = {}
-        return personal_function_mapping, assistant_function_mapping
-
-    def register_user_functions(self, personal_function_mapping, assistant_function_mapping):
+    def register_user_functions(self, multi_agent_system, run_manager):
         """
         Register user-defined functions by merging them with existing function mappings.
 
         Args:
-            personal_function_mapping (dict): The personal function mappings to be updated.
-            assistant_function_mapping (dict): The assistant function mappings to be updated.
-
-        Returns:
-            tuple: A tuple containing the updated personal function mappings and assistant function mappings.
+            multi_agent_system (MultiAgentThreadsManager): The multi-agent threads manager instance.
+            run_manager (RunManager): The run manager instance.
         """
         try:
             user_modules = self._load_user_modules()
             for module in user_modules:
                 if hasattr(module, 'register_user_tasks'):
-                    user_personal_functions, user_assistant_functions = module.register_user_tasks()
-                    personal_function_mapping.update(user_personal_functions)
-                    assistant_function_mapping.update(user_assistant_functions)
+                    user_personal_functions, user_assistant_functions = module.register_user_tasks(multi_agent_system, run_manager)
+                    self.personal_function_mapping.update(user_personal_functions)
+                    self.assistant_function_mapping.update(user_assistant_functions)
                     logger.info(f"Successfully registered user functions from {module.__name__}")
+                    logger.debug(f"Updated personal functions: {list(self.personal_function_mapping.keys())}")
+                    logger.debug(f"Updated assistant functions: {list(self.assistant_function_mapping.keys())}")
 
         except Exception as e:
             logger.error(f"Failed to register user functions: {e}", exc_info=True)
             raise
 
-        return personal_function_mapping, assistant_function_mapping
 
     def _load_user_modules(self):
         """
@@ -83,6 +76,7 @@ class FunctionMapper:
                 try:
                     module = importlib.import_module(module_name)
                     modules.append(module)
+                    logger.info(f"Attempting to import module: {module_name}")
                 except ImportError as e:
                     logger.warning(f"Failed to import module {module_name}: {e}")
         return modules

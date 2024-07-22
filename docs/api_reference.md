@@ -1,478 +1,489 @@
-# FlexiAI API Reference
+# API Reference
 
-## Overview
-
-FlexiAI is a flexible AI framework for managing interactions with OpenAI and Azure OpenAI services. This document provides a comprehensive reference for the methods and functionalities available in the `flexiai_client.py` module.
+This document provides a comprehensive reference for the FlexiAI framework's API. It includes detailed descriptions of the main classes, methods, and their usage to help developers integrate and utilize FlexiAI effectively.
 
 ## Table of Contents
 
-- [FlexiAI Class](#flexiai-class)
-  - [__init__](#__init__)
-  - [_initialize_openai_client](#_initialize_openai_client)
-  - [_initialize_azure_openai_client](#_initialize_azure_openai_client)
-  - [create_thread](#create_thread)
-  - [add_user_message](#add_user_message)
-  - [wait_for_run_completion](#wait_for_run_completion)
-  - [create_run](#create_run)
-  - [create_advanced_run](#create_advanced_run)
-  - [retrieve_messages](#retrieve_messages)
-  - [retrieve_message_object](#retrieve_message_object)
-  - [process_and_print_messages](#process_and_print_messages)
-  - [handle_requires_action](#handle_requires_action)
-  - [determine_action_type](#determine_action_type)
-  - [execute_personal_function_with_arguments](#execute_personal_function_with_arguments)
-  - [call_assistant_with_arguments](#call_assistant_with_arguments)
-- [User-Defined Functions](#user-defined-functions)
-  - [register_user_functions](#register_user_functions)
-  - [get_function_mappings](#get_function_mappings)
-  - [Example User-Defined Functions](#example-user-defined-functions)
-
-## FlexiAI Class
-
-The `FlexiAI` class is designed to manage interactions with OpenAI and Azure OpenAI services, handling tasks such as creating threads, adding messages, and running threads with specified assistants.
-
-### \_\_init\_\_
-
-Initializes the FlexiAI instance by setting up logging, determining the credential type, and initializing the appropriate OpenAI or Azure OpenAI client. Also sets up task management and function mappings.
-
-#### Parameters
-None
-
-#### Raises
-- `ValueError`: If the credential type is unsupported.
-
-#### Example Usage
-```python
-from flexiai.core.flexiai_client import FlexiAI
-
-# Initialize FlexiAI instance
-flexiai = FlexiAI()
-```
-
----
-
-### _initialize_openai_client
-
-Initializes the OpenAI client using the API key from the configuration.
-
-#### Returns
-- `OpenAI`: Initialized OpenAI client.
-
-#### Raises
-- `ValueError`: If the OpenAI API key is not set.
-- `Exception`: If the client initialization fails.
-
-#### Example Usage
-```python
-# This method is used internally by FlexiAI and is not typically called directly.
-```
-
----
-
-### _initialize_azure_openai_client
-
-Initializes the Azure OpenAI client using the API key, endpoint, and API version from the configuration.
-
-#### Returns
-- `AzureOpenAI`: Initialized Azure OpenAI client.
-
-#### Raises
-- `ValueError`: If the Azure OpenAI API key, endpoint, or API version is not set.
-- `Exception`: If the client initialization fails.
-
-#### Example Usage
-```python
-# This method is used internally by FlexiAI and is not typically called directly.
-```
-
----
-
-### create_thread
-
-Creates a new thread.
-
-#### Returns
-- `object`: The newly created thread object.
-
-#### Raises
-- `OpenAIError`: If the API call to create a new thread fails.
-- `Exception`: If an unexpected error occurs.
-
-#### Example Usage
-```python
-# Create a new thread
-thread = flexiai.create_thread()
-print("Thread ID:", thread.id)
-```
-
----
-
-### add_user_message
-
-Adds a user message to a specified thread.
-
-#### Parameters
-- `thread_id` (str): The ID of the thread.
-- `user_message` (str): The user's message content.
-
-#### Returns
-- `object`: The message object that was added to the thread.
-
-#### Raises
-- `OpenAIError`: If the API call to add a user message fails.
-- `Exception`: If an unexpected error occurs.
-
-#### Example Usage
-```python
-# Add a user message to a thread
-thread_id = "your_thread_id"
-user_message = "What is the capital of France?"
-message = flexiai.add_user_message(thread_id, user_message)
-print("Message ID:", message.id)
-```
-
----
-
-### wait_for_run_completion
-
-Waits for any active run in the thread to complete.
-
-#### Parameters
-- `thread_id` (str): The ID of the thread.
-
-#### Raises
-- `OpenAIError`: If the API call to retrieve thread runs fails.
-- `Exception`: If an unexpected error occurs.
-
-#### Example Usage
-```python
-# Wait for any active run to complete
-thread_id = "your_thread_id"
-flexiai.wait_for_run_completion(thread_id)
-```
-
----
-
-### create_run
-
-Creates and runs a thread with the specified assistant, handling required actions.
-
-#### Parameters
-- `assistant_id` (str): The ID of the assistant.
-- `thread_id` (str): The ID of the thread.
-
-#### Returns
-- `object`: The run object.
-
-#### Raises
-- `OpenAIError`: If any API call within this function fails.
-- `Exception`: If an unexpected error occurs.
-
-#### Example Usage
-```python
-# Create and run a thread with a specified assistant
-assistant_id = "your_assistant_id"
-thread_id = "your_thread_id"
-run = flexiai.create_run(assistant_id, thread_id)
-print("Run ID:", run.id)
-```
-
----
-
-### create_advanced_run
-
-Creates and runs a thread with the specified assistant, user message, and handles required actions.
-
-#### Parameters
-- `assistant_id` (str): The ID of the assistant.
-- `thread_id` (str): The ID of the thread.
-- `user_message` (str): The user's message content.
-
-#### Returns
-- `object`: The run object.
-
-#### Raises
-- `OpenAIError`: If any API call within this function fails.
-- `Exception`: If an unexpected error occurs.
-
-#### Example Usage
-```python
-# Create and run a thread with a specified assistant and user message
-assistant_id = "your_assistant_id"
-thread_id = "your_thread_id"
-user_message = "What is the capital of France?"
-run = flexiai.create_advanced_run(assistant_id, thread_id, user_message)
-print("Run ID:", run.id)
-```
-
----
-
-### retrieve_messages
-
-Retrieves the message objects from a specified thread.
-
-#### Parameters
-- `thread_id` (str): The ID of the thread.
-- `order` (str, optional): The order in which to retrieve messages, either 'asc' or 'desc'. Defaults to 'desc'.
-- `limit` (int, optional): The number of messages to retrieve. Defaults to 20.
-
-#### Returns
-- `list`: A list of dictionaries containing the message ID, role, and content of each message.
-
-#### Raises
-- `OpenAIError`: If the API call to retrieve messages fails.
-- `Exception`: If an unexpected error occurs.
-
-#### Example Usage
-```python
-# Retrieve messages from a thread
-thread_id = "your_thread_id"
-messages = flexiai.retrieve_messages(thread_id, order='asc', limit=10)
-for message in messages:
-    print(f"{message['role']}: {message['content']}")
-```
-
----
-
-### retrieve_message_object
-
-Retrieves the message objects from a specified thread without formatting.
-
-#### Parameters
-- `thread_id` (str): The ID of the thread.
-- `order` (str, optional): The order in which to retrieve messages, either 'asc' or 'desc'. Defaults to 'asc'.
-- `limit` (int, optional): The number of messages to retrieve. Defaults to 20.
-
-#### Returns
-- `list`: A list of message objects.
-
-#### Raises
-- `OpenAIError`: If the API call to retrieve messages fails.
-- `Exception`: If an unexpected error occurs.
-
-#### Example Usage
-```python
-# Retrieve raw message objects from a thread
-thread_id = "your_thread_id"
-messages = flexiai.retrieve_message_object(thread_id, order='asc', limit=10)
-print(messages)
-```
-
----
-
-### process_and_print_messages
-
-Processes the message objects and prints the role and content value of each message.
-
-#### Parameters
-- `messages` (list): The list of message objects.
-
-#### Example Usage
-```python
-# Process and print messages
-messages = flexiai.retrieve_message_object(thread_id, order='asc', limit=10)
-flexiai.process_and_print_messages(messages)
-```
-
----
-
-### handle_requires_action
-
-Handles required actions from a run.
-
-This method processes the required actions for a given run. It executes the necessary functions and submits the outputs back to the OpenAI API or Azure OpenAI.
-
-#### Parameters
-- `run` (object): The run object requiring actions.
-- `assistant_id` (str): The ID of the assistant.
-- `thread_id` (str): The ID of the thread.
-
-#### Raises
-- `OpenAIError`: If an error occurs when interacting with the OpenAI API.
-- `Exception`: If an unexpected error occurs during the process.
-
-#### Example Usage
-```python
-# This method is used internally by FlexiAI and is not typically called directly.
-```
-
----
-
-### determine_action_type
-
-Determines the type of action required based on the function's name.
-
-#### Parameters
-- `function_name` (str): The name of the function.
-
-#### Returns
-- `str`: The type of action, either 'call_assistant' or 'personal_function'.
-
-#### Example Usage
-```python
-# This method is used internally by FlexiAI and is not typically called directly.
-```
-
----
-
-### execute_personal_function_with_arguments
-
-Dynam
-
-ically executes a function from the function_mapping based on the provided function name and supplied arguments.
-
-#### Parameters
-- `function_name` (str): The name of the function to execute.
-- `**arguments`: The arguments to pass to the function.
-
-#### Returns
-- `tuple`: A tuple containing the status (bool), message (str), and result (any).
-
-#### Raises
-- `Exception`: If the function execution fails.
-
-#### Example Usage
-```python
-# This method is used internally by FlexiAI and is not typically called directly.
-```
-
----
-
-### call_assistant_with_arguments
-
-Routes the function call to the appropriate assistant or internal function.
-
-#### Parameters
-- `function_name` (str): The name of the function to call.
-- `**arguments`: The arguments to pass to the function.
-
-#### Returns
-- `tuple`: A tuple containing the status (bool), message (str), and result (any).
-
-#### Raises
-- `ValueError`: If the function is not found.
-- `Exception`: If the function execution fails.
-
-#### Example Usage
-```python
-# This method is used internally by FlexiAI and is not typically called directly.
-```
-
----
-
-## User-Defined Functions
-
-FlexiAI supports the integration of user-defined functions to extend its capabilities. This section provides an overview of how user functions are registered and utilized within the framework.
-
-### register_user_functions
-
-Registers user-defined functions by merging them with existing function mappings.
-
-#### Parameters
-- `personal_function_mapping` (dict): The personal function mappings to be updated.
-- `assistant_function_mapping` (dict): The assistant function mappings to be updated.
-
-#### Returns
-- `tuple`: A tuple containing the updated personal function mappings and assistant function mappings.
-
-#### Example Usage
-```python
-from flexiai.assistant.function_mapping import register_user_functions
-
-# Register user functions
-personal_function_mapping = {}
-assistant_function_mapping = {}
-personal_function_mapping, assistant_function_mapping = register_user_functions(personal_function_mapping, assistant_function_mapping)
-```
-
----
-
-### get_function_mappings
-
-Gets the function mappings for personal and assistant functions, including both internal and user-defined functions.
-
-#### Returns
-- `tuple`: A tuple containing the personal function mappings and assistant function mappings.
-
-#### Example Usage
-```python
-from flexiai.assistant.function_mapping import get_function_mappings
-
-# Get function mappings
-personal_function_mapping, assistant_function_mapping = get_function_mappings()
-```
-
----
-
-### Example User-Defined Functions
-
-Here are some examples of user-defined functions that can be registered with FlexiAI.
+- [FlexiAI](#flexiai)
+  - [Class Definition](#class-definition)
+  - [Methods](#methods)
+    - [`__init__`](#__init__)
+    - [`create_thread`](#create_thread)
+    - [`retrieve_thread`](#retrieve_thread)
+    - [`update_thread`](#update_thread)
+    - [`delete_thread`](#delete_thread)
+    - [`attach_assistant_to_thread`](#attach_assistant_to_thread)
+    - [`add_user_message`](#add_user_message)
+    - [`wait_for_run_completion`](#wait_for_run_completion)
+    - [`create_run`](#create_run)
+    - [`create_advanced_run`](#create_advanced_run)
+    - [`create_and_monitor_run`](#create_and_monitor_run)
+    - [`retrieve_messages`](#retrieve_messages)
+    - [`retrieve_message_object`](#retrieve_message_object)
+    - [`process_and_print_messages`](#process_and_print_messages)
+    - [`assistant_transformer`](#assistant_transformer)
+    - [`create_vector_store`](#create_vector_store)
+    - [`upload_files_and_poll`](#upload_files_and_poll)
+    - [`update_assistant_with_vector_store`](#update_assistant_with_vector_store)
+    - [`list_vector_stores`](#list_vector_stores)
+    - [`retrieve_vector_store_details`](#retrieve_vector_store_details)
+    - [`delete_vector_store`](#delete_vector_store)
+    - [`list_files_in_vector_store`](#list_files_in_vector_store)
+    - [`retrieve_file_batch_details`](#retrieve_file_batch_details)
+    - [`search_files_in_vector_store`](#search_files_in_vector_store)
+    - [`call_parallel_functions`](#call_parallel_functions)
+    - [`add_messages_dynamically`](#add_messages_dynamically)
+    - [`retrieve_messages_dynamically`](#retrieve_messages_dynamically)
+- [CredentialManager](#credentialmanager)
+  - [Class Definition](#class-definition-1)
+  - [Methods](#methods-1)
+    - [`__init__`](#__init__-1)
+    - [`_get_client`](#_get_client)
+- [CredentialStrategy](#credentialstrategy)
+  - [Class Definition](#class-definition-2)
+  - [Methods](#methods-2)
+    - [`get_client`](#get_client)
+
+## FlexiAI
+
+The `FlexiAI` class is the core of the FlexiAI framework, providing methods to manage threads, runs, and message retrieval. This class enables the integration of both OpenAI and Azure OpenAI services.
+
+### Class Definition
 
 ```python
-# user_flexiai_rag/user_task_manager.py
-import logging
-from flexiai.config.logging_config import setup_logging
-import subprocess
-import urllib.parse
-
-# Set up logging using your custom configuration
-setup_logging(root_level=logging.INFO, file_level=logging.DEBUG, console_level=logging.ERROR)
-
-class UserTaskManager:
+class FlexiAI:
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
+        # Initialization code here
 
-    def search_youtube(self, query):
-        if not query:
-            return {
-                "status": False,
-                "message": "Query cannot be empty.",
-                "result": None
-            }
+    def create_thread(self):
+        # Method to create a new thread
 
-        try:
-            query_normalized = query.replace(" ", "+")
-            query_encoded = urllib.parse.quote(query_normalized)
-            youtube_search_url = f"https://www.youtube.com/results?search_query={query_encoded}"
-            self.logger.info(f"Opening YouTube search for query: {query}")
+    def retrieve_thread(self, thread_id):
+        # Method to retrieve a specific thread
 
-            subprocess.run(['powershell.exe', '-Command', 'Start-Process', youtube_search_url], check=True)
+    def update_thread(self, thread_id, metadata=None, tool_resources=None):
+        # Method to update a thread
 
-            self.logger.info("YouTube search page opened successfully.")
-            return {
-                "status": True,
-                "message": "YouTube search page opened successfully.",
-                "result": youtube_search_url
-            }
-        except subprocess.CalledProcessError as e:
-            error_message = f"Subprocess error: {str(e)}"
-            self.logger.error(error_message, exc_info=True)
-            return {
-                "status": False,
-                "message": error_message,
-                "result": None
-            }
-        except Exception as e:
-            error_message = f"Failed to open YouTube search for query: {query}. Error: {str(e)}"
-            self.logger.error(error_message, exc_info=True)
-            return {
-                "status": False,
-                "message": error_message,
-                "result": None
-            }
+    def delete_thread(self, thread_id):
+        # Method to delete a thread
 
-# user_flexiai_rag/user_function_mapping.py
-from user_flexiai_rag.user_task_manager import UserTaskManager
+    def attach_assistant_to_thread(self, assistant_id, thread_id):
+        # Method to attach an assistant to a thread
 
-def register_user_tasks():
-    task_manager = UserTaskManager()
+    def add_user_message(self, thread_id, user_message):
+        # Method to add a user message to a thread
 
-    personal_function_mapping = {
-        'search_youtube': task_manager.search_youtube,
-    }
+    def wait_for_run_completion(self, thread_id):
+        # Method to wait for run completion
 
-    assistant_function_mapping = {
-    }
+    def create_run(self, assistant_id, thread_id):
+        # Method to create a run
 
-    return personal_function_mapping, assistant_function_mapping
+    def create_advanced_run(self, assistant_id, thread_id, user_message):
+        # Method to create an advanced run with a user message
+
+    def create_and_monitor_run(self, assistant_id, thread_id, user_message=None, role=None, metadata=None):
+        # Method to create and monitor a run
+
+    def retrieve_messages(self, thread_id, order='desc', limit=20):
+        # Method to retrieve messages from a thread
+
+    def retrieve_message_object(self, thread_id, order='asc', limit=20):
+        # Method to retrieve message objects from a thread
+
+    def process_and_print_messages(self, messages):
+        # Method to process and print messages
+
+    def assistant_transformer(self, thread_id, new_assistant_id):
+        # Method to attach a new assistant to an existing thread
+
+    def create_vector_store(self, name):
+        # Method to create a new vector store
+
+    def upload_files_and_poll(self, vector_store_id, file_paths):
+        # Method to upload files to a vector store
+
+    def update_assistant_with_vector_store(self, assistant_id, vector_store_id):
+        # Method to update an assistant to use the new vector store
+
+    def list_vector_stores(self):
+        # Method to list all vector stores
+
+    def retrieve_vector_store_details(self, vector_store_id):
+        # Method to retrieve details about a vector store
+
+    def delete_vector_store(self, vector_store_id):
+        # Method to delete a vector store
+
+    def list_files_in_vector_store(self, vector_store_id, batch_id):
+        # Method to list all files in a vector store
+
+    def retrieve_file_batch_details(self, vector_store_id, batch_id):
+        # Method to retrieve details of a file batch in a vector store
+
+    def search_files_in_vector_store(self, vector_store_id, query):
+        # Method to search for files in a vector store
+
+    def call_parallel_functions(self, tasks):
+        # Method to run parallel tool calls in an asynchronous event loop
+
+    def add_messages_dynamically(self, thread_id, messages, role=None, metadata=None):
+        # Method to add multiple user messages dynamically
+
+    def retrieve_messages_dynamically(self, thread_id, order='asc', limit=20, retrieve_all=False, last_retrieved_id=None):
+        # Method to retrieve messages dynamically from a thread
 ```
+
+### Methods
+
+#### `__init__`
+
+Initializes the `FlexiAI` instance. Sets up necessary configurations and dependencies.
+
+#### `create_thread`
+
+Creates a new thread using the `ThreadManager`.
+
+- **Returns**: 
+  - `str`: The ID of the newly created thread.
+
+#### `retrieve_thread`
+
+Retrieves details of a specific thread by its ID using the `ThreadManager`.
+
+- **Parameters**:
+  - `thread_id` (str): The ID of the thread to retrieve.
+
+- **Returns**: 
+  - `object`: The thread object.
+
+#### `update_thread`
+
+Updates a thread with the given details using the `ThreadManager`.
+
+- **Parameters**:
+  - `thread_id` (str): The ID of the thread to update.
+  - `metadata` (dict, optional): Metadata to update for the thread.
+  - `tool_resources` (dict, optional): Tool resources to update for the thread.
+
+- **Returns**: 
+  - `object`: The updated thread object.
+
+#### `delete_thread`
+
+Deletes a thread by its ID using the `ThreadManager`.
+
+- **Parameters**:
+  - `thread_id` (str): The ID of the thread to delete.
+
+- **Returns**: 
+  - `bool`: True if the thread was deleted successfully, False otherwise.
+
+#### `attach_assistant_to_thread`
+
+Attaches an assistant to an existing thread using the `ThreadManager`.
+
+- **Parameters**:
+  - `assistant_id` (str): The ID of the assistant.
+  - `thread_id` (str): The ID of the thread.
+
+- **Returns**: 
+  - `object`: The run object indicating the assistant has been attached.
+
+#### `add_user_message`
+
+Adds a user message to a specified thread using the `MessageManager`.
+
+- **Parameters**:
+  - `thread_id` (str): The ID of the thread.
+  - `user_message` (str): The content of the user's message.
+
+- **Returns**: 
+  - `object`: The message object that was added to the thread.
+
+#### `wait_for_run_completion`
+
+Waits for the completion of a run on a specified thread using the `RunManager`.
+
+- **Parameters**:
+  - `thread_id` (str): The ID of the thread to wait for run completion.
+
+#### `create_run`
+
+Creates a new run for a specified assistant and thread using the `RunManager`.
+
+- **Parameters**:
+  - `assistant_id` (str): The ID of the assistant.
+  - `thread_id` (str): The ID of the thread.
+
+- **Returns**: 
+  - `object`: The run object if successful, None otherwise.
+
+#### `create_advanced_run`
+
+Creates an advanced run with a user message for a specified assistant and thread using the `RunManager`.
+
+- **Parameters**:
+  - `assistant_id` (str): The ID of the assistant.
+  - `thread_id` (str): The ID of the thread.
+  - `user_message` (str): The user's message content.
+
+- **Returns**: 
+  - `object`: The run object if successful, None otherwise.
+
+#### `create_and_monitor_run`
+
+Creates and runs a thread with the specified assistant, optionally adding a user message, and monitors its status until completion or failure using the `RunManager`.
+
+- **Parameters**:
+  - `assistant_id` (str): The ID of the assistant.
+  - `thread_id` (str): The ID of the thread.
+  - `user_message` (str, optional): The user's message content to add before creating the run.
+  - `role` (str, optional): The role of the message sender. Defaults to
+
+ 'user'.
+  - `metadata` (dict, optional): Metadata to include with the message.
+
+- **Returns**: 
+  - `None`
+
+#### `retrieve_messages`
+
+Retrieves messages from a specified thread using the `MessageManager`.
+
+- **Parameters**:
+  - `thread_id` (str): The ID of the thread.
+  - `order` (str, optional): The order in which to retrieve messages, either 'asc' or 'desc'. Defaults to 'desc'.
+  - `limit` (int, optional): The number of messages to retrieve. Defaults to 20.
+
+- **Returns**: 
+  - `list`: A list of dictionaries containing the message ID, role, and content of each message.
+
+#### `retrieve_message_object`
+
+Retrieves message objects from a specified thread using the `MessageManager`.
+
+- **Parameters**:
+  - `thread_id` (str): The ID of the thread.
+  - `order` (str, optional): The order in which to retrieve messages, either 'asc' or 'desc'. Defaults to 'asc'.
+  - `limit` (int, optional): The number of messages to retrieve. Defaults to 20.
+
+- **Returns**: 
+  - `list`: A list of message objects.
+
+#### `process_and_print_messages`
+
+Processes and prints the role and content of each message using the `MessageManager`.
+
+- **Parameters**:
+  - `messages (list)`: The list of message objects.
+
+#### `assistant_transformer`
+
+Attaches a new assistant to an existing thread and runs the thread to speak with the new assistant using the `RunManager`.
+
+- **Parameters**:
+  - `thread_id` (str): The ID of the existing thread.
+  - `new_assistant_id` (str): The ID of the new assistant to attach.
+
+- **Returns**: 
+  - `object`: The final run object indicating the result of the interaction.
+
+#### `create_vector_store`
+
+Creates a new vector store with a specified name using the `VectorStoreManager`.
+
+- **Parameters**:
+  - `name` (str): The name of the vector store.
+
+- **Returns**: 
+  - `object`: The newly created vector store object.
+
+#### `upload_files_and_poll`
+
+Uploads files to a vector store and polls the status of the file batch for completion using the `VectorStoreManager`.
+
+- **Parameters**:
+  - `vector_store_id` (str): The ID of the vector store.
+  - `file_paths` (list): A list of file paths to upload.
+
+- **Returns**: 
+  - `object`: The file batch object after upload and completion.
+
+#### `update_assistant_with_vector_store`
+
+Updates an assistant to use the new vector store using the `VectorStoreManager`.
+
+- **Parameters**:
+  - `assistant_id` (str): The ID of the assistant.
+  - `vector_store_id` (str): The ID of the vector store.
+
+- **Returns**: 
+  - `object`: The updated assistant object.
+
+#### `list_vector_stores`
+
+Retrieves a list of all existing vector stores using the `VectorStoreManager`.
+
+- **Returns**: 
+  - `list`: A list of vector store objects.
+
+#### `retrieve_vector_store_details`
+
+Retrieves detailed information about a specific vector store using the `VectorStoreManager`.
+
+- **Parameters**:
+  - `vector_store_id` (str): The ID of the vector store.
+
+- **Returns**: 
+  - `object`: The vector store object with detailed information.
+
+#### `delete_vector_store`
+
+Deletes a vector store using the `VectorStoreManager`.
+
+- **Parameters**:
+  - `vector_store_id` (str): The ID of the vector store.
+
+- **Returns**: 
+  - `bool`: True if the vector store was deleted successfully, False otherwise.
+
+#### `list_files_in_vector_store`
+
+Lists all files that have been uploaded to a specific vector store using the `VectorStoreManager`.
+
+- **Parameters**:
+  - `vector_store_id` (str): The ID of the vector store.
+  - `batch_id` (str): The ID of the file batch.
+
+- **Returns**: 
+  - `list`: A list of files in the vector store.
+
+#### `retrieve_file_batch_details`
+
+Retrieves the status and details of a specific file batch within a vector store using the `VectorStoreManager`.
+
+- **Parameters**:
+  - `vector_store_id` (str): The ID of the vector store.
+  - `batch_id` (str): The ID of the file batch.
+
+- **Returns**: 
+  - `object`: The file batch object with detailed information.
+
+#### `search_files_in_vector_store`
+
+Searches for files in a vector store based on a query using the `VectorStoreManager`.
+
+- **Parameters**:
+  - `vector_store_id` (str): The ID of the vector store.
+  - `query` (str): The search query.
+
+- **Returns**: 
+  - `list`: A list of search results.
+
+#### `call_parallel_functions`
+
+Wrapper to run parallel tool calls in an asynchronous event loop.
+
+- **Parameters**:
+  - `tasks` (list): A list of dictionaries where each dictionary contains:
+    - `function_name` (str): The name of the function to call.
+    - `parameters` (dict): The parameters to pass to the function.
+
+- **Returns**: 
+  - `list`: A list of results from each function call.
+
+#### `add_messages_dynamically`
+
+Adds multiple user messages to a specified thread dynamically with optional metadata.
+
+- **Parameters**:
+  - `thread_id` (str): The ID of the thread.
+  - `messages` (list): A list of dictionaries containing the message content and optional metadata. Each dictionary should have the following structure:
+    ```json
+    {
+        "content": "Message content",
+        "metadata": {"key": "value"} (optional)
+    }
+    ```
+  - `role` (str, optional): The role of the message sender. Defaults to None.
+  - `metadata` (dict, optional): Default metadata to include with each message if not provided in individual messages.
+
+- **Returns**: 
+  - `list`: A list of message objects that were added to the thread.
+
+- **Raises**: 
+  - `OpenAIError`: If the API call to add a message fails.
+  - `Exception`: If an unexpected error occurs.
+
+#### `retrieve_messages_dynamically`
+
+Retrieves messages from a specified thread dynamically.
+
+- **Parameters**:
+  - `thread_id` (str): The ID of the thread from which to retrieve messages.
+  - `order` (str, optional): The order in which to retrieve messages, either 'asc' or 'desc'. Defaults to 'asc'.
+  - `limit` (int, optional): The maximum number of messages to retrieve in a single request. Defaults to 20.
+  - `retrieve_all` (bool, optional): Whether to retrieve all messages in the thread. If False, only retrieves up to the limit. Defaults to False.
+  - `last_retrieved_id` (str, optional): The ID of the last retrieved message to fetch messages after it. Defaults to None.
+
+- **Returns**: 
+  - `list`: A list of message objects retrieved from the thread.
+
+- **Raises**: 
+  - `OpenAIError`: If the API call to retrieve messages fails.
+  - `Exception`: If an unexpected error occurs.
+
+## CredentialManager
+
+The `CredentialManager` class manages the credentials and provides the appropriate client based on the credential type.
+
+### Class Definition
+
+```python
+class CredentialManager:
+    def __init__(self):
+        self.credential_type = config.CREDENTIAL_TYPE
+        self.client = self._get_client()
+
+    def _get_client(self):
+        # Method to get the appropriate client based on credential type
+```
+
+### Methods
+
+#### `__init__`
+
+Initializes the `CredentialManager` instance. Sets up the credential type and retrieves the client.
+
+#### `_get_client`
+
+Gets the appropriate client based on the credential type.
+
+- **Returns**: 
+  - `Client`: The API client for the specified credential type.
+
+## CredentialStrategy
+
+The `CredentialStrategy` class is an abstract base class for credential strategies. This class defines the interface for different credential strategies to get their respective API clients.
+
+### Class Definition
+
+```python
+class CredentialStrategy(ABC):
+    @abstractmethod
+    def get_client(self):
+        # Abstract method to get the API client
+```
+
+### Methods
+
+#### `get_client`
+
+Abstract method to get the API client. This method should be implemented by all subclasses to return the appropriate client for the given credential strategy.
+
+- **Returns**: 
+  - `Client`: The API client for the specific credential strategy.
+
+
+---

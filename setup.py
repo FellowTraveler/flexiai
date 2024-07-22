@@ -1,7 +1,6 @@
+# setup.py
 from setuptools import setup, find_packages
-import os
 
-# Ensure the README file is read correctly
 def read_readme():
     try:
         with open('README.md', encoding='utf-8') as f:
@@ -11,7 +10,7 @@ def read_readme():
 
 setup(
     name='flexiai',
-    version='0.8.47',
+    version='1.0.1',
     packages=find_packages(include=['flexiai', 'flexiai.*']),
     include_package_data=True,
     package_data={
@@ -19,7 +18,10 @@ setup(
             'assistant/*.py',
             'config/*.py',
             'core/*.py',
-            'core/utils/*.py'
+            'core/flexi_managers/*.py',
+            'core/utils/*.py',
+            'credentials/*.py',
+            'tests/*.py'
         ],
     },
     install_requires=[
@@ -29,8 +31,6 @@ setup(
         'azure-identity==1.17.1',
         'azure-mgmt-core==1.4.0',
         'azure-mgmt-resource==23.1.1',
-        'pytest==8.2.2',
-        'pytest-mock==3.14.0',
         'pydantic==2.7.4',
         'pydantic-settings==2.3.3',
         'pydantic_core==2.18.4',
@@ -45,15 +45,17 @@ setup(
     },
     author='Savin Ionut Razvan',
     author_email='razvan.i.savin@gmail.com',
-    description='FlexiAI is a powerful AI framework that simplifies the integration and management of OpenAI and Azure OpenAI services, featuring advanced Retrieval-Augmented Generation (RAG) capabilities for efficient AI-driven application development.',
+    description="FlexiAI: A dynamic and modular AI framework leveraging Multi-Agent Systems and Retrieval Augmented Generation (RAG) for seamless integration with OpenAI and Azure OpenAI services.",
     long_description=read_readme(),
     long_description_content_type='text/markdown',
     url='https://github.com/SavinRazvan/flexiai',
     classifiers=[
-        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Topic :: Software Development',
     ],

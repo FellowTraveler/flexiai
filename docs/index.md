@@ -1,90 +1,47 @@
-# Welcome to FlexiAI Documentation
+# FlexiAI Documentation
 
-Welcome to the official documentation for FlexiAI, a versatile and powerful AI framework designed to simplify the use of OpenAI and Azure OpenAI APIs. By leveraging advanced Retrieval-Augmented Generation (RAG) capabilities, FlexiAI enables developers to build sophisticated, custom AI assistants efficiently and effectively.
+Welcome to the FlexiAI documentation. This comprehensive guide is designed to help you get started with FlexiAI and make the most out of its powerful features. Whether you're a beginner or an experienced developer, you'll find everything you need to know about setting up, using, and extending FlexiAI.
 
 ## Table of Contents
 
 - [Introduction](#introduction)
 - [Features](#features)
-- [Quick Start](#quick-start)
-- [Detailed Guides](#detailed-guides)
-    - [Installation Guide](docs/setup.md)
-    - [Usage Guide](docs/usage.md)
-    - [API Reference](docs/api_reference.md)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
-
-## Introduction
-
-FlexiAI is a cutting-edge AI framework designed to support both OpenAI and Azure OpenAI services. It offers a range of features that make it an ideal choice for developing AI assistants and applications that require dynamic and real-time information retrieval.
-
-## Features
-
-- **Multi-Platform Integration**: Seamlessly integrates with both OpenAI and Azure OpenAI services.
-- **Configurable and Extensible**: Highly configurable and extensible to suit specific project needs.
-- **Robust Logging**: Offers comprehensive logging for effective debugging and monitoring.
-- **Task Management**: Efficiently manages and executes a wide range of tasks.
-- **Retrieval-Augmented Generation (RAG)**: Enables AI assistants to call external functions or services for real-time information retrieval.
-- **Examples and Tests**: Provides example scripts and comprehensive tests for quick onboarding.
-- **Secure and Scalable**: Suitable for both small projects and large enterprise applications.
-- **Community-Driven**: Actively maintained and supported by a community of developers.
-
-## Quick Start
-
-To get started with FlexiAI, follow these steps:
-
-1. **Installation**: Install FlexiAI using pip.
-2. **Setup**: Configure your environment and set up necessary directories and files.
-3. **Usage**: Begin developing your AI assistant using the provided examples and guides.
-
-### Installation
-
-Create a virtual environment and install FlexiAI:
-
-#### Using PowerShell
-```powershell
-python -m venv env
-source env/bin/activate
-pip install flexiai
-```
-
-#### Using Conda
-```bash
-conda create --name flexiai_env python=3.10
-conda activate flexiai_env
-pip install flexiai
-```
-
-### Post-Installation Setup
-
-Run the `post_install.py` script to set up necessary directories and files:
-
-```bash
-python post_install.py
-```
-
-## Detailed Guides
-
-For more detailed instructions and guides, refer to the following documentation:
-
-- [Installation Guide](flexiai/docs/setup.md): Step-by-step installation instructions.
-- [Usage Guide](flexiai/docs/usage.md): Comprehensive usage examples and advanced functionalities.
-- [API Reference](flexiai/docs/api_reference.md): Detailed API reference for FlexiAI.
-
-## Contributing
-
-We welcome contributions from the community. If you want to contribute to FlexiAI, please read our [Contributing Guide](flexiai/docs/contributing.md) to get started.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/SavinRazvan/flexiai/blob/main/LICENSE.txt) file for details.
-
-
-## Contact
-
-For any inquiries or support, please contact Savin Ionut Razvan at [razvan.i.savin@gmail.com](mailto:razvan.i.savin@gmail.com).
+- [Setup](setup.md)
+- [Usage](usage.md)
+- [API Reference](api_reference.md)
+- [Contributing](contributing.md)
 
 ---
 
-Thank you for using FlexiAI! We hope our framework helps you build amazing AI applications. If you have any feedback or questions, feel free to reach out to us.
+## Introduction
+
+FlexiAI is a dynamic and modular AI framework designed to leverage the power of Multi-Agent Systems and Retrieval Augmented Generation (RAG). This framework is ideal for developers seeking to integrate AI capabilities into their applications with ease and flexibility. With FlexiAI, you can harness the power of both OpenAI and Azure OpenAI services to create intelligent agents that can manage tasks, process data, and provide advanced AI-driven solutions.
+
+## Features
+
+- **Multi-Agent System**: Manage multiple AI agents concurrently to handle various tasks efficiently.
+- **Retrieval Augmented Generation (RAG)**: Enhance the AI's capabilities by integrating retrieval mechanisms to provide enriched and contextually relevant responses. This includes:
+  - **Comprehensive Task Management**: Organize, execute, and manage a variety of tasks with the integrated `TaskManager`, enabling AI assistants to take actions and retrieve real-time data from your personal computer or cloud services.
+- **Flexible Credential Management**: Seamlessly switch between OpenAI and Azure OpenAI credentials.
+- **Extensible Architecture**: Easily extend and customize the framework with user-defined functions and tasks.
+- **Robust Logging**: Comprehensive logging for effective debugging and monitoring.
+- **Secure and Scalable**: Suitable for both small projects and large enterprise applications.
+- **Actively Maintained**: Continuously improved and supported by the project's developer.
+
+---
+
+For detailed instructions on how to set up and use FlexiAI, please refer to the following sections:
+
+- [Setup Guide](setup.md)
+- [Usage Guide](usage.md)
+- [API Reference](api_reference.md)
+- [Contributing Guide](contributing.md)
+
+---
+
+## Getting Help
+
+If you need any help or have questions, please refer to the [Contact](README.md#contact) section in the README file.
+
+
+---

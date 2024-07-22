@@ -2,6 +2,7 @@
 import time
 from openai import OpenAIError
 
+
 class VectorStoreManager:
     """
     VectorStoreManager handles the creation of vector stores, uploading files,
@@ -22,6 +23,7 @@ class VectorStoreManager:
         """
         self.client = client
         self.logger = logger
+
 
     def create_vector_store(self, name):
         """
@@ -48,6 +50,7 @@ class VectorStoreManager:
         except Exception as e:
             self.logger.error(f"An unexpected error occurred while creating vector store: {str(e)}", exc_info=True)
             raise RuntimeError(f"Unexpected error: {str(e)}")
+
 
     def upload_files_and_poll(self, vector_store_id, file_paths):
         """
@@ -94,6 +97,7 @@ class VectorStoreManager:
             self.logger.error(f"An unexpected error occurred while uploading files: {str(e)}", exc_info=True)
             raise RuntimeError(f"Unexpected error: {str(e)}")
 
+
     def update_assistant_with_vector_store(self, assistant_id, vector_store_id):
         """
         Updates the assistant to use the new vector store.
@@ -124,6 +128,7 @@ class VectorStoreManager:
             self.logger.error(f"An unexpected error occurred while updating assistant: {str(e)}", exc_info=True)
             raise RuntimeError(f"Unexpected error: {str(e)}")
 
+
     def list_vector_stores(self):
         """
         Retrieves a list of all existing vector stores.
@@ -149,6 +154,7 @@ class VectorStoreManager:
         except Exception as e:
             self.logger.error(f"An unexpected error occurred while listing vector stores: {str(e)}", exc_info=True)
             raise RuntimeError(f"Unexpected error: {str(e)}")
+
 
     def retrieve_vector_store_details(self, vector_store_id):
         """
@@ -176,6 +182,7 @@ class VectorStoreManager:
             self.logger.error(f"An unexpected error occurred while retrieving vector store details: {str(e)}", exc_info=True)
             raise RuntimeError(f"Unexpected error: {str(e)}")
 
+
     def delete_vector_store(self, vector_store_id):
         """
         Deletes a vector store.
@@ -201,6 +208,7 @@ class VectorStoreManager:
         except Exception as e:
             self.logger.error(f"An unexpected error occurred while deleting vector store: {str(e)}", exc_info=True)
             raise RuntimeError(f"Unexpected error: {str(e)}")
+
 
     def list_files_in_vector_store(self, vector_store_id, batch_id):
         """
@@ -234,6 +242,7 @@ class VectorStoreManager:
             self.logger.error(f"An unexpected error occurred while listing files: {str(e)}", exc_info=True)
             raise RuntimeError(f"Unexpected error: {str(e)}")
 
+
     def retrieve_file_batch_details(self, vector_store_id, batch_id):
         """
         Retrieves the status and details of a specific file batch within a vector store.
@@ -262,6 +271,7 @@ class VectorStoreManager:
         except Exception as e:
             self.logger.error(f"An unexpected error occurred while retrieving file batch details: {str(e)}", exc_info=True)
             raise RuntimeError(f"Unexpected error: {str(e)}")
+
 
     def search_files_in_vector_store(self, vector_store_id, query):
         """

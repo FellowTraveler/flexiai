@@ -4,7 +4,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 
-def setup_logging(root_level=logging.WARNING, file_level=logging.WARNING, console_level=logging.WARNING):
+def setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_level=logging.WARNING):
     """
     Configures the logging settings for the application with user-defined log levels.
 
@@ -67,7 +67,7 @@ def setup_logging(root_level=logging.WARNING, file_level=logging.WARNING, consol
 
             # Create a formatter to define the log message format
             formatter = logging.Formatter(
-                "%(asctime)s - %(levelname)s - %(filename)s - %(message)s"  # Log message format
+                "%(asctime)s - %(levelname)s - %(filename)s - %(message)s"  # Log message format with date
             )
             
             # Assign the formatter to the file handler
