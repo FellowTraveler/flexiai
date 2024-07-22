@@ -23,6 +23,7 @@ class SessionManager:
         self.client = client
         self.logger = logger
 
+
     def create_session(self, session_id, data):
         """
         Creates a new session or updates an existing session with the given session_id.
@@ -45,6 +46,7 @@ class SessionManager:
         except Exception as e:
             self.logger.error(f"An unexpected error occurred while creating/updating session {session_id}: {str(e)}", exc_info=True)
             raise
+
 
     def get_session(self, session_id):
         """
@@ -74,6 +76,7 @@ class SessionManager:
             self.logger.error(f"An unexpected error occurred while retrieving session {session_id}: {str(e)}", exc_info=True)
             raise
 
+
     def delete_session(self, session_id):
         """
         Deletes session data by session_id.
@@ -100,6 +103,7 @@ class SessionManager:
             self.logger.error(f"An unexpected error occurred while deleting session {session_id}: {str(e)}", exc_info=True)
             raise
 
+
     def get_all_sessions(self):
         """
         Retrieves all current sessions.
@@ -115,6 +119,7 @@ class SessionManager:
         except Exception as e:
             self.logger.error(f"An unexpected error occurred while retrieving all sessions: {str(e)}", exc_info=True)
             raise
+
 
     def clear_all_sessions(self):
         """

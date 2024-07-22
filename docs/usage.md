@@ -1,183 +1,123 @@
-# FlexiAI Usage Guide
+# Usage Guide
+
+This guide will help you understand how to use the FlexiAI framework to interact with AI assistants. Below are step-by-step instructions and an example script to get you started.
 
 ## Table of Contents
-1. [Initial Setup and Configuration](#initial-setup-and-configuration)
-2. [Import Necessary Modules](#import-necessary-modules)
-3. [Define the Assistant ID](#define-the-assistant-id)
-4. [Create a New Thread](#create-a-new-thread)
-5. [Variable to Store All Messages](#variable-to-store-all-messages)
-6. [Add a User Message and Print the Message](#add-a-user-message-and-print-the-message)
-7. [Create a Run to Get the Assistant's Response](#create-a-run-to-get-the-assistants-response)
-8. [Retrieve and Store the Assistant's Response](#retrieve-and-store-the-assistants-response)
-9. [Add Another User Message and Print the Message](#add-another-user-message-and-print-the-message)
-10. [Create Another Run to Get the Assistant's Response](#create-another-run-to-get-the-assistants-response)
-11. [Retrieve and Print the Last Messages](#retrieve-and-print-the-last-messages)
-12. [Example to Show Different Formats for Retrieving Messages](#example-to-show-different-formats-for-retrieving-messages)
 
-## Initial Setup and Configuration
-- Changing and Verifying the Working Directory for Project Setup
-- This section ensures that your working directory is set to the project root.
+- [Basic Usage](#basic-usage)
+- [Running the Example Script](#running-the-example-script)
+- [Customizing the Script](#customizing-the-script)
 
-```python
-import sys
-import os
+---
 
-# Check current working directory
-current_dir = os.getcwd()
-print(f"Current Directory: {current_dir}")
+## Basic Usage
 
-# Change to your project root directory
-project_root = '/your/project/directory'
-os.chdir(project_root)
-print(f"Changed Directory to: {os.getcwd()}")
+FlexiAI allows you to create and manage AI assistants that can handle various tasks. The following sections provide a basic overview of how to set up and use an AI assistant with FlexiAI.
 
-# Add project root directory to sys.path
-sys.path.append(project_root)
-print(f"Project root added to sys.path")
-```
+## Running the Example Script
 
-## Import Necessary Modules
-- Import required modules and set up logging.
+Below is an example script (`chat.py`) that demonstrates how to use FlexiAI to interact with an AI assistant. The script sets up logging, initializes FlexiAI, creates a new thread for the assistant, and enters a loop to continuously get user input and interact with the assistant.
+
+### `chat.py`
 
 ```python
 import logging
 from flexiai.core.flexiai_client import FlexiAI
 from flexiai.config.logging_config import setup_logging
-from flexiai.core.utils.helpers import show_json, print_messages_as_json, print_run_details
+from flexiai.core.utils.helpers import HelperFunctions
 
-# Setup logging using the predefined configuration
-setup_logging(root_level=logging.DEBUG, file_level=logging.DEBUG, console_level=logging.ERROR)
+# Define global variables for role names
+USER_ROLE_NAME = "You"
+ASSISTANT_ROLE_NAME = "Alpha"
 
-# Initialize FlexiAI
-flexiai = FlexiAI()
+def main():
+    # Set up logging using your custom configuration
+    setup_logging()
+    
+    # Initialize FlexiAI
+    flexiai = FlexiAI()
+
+    # Use the given assistant ID
+    assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXX'  # Replace with the actual assistant ID
+
+    # Initialize MultiAgentSystemManager
+    multi_agent_system = flexiai.multi_agent_system
+
+    # Initialize a new thread for the given assistant ID
+    try:
+        thread_id, status = multi_agent_system.check_for_thread_and_status(assistant_id)
+        if not thread_id:
+            thread_id = multi_agent_system.thread_initialization(assistant_id)
+            if thread_id:
+                logging.info(f"Initialized thread with ID: {thread_id} for assistant ID: {assistant_id}")
+            else:
+                logging.error(f"Failed to initialize thread for assistant ID: {assistant_id}")
+                return
+        else:
+            logging.info(f"Thread with ID: {thread_id} already exists for assistant ID: {assistant_id}, Status: {status}")
+    except Exception as e:
+        logging.error(f"Error initializing thread for assistant ID {assistant_id}: {e}", exc_info=True)
+        return
+
+    # Variable to store all messages
+    all_messages = []
+    last_retrieved_id = None
+
+    # Loop to continuously get user input and interact with the assistant
+    while True:
+        # Get user input
+        user_message = input(f"{USER_ROLE_NAME}: ")
+
+        # Exit the loop if the user types 'exit'
+        if user_message.lower() == 'exit':
+            print("Exiting...")
+            break
+
+        logging.info(f"User message: {user_message}")
+
+        # Run the thread and handle required actions
+        try:
+            flexiai.create_and_monitor_run(assistant_id, thread_id, user_message)
+            
+            # Retrieve messages dynamically after the run
+            retrieved_messages_after_run = flexiai.retrieve_messages_dynamically(
+                thread_id, order='asc', limit=20, retrieve_all=False, last_retrieved_id=last_retrieved_id
+            )
+            last_retrieved_id = retrieved_messages_after_run[-1].id if retrieved_messages_after_run else last_retrieved_id
+            
+            # Clear console and print the stored messages in the desired format
+            HelperFunctions.clear_console()
+            HelperFunctions.format_and_track_messages(all_messages, retrieved_messages_after_run, USER_ROLE_NAME, ASSISTANT_ROLE_NAME)
+        except Exception as e:
+            logging.error(f"Error running thread: {e}", exc_info=True)
+
+if __name__ == "__main__":
+    main()
 ```
 
-## Define the Assistant ID
-- Define the assistant ID that will be used for interactions.
+### Steps to Run the Script
 
-```python
-# Use the given assistant ID
-assistant_id = 'asst_AWAVO511bAbTVEdOvLNWitoT'  # Replace with the actual assistant ID
-```
+1. **Set up your environment**: Ensure you have followed the setup instructions in the [Setup Guide](setup.md).
 
-## Create a New Thread
-- Create a new thread to start a conversation.
+2. **Save the script**: Save the above script as `chat.py` in your project directory.
 
-```python
-thread = flexiai.create_thread()
-thread_id = thread.id
-print(f"Thread Created with ID: {thread_id}")
-```
+3. **Run the script**: Execute the script using Python.
 
-## Variable to Store All Messages
-- Initialize variables to store messages and keep track of processed message IDs.
+    ```bash
+    python chat.py
+    ```
 
-```python
-all_messages = []
-seen_message_ids = set()
-```
+4. **Interact with the assistant**: Enter your messages when prompted. Type 'exit' to end the interaction.
 
-## Add a User Message and Print the Message
-- Add a message from the user to the thread and print the message details.
+## Customizing the Script
 
-```python
-user_message = "Tell me about the Eiffel Tower."
-message = flexiai.add_user_message(thread_id=thread_id, user_message=user_message)
-show_json(message)
+You can customize the `chat.py` script to better suit your needs:
 
-# Store the message
-all_messages.append({"role": "user", "content": user_message})
-seen_message_ids.add(message.id)
-```
+- **Assistant ID**: Replace `'asst_XXXXXXXXXXXXXXXXXXXXXXXXX'` with your actual assistant ID.
+- **Role Names**: Change the `USER_ROLE_NAME` and `ASSISTANT_ROLE_NAME` variables to customize how the roles are displayed.
+- **Logging**: Modify the `setup_logging()` function call to configure logging according to your preferences.
 
-## Create a Run to Get the Assistant's Response
-- Create a run to get the response from the assistant.
+For more detailed usage examples and advanced functionalities, refer to the [Usage Guide](usage.md).
 
-```python
-run = flexiai.create_run(assistant_id=assistant_id, thread_id=thread_id)
-print_run_details(run)
-```
 
-## Retrieve and Store the Assistant's Response
-- Retrieve messages from the thread and store them in a list.
-
-```python
-messages = flexiai.retrieve_messages(thread_id=thread_id, order='desc', limit=2)
-
-for msg in messages:
-    if msg['message_id'] not in seen_message_ids:
-        all_messages.append(msg)
-        seen_message_ids.add(msg['message_id'])
-
-# Print all messages
-for msg in all_messages:
-    role = "🤖 Assistant" if msg['role'] == "assistant" else "🧑 You"
-    print(f"{role}: {msg['content']}")
-```
-
-## Add Another User Message and Print the Message
-- Add another message from the user to the thread and print the message details.
-- This message will trigger the `search_youtube` function.
-
-```python
-user_message = "I would like to search on YouTube these keywords: Eiffel Tower."
-message = flexiai.add_user_message(thread_id=thread_id, user_message=user_message)
-show_json(message)
-
-# Store the message
-all_messages.append({"role": "user", "content": user_message})
-seen_message_ids.add(message.id)
-```
-
-## Create Another Run to Get the Assistant's Response
-- Create another run to get the assistant's response to the new message.
-- The `create_run` function can handle `requires_action` and will trigger a search on YouTube with the `search_youtube` function if it is mapped in `user_flexiai_rag/user_function_mapping.py` and stored in `user_flexiai_rag/user_task_manager.py`.
-
-```python
-run = flexiai.create_run(assistant_id=assistant_id, thread_id=thread_id)
-show_json(run)
-```
-
-## Retrieve and Print the Last Messages
-- Retrieve the latest messages from the thread and print them.
-
-```python
-messages = flexiai.retrieve_messages(thread_id=thread_id, order='desc', limit=2)
-
-for msg in messages:
-    if msg['message_id'] not in seen_message_ids:
-        all_messages.append(msg)
-        seen_message_ids.add(msg['message_id'])
-
-# Print all messages
-for msg in all_messages:
-    role = "🤖 Assistant" if msg['role'] == "assistant" else "🧑 You"
-    print(f"{role}: {msg['content']}")
-```
-
-## Example to Show Different Formats for Retrieving Messages
-- This section demonstrates two different formats for retrieving messages from a thread using FlexiAI.
-
-### Retrieve Messages
-- The `retrieve_messages` function fetches messages in a list of formatted dictionaries.
-- The `order='desc'` argument specifies that the messages are retrieved in descending order (newest first).
-- `limit=20` specifies the maximum number of messages to retrieve.
-- The retrieved messages are printed to show their format.
-
-```python
-print(100*'=')
-messages = flexiai.retrieve_messages(thread_id=thread_id, order='desc', limit=20)
-print(messages)
-print(100*'=')
-```
-
-### Retrieve Message Objects
-- The `retrieve_message_object` function fetches the entire message objects from the thread.
-- The `order='asc'` argument specifies that the messages are retrieved in ascending order (oldest first).
-- `limit=20` specifies the maximum number of message objects to retrieve.
-- The retrieved message objects are printed to show their detailed structure.
-
-```python
-messages = flexiai.retrieve_message_object(thread_id=thread_id, order='asc', limit=20)
-print_messages_as_json(messages)
-```
+---
