@@ -36,7 +36,7 @@ conda create --name flexiai_env python=3.12.4
 conda activate flexiai_env
 ```
 
-### Install FlexiAI with `pip`
+### Install FlexiAI with pip
 
 To install the FlexiAI framework using `pip`, run:
 
@@ -57,7 +57,7 @@ After installing, copy the `flexiai_rag_extension.py` and `flexiai_basic_flask_a
 <summary> ⬇️ Expand to see the code for `flexiai_rag_extension.py` ⬇️ </summary>
 
 ```python
-# flexiai/scripts/flexiai_rag_extension.py
+# flexiai_rag_extension.py
 import os
 
 def create_logs_folder(project_root):
@@ -306,106 +306,51 @@ def create_requirements_file(project_root):
             f.write(
                 "annotated-types==0.7.0\n"
                 "anyio==4.4.0\n"
-                "asttokens==2.1.0\n"
                 "azure-common==1.1.28\n"
                 "azure-core==1.30.2\n"
                 "azure-identity==1.17.1\n"
                 "azure-mgmt-core==1.4.0\n"
                 "azure-mgmt-resource==23.1.1\n"
-                "backports.tarfile==1.2.0\n"
                 "blinker==1.8.2\n"
-                "certifi==2024.6.2\n"
+                "certifi==2024.7.4\n"
                 "cffi==1.16.0\n"
                 "charset-normalizer==3.3.2\n"
                 "click==8.1.7\n"
-                "comm==0.1.3\n"
-                "cryptography==42.0.8\n"
-                "debugpy==1.6.5\n"
-                "decorator==5.1.1\n"
+                "cryptography==43.0.0\n"
                 "distro==1.9.0\n"
-                "docutils==0.21.2\n"
-                "exceptiongroup==1.1.0\n"
-                "executing==1.2.0\n"
                 "Flask==3.0.3\n"
+                "glob2==0.7\n"
                 "h11==0.14.0\n"
                 "httpcore==1.0.5\n"
                 "httpx==0.27.0\n"
                 "idna==3.7\n"
-                "importlib_metadata==6.8.0\n"
                 "iniconfig==2.0.0\n"
-                "ipykernel==6.24.0\n"
-                "ipython==8.14.0\n"
-                "ipywidgets==8.1.3\n"
                 "isodate==0.6.1\n"
                 "itsdangerous==2.2.0\n"
-                "jaraco.classes==3.4.0\n"
-                "jaraco.context==5.3.0\n"
-                "jaraco.functools==4.0.1\n"
-                "jedi==0.19.0\n"
-                "jeepney==0.8.0\n"
-                "jupyter_client==8.3.0\n"
-                "jupyter_core==5.2.0\n"
-                "jupyterlab_widgets==3.0.11\n"
-                "keyring==25.2.1\n"
-                "markdown-it-py==3.0.0\n"
+                "Jinja2==3.1.4\n"
                 "MarkupSafe==2.1.5\n"
-                "matplotlib-inline==0.1.6\n"
-                "mdurl==0.1.2\n"
-                "more-itertools==10.3.0\n"
-                "msal==1.29.0\n"
+                "msal==1.30.0\n"
                 "msal-extensions==1.2.0\n"
-                "nest_asyncio==1.5.7\n"
-                "nh3==0.2.17\n"
-                "numpy==2.0.0\n"
+                "nest-asyncio==1.6.0\n"
                 "openai==1.35.0\n"
-                "packaging==23.1\n"
-                "pandas==2.2.2\n"
-                "parso==0.8.3\n"
-                "pexpect==4.8.0\n"
-                "pickleshare==0.7.5\n"
-                "pkginfo==1.10.0\n"
+                "packaging==24.1\n"
                 "platformdirs==3.7.0\n"
                 "pluggy==1.5.0\n"
-                "portalocker==2.10.0\n"
-                "prompt_toolkit==3.0.39\n"
-                "psutil==5.9.5\n"
-                "ptyprocess==0.7.0\n"
-                "pure-eval==0.2.2\n"
+                "portalocker==2.10.1\n"
                 "pycparser==2.22\n"
                 "pydantic==2.7.4\n"
                 "pydantic-settings==2.3.3\n"
                 "pydantic_core==2.18.4\n"
-                "Pygments==2.15.1\n"
                 "PyJWT==2.8.0\n"
-                "pytest==8.2.2\n"
-                "pytest-mock==3.14.0\n"
-                "python-dateutil==2.8.2\n"
+                "pytest==8.3.1\n"
                 "python-dotenv==1.0.1\n"
-                "pytz==2024.1\n"
-                "pyzmq==25.1.0\n"
-                "readme_renderer==43.0\n"
                 "requests==2.32.3\n"
-                "requests-toolbelt==1.0.0\n"
-                "rfc3986==2.0.0\n"
-                "rich==13.7.1\n"
-                "SecretStorage==3.3.3\n"
                 "six==1.16.0\n"
                 "sniffio==1.3.1\n"
-                "stack-data==0.6.3\n"
-                "tomli==2.0.1\n"
-                "tornado==6.3.2\n"
                 "tqdm==4.66.4\n"
-                "traitlets==5.10.1\n"
-                "twine==5.1.1\n"
-                "typing_extensions==4.7.1\n"
-                "tzdata==2024.1\n"
+                "typing_extensions==4.12.2\n"
                 "urllib3==2.2.2\n"
-                "wcwidth==0.2.6\n"
                 "Werkzeug==3.0.3\n"
-                "widgetsnbextension==4.0.11\n"
-                "zipp==3.17.0\n"
-                "setuptools==70.2.0\n"
-                "pip-audit==2.7.3\n"
             )
         print(f"Created file: {requirements_file}")
 
@@ -969,6 +914,7 @@ if __name__ == '__main__':
         create_main_files(project_root)
     except Exception as e:
         print(f"Post-installation step failed: {e}")
+
 
 ```
 
