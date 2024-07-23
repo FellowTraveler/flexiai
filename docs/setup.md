@@ -48,8 +48,8 @@ pip install flexiai
 
 After installing, copy the `flexiai_rag_extension.py` and `flexiai_basic_flask_app.py` files to your project root directory and run them manually to set up additional necessary directories and files.
 
-[Download flexiai_rag_extension.py](https://github.com/SavinRazvan/flexiai/blob/main/flexiai_rag_extension.py)
-[Download flexiai_basic_flask_app.py](https://github.com/SavinRazvan/flexiai/blob/main/flexiai_basic_flask_app.py)
+- [Download flexiai_rag_extension.py](https://github.com/SavinRazvan/flexiai/blob/main/flexiai_rag_extension.py): This script sets up the necessary structure and files for enabling Retrieval-Augmented Generation (RAG) capabilities in your FlexiAI project.
+- [Download flexiai_basic_flask_app.py](https://github.com/SavinRazvan/flexiai/blob/main/flexiai_basic_flask_app.py): This script creates a basic Flask application structure, including routes, static files, templates, and main application files, to facilitate running a web server for your FlexiAI project.
 
 #### Or create new files `flexiai_rag_extension.py` and `flexiai_basic_flask_app.py` in the root directory of your project.
 
@@ -922,7 +922,7 @@ if __name__ == '__main__':
 
 ### Enable Retrieval-Augmented Generation (RAG)
 
-Running the `flexiai_rag_extension.py` and `flexiai_basic_flask_app.py` scripts will automatically create the necessary structure and files to enable the Retrieval-Augmented Generation (RAG) module in your project.
+Running the `flexiai_rag_extension.py` and `flexiai_basic_flask_app.py` scripts will automatically create the necessary structure and files to enable the Retrieval-Augmented Generation (RAG) module and the basic Flask app in your project.
 
 Here's an overview of the created structure:
 
@@ -943,10 +943,8 @@ Here's an overview of the created structure:
  ┃ ┃ ┣ 📂css
  ┃ ┃ ┃ ┗ 📜styles.css
  ┃ ┃ ┣ 📂images
- ┃ ┃ ┃ ┣ 📂other_images
- ┃ ┃ ┃ ┃ ┗ 📜your other images
- ┃ ┃ ┃ ┣ 📜assistant.png
- ┃ ┃ ┃ ┗ 📜user.png
+ ┃ ┃ ┃ ┣ 📜assistant.png              <- Add your Assistant image, make sure to have same name
+ ┃ ┃ ┃ ┗ 📜user.png                   <- Add your User image, make sure to have same name
  ┃ ┃ ┣ 📂js
  ┃ ┃ ┃ ┗ 📜scripts.js
  ┃ ┃ ┗ 📜favicon.ico
