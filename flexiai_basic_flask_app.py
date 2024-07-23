@@ -143,7 +143,7 @@ def create_static_folder(project_root):
             "/* Chat Container */\n"
             "#chat-container {\n"
             "    width: 100%;\n"
-            "    max-width: 400px;\n"
+            "    max-width: 680px;\n"
             "    height: calc(100vh - 2rem);\n"
             "    display: flex;\n"
             "    flex-direction: column;\n"
