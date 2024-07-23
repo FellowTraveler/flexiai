@@ -948,7 +948,7 @@ Here's an overview of the created structure:
  ┃ ┃ ┗ 📜user.png                   <- Add your User image, make sure to have same name
  ┃ ┣ 📂js
  ┃ ┃ ┗ 📜scripts.js
- ┃ ┗ 📜favicon.ico
+ ┃ ┗ 📜favicon.ico                  <- Add your favicon.ico image, make sure to have same name
  ┣ 📂templates
  ┃ ┗ 📜index.html
  ┣ 📜app.py
