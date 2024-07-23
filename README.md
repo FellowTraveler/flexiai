@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/SavinRazvan/flexiai/actions/workflows/workflow.yml/badge.svg)](https://github.com/SavinRazvan/flexiai/actions/workflows/workflow.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PyPI version](https://badge.fury.io/py/flexiai.svg?v=1.1)](https://badge.fury.io/py/flexiai)
+[![PyPI version](https://badge.fury.io/py/flexiai.svg?v=1.7)](https://badge.fury.io/py/flexiai)
 [![Python Versions](https://img.shields.io/pypi/pyversions/flexiai.svg)](https://pypi.org/project/flexiai/)
 [![Dependencies](https://img.shields.io/librariesio/github/SavinRazvan/flexiai)](https://libraries.io/github/SavinRazvan/flexiai)
 [![Downloads](https://static.pepy.tech/badge/flexiai)](https://pepy.tech/project/flexiai)
