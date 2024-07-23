@@ -57,7 +57,7 @@ After installing, copy the `flexiai_rag_extension.py` and `flexiai_basic_flask_a
 <summary> ⬇️ Expand to see the code for `flexiai_rag_extension.py` ⬇️ </summary>
 
 ```python
-# flexiai_rag_extension.py
+# flexiai/scripts/flexiai_rag_extension.py
 import os
 
 def create_logs_folder(project_root):
@@ -171,9 +171,7 @@ def create_user_flexiai_rag_folder(project_root):
             "        previously stored information for enhanced context and continuity in RAG.\n\n"
             "        Args:\n"
             "            from_assistant_id (str): The assistant identifier from which the content originates.\n"
-            "            to_assistant_id (str): The assistant identifier to which the content is directed.\n
-
-"
+            "            to_assistant_id (str): The assistant identifier to which the content is directed.\n"
             "            multiple_retrieval (bool): Whether to retrieve content from all sources, not just the specified to_assistant_id.\n\n"
             "        Returns:\n"
             "            list: A list of stored user content if found, otherwise an empty list.\n"
@@ -332,9 +330,7 @@ def create_requirements_file(project_root):
                 "h11==0.14.0\n"
                 "httpcore==1.0.5\n"
                 "httpx==0.27.0\n"
-                "idna==3
-
-.7\n"
+                "idna==3.7\n"
                 "importlib_metadata==6.8.0\n"
                 "iniconfig==2.0.0\n"
                 "ipykernel==6.24.0\n"
@@ -424,6 +420,8 @@ if __name__ == '__main__':
     except Exception as e:
         print(f"Post-installation step failed: {e}")
 
+
+
 ```
 
 </details>
@@ -503,9 +501,7 @@ def create_routes_folder(project_root):
             "    return jsonify(success=True, thread_id=thread_id, messages=filtered_messages)\n\n"
             "@api_bp.route('/thread/<thread_id>/messages', methods=['GET'])\n"
             "def get_thread_messages(thread_id):\n"
-            "    session_id = flask_session.get('session_id')
-
-\n"
+            "    session_id = flask_session.get('session_id')\n"
             "    if not session_id:\n"
             "        return jsonify(success=False, message=\"Session not found\"), 404\n\n"
             "    messages = flexiai.retrieve_messages(thread_id, limit=20)\n"
@@ -689,9 +685,7 @@ def create_static_folder(project_root):
             "    border: 1px solid #484e5c;\n"
             "    border-radius: 20px;\n"
             "    margin-right: 0.5rem;\n"
-            "    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);\n
-
-"
+            "    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);\n"
             "    transition: border-color 0.3s;\n"
             "    background-color: #3a3a3a;\n"
             "    color: #e1e1e6;\n"
@@ -871,9 +865,7 @@ def create_static_folder(project_root):
 
     for filename, content in files_content.items():
         file_path = os.path.join(static_folder, filename)
-        if not
-
- os.path.exists(file_path):
+        if not os.path.exists(file_path):
             with open(file_path, 'w') as f:
                 f.write(content)
             print(f"Created file: {file_path}")
@@ -977,6 +969,7 @@ if __name__ == '__main__':
         create_main_files(project_root)
     except Exception as e:
         print(f"Post-installation step failed: {e}")
+
 ```
 
 </details>
