@@ -1,4 +1,4 @@
-# post_install.py
+# flexiai/scripts/flexiai_rag_extension.py
 import os
 
 def create_logs_folder(project_root):

@@ -10,7 +10,7 @@ def read_readme():
 
 setup(
     name='flexiai',
-    version='1.0.2',
+    version='1.0.7',
     packages=find_packages(include=['flexiai', 'flexiai.*']),
     include_package_data=True,
     package_data={
@@ -21,6 +21,7 @@ setup(
             'core/flexi_managers/*.py',
             'core/utils/*.py',
             'credentials/*.py',
+            # 'scripts/*.py',
             'tests/*.py'
         ],
     },
@@ -33,14 +34,15 @@ setup(
         'azure-mgmt-resource==23.1.1',
         'pydantic==2.7.4',
         'pydantic-settings==2.3.3',
-        'pydantic_core==2.18.4',
+        'pydantic-core==2.18.4',
         'platformdirs==3.7.0',
         'python-dotenv==1.0.1',
         'urllib3==2.2.2',
     ],
     entry_points={
         'console_scripts': [
-            # Define command line scripts here if needed
+            # 'setup-flexiai-rag=flexiai.scripts.flexiai_rag_extension:setup_project',
+            # 'setup-flexiai-flask-app=flexiai.scripts.flexiai_basic_flask_app:setup_project',
         ],
     },
     author='Savin Ionut Razvan',
