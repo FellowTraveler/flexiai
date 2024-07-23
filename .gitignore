@@ -105,6 +105,3 @@ ehthumbs.db
 build
 dist
 flexiai.egg-info
-flexiai/scripts/__init__.py
-flexiai/scripts/flexiai_basic_flask_app.py
-flexiai/scripts/flexiai_rag_extension.py

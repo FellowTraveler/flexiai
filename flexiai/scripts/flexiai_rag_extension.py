@@ -1,5 +1,17 @@
-# flexiai_rag_extension.py
+# flexiai/scripts/flexiai_rag_extension.py
 import os
+from pathlib import Path
+
+def _detect_project_root():
+    """
+    Detects the project root directory based on a known file or structure.
+
+    Returns:
+        str: The detected project root directory path.
+    """
+    current_dir = Path.cwd()
+    project_root = current_dir
+    return str(project_root)
 
 def create_logs_folder(project_root):
     log_folder = os.path.join(project_root, 'logs')
@@ -295,13 +307,12 @@ def create_requirements_file(project_root):
             )
         print(f"Created file: {requirements_file}")
 
-if __name__ == '__main__':
-    project_root = os.getcwd()
+def setup_project():
+    project_root = _detect_project_root()
+    create_logs_folder(project_root)
+    create_user_flexiai_rag_folder(project_root)
+    create_env_file(project_root)
+    create_requirements_file(project_root)
 
-    try:
-        create_logs_folder(project_root)
-        create_user_flexiai_rag_folder(project_root)
-        create_env_file(project_root)
-        create_requirements_file(project_root)
-    except Exception as e:
-        print(f"Post-installation step failed: {e}")
+if __name__ == '__main__':
+    setup_project()
