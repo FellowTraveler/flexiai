@@ -936,23 +936,23 @@ Here's an overview of the created structure:
  ┃ ┣ 📜user_function_mapping.py
  ┃ ┣ 📜user_helpers.py             
  ┃ ┗ 📜user_task_manager.py
- ┣ 📂user_flexiai_flask_app
- ┃ ┣ 📂routes
- ┃ ┃ ┗ 📜api.py
- ┃ ┣ 📂static
- ┃ ┃ ┣ 📂css
- ┃ ┃ ┃ ┗ 📜styles.css
- ┃ ┃ ┣ 📂images
- ┃ ┃ ┃ ┣ 📜assistant.png              <- Add your Assistant image, make sure to have same name
- ┃ ┃ ┃ ┗ 📜user.png                   <- Add your User image, make sure to have same name
- ┃ ┃ ┣ 📂js
- ┃ ┃ ┃ ┗ 📜scripts.js
- ┃ ┃ ┗ 📜favicon.ico
- ┃ ┣ 📂templates
- ┃ ┃ ┗ 📜index.html
- ┃ ┣ 📜app.py
- ┃ ┗ 📜run.py
+ ┣
  ┣ 📂logs
+ ┣ 📂routes
+ ┃ ┗ 📜api.py
+ ┣ 📂static
+ ┃ ┣ 📂css
+ ┃ ┃ ┗ 📜styles.css
+ ┃ ┣ 📂images
+ ┃ ┃ ┣ 📜assistant.png              <- Add your Assistant image, make sure to have same name
+ ┃ ┃ ┗ 📜user.png                   <- Add your User image, make sure to have same name
+ ┃ ┣ 📂js
+ ┃ ┃ ┗ 📜scripts.js
+ ┃ ┗ 📜favicon.ico
+ ┣ 📂templates
+ ┃ ┗ 📜index.html
+ ┣ 📜app.py
+ ┣ 📜run.py
  ┣ 📜requirements.txt
  ┗ 📜.env
  ┣ 
