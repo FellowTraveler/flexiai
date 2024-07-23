@@ -32,7 +32,7 @@ source env/bin/activate
 #### Using Conda
 
 ```powershell
-conda create --name flexiai_env python=3.10
+conda create --name flexiai_env python=3.12.4
 conda activate flexiai_env
 ```
 
@@ -980,7 +980,7 @@ Running the `flexiai_rag_extension.py` and `flexiai_basic_flask_app.py` scripts 
 
 Here's an overview of the created structure:
 
-```bash
+```plaintext
 📦your_project
  ┃
  ┣ 📂user_flexiai_rag
