@@ -17,6 +17,8 @@ class FlexiAI:
 
     This class initializes various managers and loads user-defined tasks to facilitate the interactions with
     AI assistants.
+    
+    Link: https://github.com/SavinRazvan/flexiai/blob/main/flexiai/core/flexiai_client.py
     """
 
     def __init__(self):
