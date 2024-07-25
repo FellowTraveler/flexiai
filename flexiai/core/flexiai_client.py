@@ -8,6 +8,12 @@ from flexiai.core.flexi_managers.session_manager import SessionManager
 from flexiai.core.flexi_managers.thread_manager import ThreadManager
 from flexiai.core.flexi_managers.vector_store_manager import VectorStoreManager
 from flexiai.core.flexi_managers.multi_agent_system import MultiAgentSystemManager
+from flexiai.core.flexi_managers.audio_manager import (
+    SpeechToTextManager, 
+    TextToSpeechManager, 
+    AudioTranscriptionManager, 
+    AudioTranslationManager
+)
 
 
 class FlexiAI:
@@ -27,7 +33,7 @@ class FlexiAI:
 
         Sets up logging, initializes the CredentialManager to handle credentials, and initializes various managers
         including TaskManager, ThreadManager, MessageManager, RunManager, MultiAgentSystemManager, SessionManager,
-        and VectorStoreManager.
+        VectorStoreManager, SpeechToTextManager, TextToSpeechManager, AudioTranscriptionManager, and AudioTranslationManager.
 
         The function mappings are updated after loading user tasks to ensure that all user-defined tasks are properly
         registered.
@@ -43,6 +49,10 @@ class FlexiAI:
             multi_agent_system (MultiAgentSystemManager): Manager for handling multi-agent systems.
             session_manager (SessionManager): Manager for handling sessions.
             vector_store_manager (VectorStoreManager): Manager for handling vector stores.
+            speech_to_text_manager (SpeechToTextManager): Manager for speech-to-text operations.
+            text_to_speech_manager (TextToSpeechManager): Manager for text-to-speech operations.
+            audio_transcription_manager (AudioTranscriptionManager): Manager for audio transcription operations.
+            audio_translation_manager (AudioTranslationManager): Manager for audio translation operations.
             personal_function_mapping (dict): Mapping of personal functions loaded from user tasks.
             assistant_function_mapping (dict): Mapping of assistant functions loaded from user tasks.
         """
@@ -63,6 +73,12 @@ class FlexiAI:
             self.client, self.logger, self.thread_manager, self.run_manager, self.message_manager
         )
         
+        # Initialize audio managers
+        self.speech_to_text_manager = SpeechToTextManager(self.client, self.logger)
+        self.text_to_speech_manager = TextToSpeechManager(self.client, self.logger)
+        self.audio_transcription_manager = AudioTranscriptionManager(self.client, self.logger)
+        self.audio_translation_manager = AudioTranslationManager(self.client, self.logger)
+        
         # Load user tasks after initializing all managers to ensure proper registration
         self.task_manager.load_user_tasks(self.multi_agent_system, self.run_manager)
         
@@ -82,6 +98,7 @@ class FlexiAI:
         
         self.session_manager = SessionManager(self.client, self.logger)
         self.vector_store_manager = VectorStoreManager(self.client, self.logger)
+
 
 
     def create_thread(self):
@@ -667,3 +684,62 @@ class FlexiAI:
             bool: True if all sessions were cleared successfully, False otherwise.
         """
         return self.session_manager.clear_all_sessions()
+
+
+    def transcribe_audio(self, audio_file_path, language="en"):
+        """
+        Transcribes audio to text using the SpeechToTextManager.
+
+        Args:
+            audio_file_path (str): Path to the audio file to be transcribed.
+            language (str, optional): Language of the audio file. Defaults to "en".
+
+        Returns:
+            str: The transcribed text.
+        """
+        return self.speech_to_text_manager.transcribe_audio(audio_file_path, language)
+
+
+    def synthesize_speech(self, text, model="tts-1", voice="alloy", output_file="output.mp3"):
+        """
+        Synthesizes speech from text using the TextToSpeechManager.
+
+        Args:
+            text (str): The text to be converted to speech.
+            model (str, optional): The TTS model to use. Default is "tts-1".
+            voice (str, optional): The voice to use for speech synthesis. Defaults to "alloy".
+            output_file (str, optional): The file path to save the audio. Defaults to "output.mp3".
+
+        Returns:
+            None
+        """
+        self.text_to_speech_manager.synthesize_speech(text, model, voice, output_file)
+
+
+    def transcribe_and_format(self, audio_file_path, language="en"):
+        """
+        Transcribes and formats audio to text using the AudioTranscriptionManager.
+
+        Args:
+            audio_file_path (str): Path to the audio file to be transcribed.
+            language (str, optional): Language of the audio file. Defaults to "en".
+
+        Returns:
+            str: The formatted transcribed text.
+        """
+        return self.audio_transcription_manager.transcribe_and_format(audio_file_path, language)
+
+
+    def translate_audio(self, audio_file_path, model="whisper-1"):
+        """
+        Translates audio to the target language using the AudioTranslationManager.
+
+        Args:
+            audio_file_path (str): Path to the audio file to be translated.
+            model (str, optional): The translation model to use. Defaults to "whisper-1".
+
+        Returns:
+            str: The translated text.
+        """
+        return self.audio_translation_manager.translate_audio(audio_file_path, model)
+

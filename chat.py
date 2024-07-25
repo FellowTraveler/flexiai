@@ -18,7 +18,7 @@ def main():
     flexiai = FlexiAI()
 
     # Use the given assistant ID
-    assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXXXX'  # ALPHA
+    assistant_id = 'asst_bxt62YG46C5wn4t5U1ESqJZf'  # ALPHA
 
     # Initialize MultiAgentSystemManager
     multi_agent_system = flexiai.multi_agent_system
