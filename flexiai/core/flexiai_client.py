@@ -11,7 +11,39 @@ from flexiai.core.flexi_managers.multi_agent_system import MultiAgentSystemManag
 
 
 class FlexiAI:
+    """
+    FlexiAI class is the central hub for managing different AI-related operations such as thread management,
+    message management, run management, session management, and vector store management.
+
+    This class initializes various managers and loads user-defined tasks to facilitate the interactions with
+    AI assistants.
+    """
+
     def __init__(self):
+        """
+        Initializes the FlexiAI class.
+
+        Sets up logging, initializes the CredentialManager to handle credentials, and initializes various managers
+        including TaskManager, ThreadManager, MessageManager, RunManager, MultiAgentSystemManager, SessionManager,
+        and VectorStoreManager.
+
+        The function mappings are updated after loading user tasks to ensure that all user-defined tasks are properly
+        registered.
+
+        Attributes:
+            logger (logging.Logger): Logger for logging information, warnings, and errors.
+            credential_manager (CredentialManager): Manager for handling credentials.
+            client (object): Client object initialized by the CredentialManager.
+            task_manager (TaskManager): Manager for handling tasks.
+            thread_manager (ThreadManager): Manager for handling threads.
+            message_manager (MessageManager): Manager for handling messages.
+            run_manager (RunManager): Manager for handling runs.
+            multi_agent_system (MultiAgentSystemManager): Manager for handling multi-agent systems.
+            session_manager (SessionManager): Manager for handling sessions.
+            vector_store_manager (VectorStoreManager): Manager for handling vector stores.
+            personal_function_mapping (dict): Mapping of personal functions loaded from user tasks.
+            assistant_function_mapping (dict): Mapping of assistant functions loaded from user tasks.
+        """
         self.logger = logging.getLogger(__name__)
         self.credential_manager = CredentialManager()
         self.client = self.credential_manager.client
@@ -52,10 +84,14 @@ class FlexiAI:
 
     def create_thread(self):
         """
-        Creates a new thread using the ThreadManager.
+        Creates a new thread.
 
         Returns:
-            str: The ID of the newly created thread.
+            object: The thread object.
+
+        Raises:
+            OpenAIError: If the API call to create a new thread fails.
+            Exception: If an unexpected error occurs.
         """
         return self.thread_manager.create_thread()
 
@@ -418,3 +454,214 @@ class FlexiAI:
             Exception: If an unexpected error occurs.
         """
         return self.message_manager.retrieve_messages_dynamically(thread_id, order, limit, retrieve_all, last_retrieved_id)
+
+    
+    def save_processed_content(self, from_assistant_id, to_assistant_id, processed_content):
+        """
+        Saves the processed user content using the from_assistant_id and to_assistant_id.
+
+        Args:
+            from_assistant_id (str): The assistant identifier from which the content originates.
+            to_assistant_id (str): The assistant identifier to which the content is directed.
+            processed_content (str): The processed content to store.
+
+        Returns:
+            bool: True if content is saved successfully, False otherwise.
+        """
+        return self.multi_agent_system.save_processed_content(from_assistant_id, to_assistant_id, processed_content)
+
+
+    def load_processed_content(self, from_assistant_id, to_assistant_id, multiple_retrieval=False):
+        """
+        Loads the stored processed user content using the from_assistant_id and to_assistant_id.
+        Optionally retrieves content from all assistants if multiple_retrieval is True.
+
+        Args:
+            from_assistant_id (str): The assistant identifier from which the content originates.
+            to_assistant_id (str): The assistant identifier to which the content is directed.
+            multiple_retrieval (bool, optional): Whether to retrieve content from all sources, not just the specified to_assistant_id. Defaults to False.
+
+        Returns:
+            list: A list of stored user content if found, otherwise an empty list.
+        """
+        return self.multi_agent_system.load_processed_content(from_assistant_id, to_assistant_id, multiple_retrieval)
+
+
+    def check_for_thread_and_status(self, assistant_id):
+        """
+        Checks if there is an existing thread for the given assistant ID and retrieves its status.
+
+        Args:
+            assistant_id (str): The unique identifier for the assistant.
+
+        Returns:
+            tuple: A tuple of (thread_id, status) if the thread exists, otherwise (None, None).
+        """
+        return self.multi_agent_system.check_for_thread_and_status(assistant_id)
+
+
+    def thread_initialization(self, assistant_id):
+        """
+        Initializes a new thread for the given assistant ID if it does not already exist,
+        and sets its status to 'initialized'.
+
+        Args:
+            assistant_id (str): The unique identifier for the assistant.
+
+        Returns:
+            str: The thread ID of the newly created or existing thread.
+        """
+        return self.multi_agent_system.thread_initialization(assistant_id)
+
+
+    def initialize_agent(self, assistant_id):
+        """
+        Initializes an agent for the given assistant ID. If a thread already exists for the assistant ID,
+        it returns a message indicating the existing thread. Otherwise, it creates a new thread and returns
+        a message indicating successful initialization.
+
+        Args:
+            assistant_id (str): The unique identifier for the assistant.
+
+        Returns:
+            str: A message indicating the result of the initialization.
+        """
+        return self.multi_agent_system.initialize_agent(assistant_id)
+
+
+    def change_thread_status(self, assistant_id, new_status):
+        """
+        Updates the status of a thread identified by the assistant ID.
+
+        Args:
+            assistant_id (str): The unique identifier for the assistant.
+            new_status (str): The new status to set for the thread.
+        """
+        return self.multi_agent_system.change_thread_status(assistant_id, new_status)
+
+
+    def update_assistant_in_thread(self, assistant_id, thread_id):
+        """
+        Updates the assistant settings in a thread by submitting an update message and creating a run.
+
+        Args:
+            assistant_id (str): The unique identifier for the assistant.
+            thread_id (str): The thread identifier used for conversation.
+
+        Returns:
+            bool: True if the update is successful, False otherwise.
+        """
+        return self.multi_agent_system.update_assistant_in_thread(assistant_id, thread_id)
+
+
+    def continue_conversation_with_assistant(self, assistant_id, user_content):
+        """
+        Continues the conversation with an assistant by submitting user content and managing the resulting run.
+
+        Args:
+            assistant_id (str): The unique identifier for the assistant.
+            user_content (str): The content submitted by the user.
+
+        Returns:
+            str: A message indicating the result of the conversation continuation.
+        """
+        return self.multi_agent_system.continue_conversation_with_assistant(assistant_id, user_content)
+
+
+    def handle_requires_action(self, run, assistant_id, thread_id):
+        """
+        Handles the required actions for a given run by executing the necessary tool functions either in parallel or sequentially.
+
+        Args:
+            run (object): The run object containing the required action.
+            assistant_id (str): The ID of the assistant handling the action.
+            thread_id (str): The ID of the thread in which the action is being handled.
+        """
+        return self.run_manager.handle_requires_action(run, assistant_id, thread_id)
+
+
+    def parallel_tool_calls(self, tasks):
+        """
+        Executes tool calls in parallel.
+
+        Args:
+            tasks (list): A list of task dictionaries containing function names and parameters.
+
+        Returns:
+            list: A list of results from the parallel execution of tool calls.
+        """
+        return self.run_manager.parallel_tool_calls(tasks)
+
+
+    def execute_task(self, function_name, parameters):
+        """
+        Executes a task for a given function name and parameters.
+
+        Args:
+            function_name (str): The name of the function to execute.
+            parameters (dict): The parameters to pass to the function.
+
+        Returns:
+            object: The result of the function execution.
+        """
+        return self.run_manager.execute_task(function_name, parameters)
+
+
+    def create_session(self, session_id, data):
+        """
+        Creates a new session or updates an existing session with the given session_id.
+
+        Args:
+            session_id (str): The ID of the session.
+            data (dict): The data to store in the session.
+
+        Returns:
+            dict: The session data.
+        """
+        return self.session_manager.create_session(session_id, data)
+
+
+    def get_session(self, session_id):
+        """
+        Retrieves session data by session_id.
+
+        Args:
+            session_id (str): The ID of the session.
+
+        Returns:
+            dict: The session data.
+        """
+        return self.session_manager.get_session(session_id)
+
+
+    def delete_session(self, session_id):
+        """
+        Deletes session data by session_id.
+
+        Args:
+            session_id (str): The ID of the session to delete.
+
+        Returns:
+            bool: True if the session was deleted successfully, False otherwise.
+        """
+        return self.session_manager.delete_session(session_id)
+
+
+    def get_all_sessions(self):
+        """
+        Retrieves all current sessions.
+
+        Returns:
+            dict: A dictionary containing all current sessions.
+        """
+        return self.session_manager.get_all_sessions()
+
+
+    def clear_all_sessions(self):
+        """
+        Clears all current sessions.
+
+        Returns:
+            bool: True if all sessions were cleared successfully, False otherwise.
+        """
+        return self.session_manager.clear_all_sessions()
