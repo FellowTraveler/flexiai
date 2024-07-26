@@ -8,6 +8,7 @@ from flexiai.core.flexi_managers.session_manager import SessionManager
 from flexiai.core.flexi_managers.thread_manager import ThreadManager
 from flexiai.core.flexi_managers.vector_store_manager import VectorStoreManager
 from flexiai.core.flexi_managers.multi_agent_system import MultiAgentSystemManager
+from flexiai.core.flexi_managers.embedding_manager import EmbeddingManager
 from flexiai.core.flexi_managers.audio_manager import (
     SpeechToTextManager, 
     TextToSpeechManager, 
@@ -59,6 +60,9 @@ class FlexiAI:
         self.logger = logging.getLogger(__name__)
         self.credential_manager = CredentialManager()
         self.client = self.credential_manager.client
+
+        # Initialize EmbeddingManager
+        self.embedding_manager = EmbeddingManager(self.client, self.logger)
 
         # Initialize TaskManager and load user-defined tasks
         self.task_manager = TaskManager()
@@ -766,4 +770,21 @@ class FlexiAI:
             str: The translated text.
         """
         return self.audio_translation_manager.translate_audio(audio_file_path, model)
+
+
+    def create_text_embedding(self, text):
+        """
+        Creates an embedding for the given text using the EmbeddingManager.
+
+        Args:
+            text (str): The text to create an embedding for.
+
+        Returns:
+            list: The generated embedding.
+
+        Raises:
+            OpenAIError: If the embedding API call fails.
+            Exception: For any unexpected errors.
+        """
+        return self.embedding_manager.create_embedding(text)
 
