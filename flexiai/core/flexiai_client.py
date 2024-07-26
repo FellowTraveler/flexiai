@@ -700,18 +700,42 @@ class FlexiAI:
         return self.speech_to_text_manager.transcribe_audio(audio_file_path, language)
 
 
+    def construct_output_file_path(self, default_path="user_flexiai_rag/data/audio/", filename="output", audio_format="mp3"):
+        """
+        Constructs the output file path based on the default path, filename, and audio format.
+
+        Args:
+            default_path (str): The default directory path for saving the audio file.
+            filename (str): The name of the audio file without the extension.
+            audio_format (str): The audio file format (e.g., 'mp3', 'opus').
+
+        Returns:
+            str: The constructed file path.
+        """
+        return self.text_to_speech_manager.construct_output_file_path(default_path, filename, audio_format)
+
+
     def synthesize_speech(self, text, model="tts-1", voice="alloy", output_file="output.mp3"):
         """
-        Synthesizes speech from text using the TextToSpeechManager.
+        Synthesizes speech from text using OpenAI's text-to-speech model.
 
         Args:
             text (str): The text to be converted to speech.
-            model (str, optional): The TTS model to use. Default is "tts-1".
-            voice (str, optional): The voice to use for speech synthesis. Defaults to "alloy".
-            output_file (str, optional): The file path to save the audio. Defaults to "output.mp3".
+            model (str, optional): The TTS model to use. Defaults to "tts-1". 
+                Available models are "tts-1" and "tts-1-hd".
+            voice (str, optional): The voice to use for speech synthesis. Defaults to "alloy". 
+                Available voices are: 'alloy', 'echo', 'fable', 'onyx', 'nova', and 'shimmer'.
+            output_file (str, optional): The file path to save the audio. Defaults to "output.mp3". 
+                Supported audio file formats: 'mp3', 'opus', 'aac', 'flac', 'wav', and 'pcm'.
+                It is recommended to use the `construct_output_file_path` method to create the output file path.
 
         Returns:
             None
+
+        Raises:
+            ValueError: If the model, voice, or output file format is invalid.
+            OpenAIError: If the synthesis API call fails.
+            Exception: For any unexpected errors.
         """
         self.text_to_speech_manager.synthesize_speech(text, model, voice, output_file)
 
