@@ -52,12 +52,6 @@ Learn more about FlexiAI by watching the following introductory video:
 
 ## Installation
 
-To get started with FlexiAI, you can install the package from PyPI:
-
-```bash
-pip install flexiai
-```
-
 For setting up starter files and detailed installation instructions, please refer to the [Setup Guide](docs/setup.md).
 
 ## Documentation
@@ -72,11 +66,11 @@ The FlexiAI framework comes with comprehensive documentation to help you get sta
 
 ## Examples
 
-### Basic Flask App
+- ### Basic Flask App
 
 FlexiAI includes a basic Flask application to demonstrate how to integrate the framework with a web server. This app provides endpoints for managing threads, messages, and sessions.
 
-### CLI Basic Chat
+- ### CLI Basic Chat
 
 The framework also includes a basic CLI chat example, which shows how to create a simple command-line interface for interacting with AI assistants.
 
