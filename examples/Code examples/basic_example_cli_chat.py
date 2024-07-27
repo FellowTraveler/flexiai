@@ -1,4 +1,4 @@
-# chat.py
+# examples/Code examples/basic_example_cli_chat.py
 import logging
 from flexiai.core.flexiai_client import FlexiAI
 from flexiai.config.logging_config import setup_logging
