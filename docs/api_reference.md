@@ -50,6 +50,13 @@ This document provides a comprehensive reference for the FlexiAI framework's API
     - [`delete_session`](#delete_session)
     - [`get_all_sessions`](#get_all_sessions)
     - [`clear_all_sessions`](#clear_all_sessions)
+    - [`transcribe_audio`](#transcribe_audio)
+    - [`construct_output_file_path`](#construct_output_file_path)
+    - [`synthesize_speech`](#synthesize_speech)
+    - [`transcribe_and_format`](#transcribe_and_format)
+    - [`translate_audio`](#translate_audio)
+    - [`create_text_embedding`](#create_text_embedding)
+    - [`create_image`](#create_image)
 - [CredentialManager](#credentialmanager)
   - [Class Definition](#class-definition)
   - [Methods](#methods)
@@ -196,6 +203,29 @@ class FlexiAI:
 
     def clear_all_sessions(self):
         # Method to clear all current sessions
+
+    def transcribe_audio(self, audio_file_path, language="en"):
+        # Method to transcribe audio to text
+
+    def construct_output_file_path(self, default_path="user_flexiai_rag/data/audio/", filename="output", audio_format="mp3"):
+        # Method to construct the output file path
+
+    def synthesize_speech(self, text, model="tts-1", voice="alloy", output_file="output.mp3"):
+        # Method to synthesize speech from text
+
+    def transcribe_and_format(self, audio_file_path, language="en"):
+        # Method to transcribe and format audio to text
+
+   
+
+ def translate_audio(self, audio_file_path, model="whisper-1"):
+        # Method to translate audio to text
+
+    def create_text_embedding(self, text):
+        # Method to create text embedding
+
+    def create_image(self, prompt, n=1, size="1024x1024", model="dall-e-3", response_format="url"):
+        # Method to create images
 ```
 
 ### Methods
@@ -211,7 +241,8 @@ def __init__(self):
 
     Sets up logging, initializes the CredentialManager to handle credentials, and initializes various managers
     including TaskManager, ThreadManager, MessageManager, RunManager, MultiAgentSystemManager, SessionManager,
-    and VectorStoreManager.
+    VectorStoreManager, SpeechToTextManager, TextToSpeechManager, AudioTranscriptionManager, AudioTranslationManager,
+    EmbeddingManager, and ImagesManager.
 
     The function mappings are updated after loading user tasks to ensure that all user-defined tasks are properly
     registered.
@@ -224,11 +255,15 @@ def __init__(self):
         thread_manager (ThreadManager): Manager for handling threads.
         message_manager (MessageManager): Manager for handling messages.
         run_manager (RunManager): Manager for handling runs.
-        multi_agent_system (MultiAgentSystemManager): Manager
-
- for handling multi-agent systems.
+        multi_agent_system (MultiAgentSystemManager): Manager for handling multi-agent systems.
         session_manager (SessionManager): Manager for handling sessions.
         vector_store_manager (VectorStoreManager): Manager for handling vector stores.
+        speech_to_text_manager (SpeechToTextManager): Manager for speech-to-text operations.
+        text_to_speech_manager (TextToSpeechManager): Manager for text-to-speech operations.
+        audio_transcription_manager (AudioTranscriptionManager): Manager for audio transcription operations.
+        audio_translation_manager (AudioTranslationManager): Manager for audio translation operations.
+        embedding_manager (EmbeddingManager): Manager for handling text embeddings.
+        images_manager (ImagesManager): Manager for generating and manipulating images.
         personal_function_mapping (dict): Mapping of personal functions loaded from user tasks.
         assistant_function_mapping (dict): Mapping of assistant functions loaded from user tasks.
     """
@@ -568,8 +603,6 @@ def retrieve_vector_store_details(self, vector_store_id):
     """
 ```
 
-
-
 #### `delete_vector_store`
 
 Deletes a vector store using the `VectorStoreManager`.
@@ -865,9 +898,7 @@ Handles the required actions for a given run by executing the necessary tool fun
 ```python
 def handle_requires_action(self, run, assistant_id, thread_id):
     """
-    Handles the required actions for a given run by executing the necessary tool functions either in parallel or
-
- sequentially.
+    Handles the required actions for a given run by executing the necessary tool functions either in parallel or sequentially.
 
     Args:
         run (object): The run object containing the required action.
@@ -991,7 +1022,147 @@ def clear_all_sessions(self):
     """
 ```
 
-## CredentialManager
+#### `transcribe_audio`
+
+Transcribes audio to text using the `SpeechToTextManager`.
+
+```python
+def transcribe_audio(self, audio_file_path, language="en"):
+    """
+    Transcribes audio to text using the SpeechToTextManager.
+
+    Args:
+        audio_file_path (str): Path to the audio file to be transcribed.
+        language (str, optional): Language of the audio file. Defaults to "en".
+
+    Returns:
+        str: The transcribed text.
+    """
+```
+
+#### `construct_output_file_path`
+
+Constructs the output file path based on the default path, filename, and audio format.
+
+```python
+def construct_output_file_path(self, default_path="user_flexiai_rag/data/audio/", filename="output", audio_format="mp3"):
+    """
+    Constructs the output file path based on the default path, filename, and audio format.
+
+    Args:
+        default_path (str): The default directory path for saving the audio file.
+        filename (str): The name of the audio file without the extension.
+        audio_format (str): The audio file format (e.g., 'mp3', 'opus').
+
+    Returns:
+        str: The constructed file path.
+    """
+```
+
+#### `synthesize_speech`
+
+Synthesizes speech from text using OpenAI's text-to-speech model.
+
+```python
+def synthesize_speech(self, text, model="tts-1", voice="alloy", output_file="output.mp3"):
+    """
+    Synthesizes speech from text using OpenAI's text-to-speech model.
+
+    Args:
+        text (str): The text to be converted to speech.
+        model (str, optional): The TTS model to use. Defaults to "tts-1". 
+            Available models are "tts-1" and "tts-1-hd".
+        voice (str, optional): The voice to use for speech synthesis. Defaults to "alloy". 
+            Available voices are: 'alloy', 'echo', 'fable', 'onyx', 'nova', and 'shimmer'.
+        output_file (str, optional): The file path to save the audio. Defaults to "output.mp3". 
+            Supported audio file formats: 'mp3', 'opus', 'aac', 'flac', 'wav', and 'pcm'.
+            It is recommended to use the `construct_output_file_path` method to create the output file path.
+
+    Returns:
+        None
+    
+    """
+```
+
+#### `transcribe_and_format`
+
+Transcribes and formats audio to text using the `AudioTranscriptionManager`.
+
+```python
+def transcribe_and_format(self, audio_file_path, language="en"):
+    """
+    Transcribes and formats audio to text using the AudioTranscriptionManager.
+
+    Args:
+        audio_file_path (str): Path to the audio file to be transcribed.
+        language (str, optional): Language of the audio file. Defaults to "en".
+
+    Returns:
+        str: The formatted transcribed text.
+    """
+```
+
+#### `translate_audio`
+
+Translates audio to the target language using the `AudioTranslationManager`.
+
+```python
+def translate_audio(self, audio_file_path, model="whisper-1"):
+    """
+    Translates audio to the target language using the AudioTranslationManager.
+
+    Args:
+        audio_file_path (str): Path to the audio file to be translated.
+        model (str, optional): The translation model to use. Defaults to "whisper-1".
+
+    Returns:
+        str: The translated text.
+    """
+```
+
+#### `create_text_embedding`
+
+Creates an embedding for the given text using the `EmbeddingManager`.
+
+```python
+def create_text_embedding(self, text):
+    """
+    Creates an embedding for the given text using the EmbeddingManager.
+
+    Args:
+        text (str): The text to create an embedding for.
+
+    Returns:
+        list: The generated embedding.
+
+    """
+```
+
+#### `create_image`
+
+Creates images based on the given prompt using OpenAI's DALL-E model.
+
+```python
+def create_image(self, prompt, n=1, size="1024x1024", model="dall-e-3", response_format="url"):
+    """
+    Creates images based on the given prompt using OpenAI's DALL-E model.
+
+    Args:
+        prompt (str): The text prompt to generate images.
+        n (int): The number of images to generate. Default is 1.
+        size (str): The size of the generated images. Default is "1024x1024".
+        model (str): The model to use for image generation. Default is "dall-e-3".
+        response_format (str): The format of the response. Can be "url" or "b64_json". Default is "url".
+
+    Returns:
+        list: A list of URLs or base64-encoded JSON strings of the generated images.
+
+    """
+```
+
+## Credential
+
+Manager
 
 The `CredentialManager` class manages the credentials and provides the appropriate client based on the credential type.
 

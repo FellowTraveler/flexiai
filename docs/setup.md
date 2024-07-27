@@ -2,7 +2,7 @@
 
 This guide will help you set up FlexiAI in your project, including installation steps, virtual environment creation, and post-installation setup.
 
-## Table of Contents
+### Table of Contents
 
 - [Installation](#installation)
   - [Create a Virtual Environment](#create-a-virtual-environment)
@@ -11,6 +11,7 @@ This guide will help you set up FlexiAI in your project, including installation 
   - [Install FlexiAI with `pip`](#install-flexiai-with-pip)
   - [Post-Installation Setup](#post-installation-setup)
     - [Enable Retrieval-Augmented Generation (RAG)](#enable-retrieval-augmented-generation-rag)
+    - [FlexiAI Basic Flask Chat Application](#flexiai-basic-flask-chat-application)
 - [Environment Setup](#environment-setup)
   - [Example .env File](#example-env-file)
 
@@ -25,15 +26,15 @@ Creating a virtual environment helps manage dependencies and avoid conflicts. Ch
 #### Using PowerShell
 
 ```powershell
-python -m venv env
+python -m venv .flexi_env
 source env/bin/activate
 ```
 
 #### Using Conda
 
 ```powershell
-conda create --name flexiai_env python=3.12.4
-conda activate flexiai_env
+conda create --name flexi_env python=3.12.4
+conda activate flexi_env
 ```
 
 ### Install FlexiAI with pip
@@ -922,61 +923,91 @@ if __name__ == '__main__':
 
 ### Enable Retrieval-Augmented Generation (RAG)
 
-Running the `flexiai_rag_extension.py` and `flexiai_basic_flask_app.py` scripts will automatically create the necessary structure and files to enable the Retrieval-Augmented Generation (RAG) module and the basic Flask app in your project.
+Running the `flexiai_rag_extension.py` script will automatically create the necessary structure and files to enable the Retrieval-Augmented Generation (RAG) module in your project.
 
-Here's an overview of the created structure:
+Here's an overview of the created structure for the RAG extension:
 
 ```plaintext
 📦your_project
  ┃
  ┣ 📂user_flexiai_rag
  ┃ ┣ 📂data
- ┃ ┃ ┗ 📜your data files
+ ┃ ┃ ┣ 📂audio
+ ┃ ┃ ┣ 📂csv
+ ┃ ┃ ┗ 📂images
  ┃ ┣ 📜__init__.py
  ┃ ┣ 📜user_function_mapping.py
  ┃ ┣ 📜user_helpers.py             
  ┃ ┗ 📜user_task_manager.py
- ┣
  ┣ 📂logs
- ┣ 📂routes
- ┃ ┗ 📜api.py
- ┣ 📂static
- ┃ ┣ 📂css
- ┃ ┃ ┗ 📜styles.css
- ┃ ┣ 📂images
- ┃ ┃ ┣ 📜assistant.png              <- Add your Assistant image, make sure to have same name
- ┃ ┃ ┗ 📜user.png                   <- Add your User image, make sure to have same name
- ┃ ┣ 📂js
- ┃ ┃ ┗ 📜scripts.js
- ┃ ┗ 📜favicon.ico                  <- Add your favicon.ico image, make sure to have same name
- ┣ 📂templates
- ┃ ┗ 📜index.html
- ┣ 📜app.py
- ┣ 📜run.py
  ┣ 📜requirements.txt
  ┗ 📜.env
- ┣ 
- ...
- ┣ 📂 other folders ...
- ┣ 📜 other files ...
- ┣  ...
-
 ```
 
-#### Run the `flexiai_rag_extension.py` and `flexiai_basic_flask_app.py` files to create your starter folders and files.
+### FlexiAI Basic Flask Chat Application
 
-```powershell
-python flexiai_rag_extension.py
-python flexiai_basic_flask_app.py
+Running the `flexiai_basic_flask_app.py` script will automatically create the necessary structure and files to set up a basic Flask chat application in your project.
+
+Here's an overview of the created structure for the Flask app:
+
+```plaintext
+📦your_project
+ ┃
+ ┣ 📂user_flexiai_flask_app
+ ┃ ┣ 📂routes
+ ┃ ┃ ┗ 📜api.py
+ ┃ ┣ 📂static
+ ┃ ┃ ┣ 📂css
+ ┃ ┃ ┃ ┗ 📜styles.css
+ ┃ ┃ ┣ 📂images
+ ┃ ┃ ┃ ┣ 📂other_images
+ ┃ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161351.png
+ ┃ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161358.png
+ ┃ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165358.png
+ ┃ ┃ ┃ ┃ ┗ 📜...
+ ┃ ┃ ┣ 📜assistant.png
+ ┃ ┃ ┗ 📜user.png
+ ┃ ┣ 📂js
+ ┃ ┃ ┗ 📜scripts.js
+ ┃ ┗ 📜favicon.ico
+ ┣ 📂templates
+ ┃ ┃ ┗ 📜index.html
+ ┣ 📜app.py
+ ┗ 📜run.py
 ```
 
-### Install Requirements
+#### Post-Installation Steps
 
-Install the required dependencies using `pip`.
+1. **Run the `flexiai_rag_extension.py` and `flexiai_basic_flask_app.py` files to create your starter folders and files.**
 
-```powershell
-pip install -r requirements.txt
-```
+    ```powershell
+    python flexiai_rag_extension.py
+    python flexiai_basic_flask_app.py
+    ```
+
+2. **Install Requirements**
+
+    Install the required dependencies using `pip`.
+
+    ```powershell
+    pip install -r requirements.txt
+    ```
+
+3. **Update the Assistant ID**
+
+    Open the `routes/api.py` file and replace the placeholder assistant ID with your main assistant ID.
+
+    ```python
+    assistant_id = 'your_main_assistant_id'
+    ```
+
+4. **Add Images**
+
+    In the `static` folder:
+    - Add an `favicon.ico` image.
+    - In the `static/images` folder, add `assistant.png` and `user.png` for the chat avatars.
+
+    This ensures that your chat application has the necessary visual elements.
 
 ---
 
