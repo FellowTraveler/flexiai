@@ -276,6 +276,7 @@ def create_requirements_file(project_root):
                 "openai==1.35.0\n"
                 "packaging==24.1\n"
                 "platformdirs==3.7.0\n"
+                "pillow==10.4.0\n"
                 "pluggy==1.5.0\n"
                 "portalocker==2.10.1\n"
                 "pycparser==2.22\n"
