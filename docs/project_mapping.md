@@ -189,9 +189,7 @@ This document provides a comprehensive overview and mapping of the FlexiAI proje
  ┃ ┣ 📜azure_openai_credential_strategy.py
  ┃ ┣ 📜credential_manager.py
  ┃ ┣ 📜credential_strategy.py
- ┃ ┗ 📜
-
-openai_credential_strategy.py
+ ┃ ┗ 📜openai_credential_strategy.py
  ┣ 📂scripts
  ┃ ┣ 📜__init__.py
  ┃ ┣ 📜flexiai_basic_flask_app.py
