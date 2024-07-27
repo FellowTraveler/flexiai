@@ -27,7 +27,7 @@ Creating a virtual environment helps manage dependencies and avoid conflicts. Ch
 
 ```powershell
 python -m venv .flexi_env
-source env/bin/activate
+source .flexi_env/bin/activate
 ```
 
 #### Using Conda
