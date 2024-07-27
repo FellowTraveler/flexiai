@@ -9,6 +9,7 @@ from flexiai.core.flexi_managers.thread_manager import ThreadManager
 from flexiai.core.flexi_managers.vector_store_manager import VectorStoreManager
 from flexiai.core.flexi_managers.multi_agent_system import MultiAgentSystemManager
 from flexiai.core.flexi_managers.embedding_manager import EmbeddingManager
+from flexiai.core.flexi_managers.images_manager import ImagesManager
 from flexiai.core.flexi_managers.audio_manager import (
     SpeechToTextManager, 
     TextToSpeechManager, 
@@ -20,7 +21,7 @@ from flexiai.core.flexi_managers.audio_manager import (
 class FlexiAI:
     """
     FlexiAI class is the central hub for managing different AI-related operations such as thread management,
-    message management, run management, session management, and vector store management.
+    message management, run management, session management, vector store management, and image generation.
 
     This class initializes various managers and loads user-defined tasks to facilitate the interactions with
     AI assistants.
@@ -34,7 +35,8 @@ class FlexiAI:
 
         Sets up logging, initializes the CredentialManager to handle credentials, and initializes various managers
         including TaskManager, ThreadManager, MessageManager, RunManager, MultiAgentSystemManager, SessionManager,
-        VectorStoreManager, SpeechToTextManager, TextToSpeechManager, AudioTranscriptionManager, and AudioTranslationManager.
+        VectorStoreManager, SpeechToTextManager, TextToSpeechManager, AudioTranscriptionManager, AudioTranslationManager,
+        EmbeddingManager, and ImagesManager.
 
         The function mappings are updated after loading user tasks to ensure that all user-defined tasks are properly
         registered.
@@ -54,6 +56,8 @@ class FlexiAI:
             text_to_speech_manager (TextToSpeechManager): Manager for text-to-speech operations.
             audio_transcription_manager (AudioTranscriptionManager): Manager for audio transcription operations.
             audio_translation_manager (AudioTranslationManager): Manager for audio translation operations.
+            embedding_manager (EmbeddingManager): Manager for handling text embeddings.
+            images_manager (ImagesManager): Manager for generating and manipulating images.
             personal_function_mapping (dict): Mapping of personal functions loaded from user tasks.
             assistant_function_mapping (dict): Mapping of assistant functions loaded from user tasks.
         """
@@ -63,6 +67,9 @@ class FlexiAI:
 
         # Initialize EmbeddingManager
         self.embedding_manager = EmbeddingManager(self.client, self.logger)
+        
+        # Initialize ImagesManager
+        self.images_manager = ImagesManager(self.client, self.logger)
 
         # Initialize TaskManager and load user-defined tasks
         self.task_manager = TaskManager()
@@ -788,3 +795,20 @@ class FlexiAI:
         """
         return self.embedding_manager.create_embedding(text)
 
+
+    def create_image(self, prompt, n=1, size="1024x1024", model="dall-e-3", response_format="url"):
+        """
+        Creates images based on the given prompt using OpenAI's DALL-E model.
+
+        Args:
+            prompt (str): The text prompt to generate images.
+            n (int): The number of images to generate. Default is 1.
+            size (str): The size of the generated images. Default is "1024x1024".
+            model (str): The model to use for image generation. Default is "dall-e-3".
+            response_format (str): The format of the response. Can be "url" or "b64_json". Default is "url".
+
+        Returns:
+            list: A list of URLs or base64-encoded JSON strings of the generated images.
+
+        """
+        return self.images_manager.create_image(prompt, n, size, model, response_format)
