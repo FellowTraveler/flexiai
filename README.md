@@ -9,13 +9,11 @@
 
 FlexiAI is a dynamic and modular AI framework designed to leverage the power of Multi-Agent Systems and Retrieval Augmented Generation (RAG). This framework is ideal for developers seeking to integrate AI capabilities into their applications with ease and flexibility. With FlexiAI, you can harness the power of both OpenAI and Azure OpenAI services to create intelligent agents that can manage tasks, process data, and provide advanced AI-driven solutions.
 
-
 ## Introduction Video
 
 Learn more about FlexiAI by watching the following introductory video:
 
 [![Watch the video](https://img.youtube.com/vi/KveLqPBLhUE/0.jpg)](https://www.youtube.com/watch?v=KveLqPBLhUE)
-
 
 ## Table of Contents
 
@@ -26,7 +24,6 @@ Learn more about FlexiAI by watching the following introductory video:
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
-
 
 ## Features
 
@@ -67,8 +64,9 @@ For setting up starter files and detailed installation instructions, please refe
 
 The FlexiAI framework comes with comprehensive documentation to help you get started and make the most out of its capabilities:
 
-- [API Reference](docs/api_reference.md)
 - [Setup Guide](docs/setup.md)
+- [Project Mapping](docs/project_mapping.md)
+- [API Reference](docs/api_reference.md)
 - [Usage Guide](docs/usage.md)
 - [Contributing Guide](docs/contributing.md)
 
@@ -86,11 +84,9 @@ The framework also includes a basic CLI chat example, which shows how to create 
 
 We welcome contributions from the community. If you want to contribute to FlexiAI, please read our [Contributing Guide](docs/contributing.md) to get started.
 
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE.txt) file for details.
-
 
 ## Contact
 
