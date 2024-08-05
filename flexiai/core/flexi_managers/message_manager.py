@@ -36,7 +36,7 @@ class MessageManager:
             Exception: If an unexpected error occurs.
         """
         try:
-            self.logger.info(f"Adding user message to thread {thread_id}: {user_message}")
+            # self.logger.info(f"Adding user message to thread {thread_id}: {user_message}")
             message = self.client.beta.threads.messages.create(
                 thread_id=thread_id,
                 role="user",
@@ -87,7 +87,7 @@ class MessageManager:
                     block.text.value for block in content_blocks if hasattr(block, 'text') and hasattr(block.text, 'value')
                 ])
 
-                self.logger.info(f"Message ID: {message_id}, Role: {role}, Content: {content_blocks}")
+                # self.logger.info(f"Message ID: {message_id}, Role: {role}, Content: {content_blocks}")
 
                 formatted_messages.append({
                     'message_id': message_id,
@@ -127,7 +127,7 @@ class MessageManager:
                 self.logger.info("No data found in the response or no messages.")
                 return []
 
-            self.logger.info(f"Retrieved {len(response.data)} messages from thread {thread_id}")
+            # self.logger.info(f"Retrieved {len(response.data)} messages from thread {thread_id}")
             messages = response.data
             return messages
         except OpenAIError as e:
@@ -179,7 +179,7 @@ class MessageManager:
             content = message.get('content')
             message_metadata = message.get('metadata', metadata or {})
             try:
-                self.logger.info(f"Adding message to thread {thread_id}: {content}")
+                # self.logger.info(f"Adding message to thread {thread_id}: {content}")
                 message_obj = self.client.beta.threads.messages.create(
                     thread_id=thread_id,
                     role=role if role else 'user',  # Use 'user' as default role if not specified
@@ -228,7 +228,7 @@ class MessageManager:
                     self.logger.info("No data found in the response or no messages.")
                     return []
 
-                self.logger.info(f"Retrieved {len(response.data)} messages from thread {thread_id}")
+                # self.logger.info(f"Retrieved {len(response.data)} messages from thread {thread_id}")
                 messages = response.data
                 all_messages.extend(messages)
 

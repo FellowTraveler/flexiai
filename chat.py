@@ -7,7 +7,7 @@ from flexiai.core.utils.helpers import HelperFunctions
 
 # Define global variables for role names
 USER_ROLE_NAME = "You"
-ASSISTANT_ROLE_NAME = "Alpha"
+ASSISTANT_ROLE_NAME = "Assistant"
 
 
 def main():
@@ -18,7 +18,7 @@ def main():
     flexiai = FlexiAI()
 
     # Use the given assistant ID
-    assistant_id = 'asst_bxt62YG46C5wn4t5U1ESqJZf'  # ALPHA
+    assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXX'  # Update with your Assistant ID
 
     # Initialize MultiAgentSystemManager
     multi_agent_system = flexiai.multi_agent_system
@@ -53,7 +53,7 @@ def main():
             print("Exiting...")
             break
 
-        logging.info(f"User message: {user_message}")
+        # logging.info(f"User message: {user_message}")
 
         # Run the thread and handle required actions
         try:

@@ -34,6 +34,7 @@ class TaskManager:
         self.personal_function_mapping = {}
         self.assistant_function_mapping = {}
 
+
     async def run_task_async(self, func, *args, **kwargs):
         """
         Runs a given task asynchronously using the ThreadPoolExecutor.
@@ -49,6 +50,7 @@ class TaskManager:
         loop = asyncio.get_running_loop()
         return await loop.run_in_executor(self.executor, func, *args, **kwargs)
 
+
     def run_task(self, func, *args, **kwargs):
         """
         Runs a given task synchronously using the ThreadPoolExecutor.
@@ -63,6 +65,7 @@ class TaskManager:
         """
         future = self.executor.submit(func, *args, **kwargs)
         return future.result()
+
 
     def load_user_tasks(self, multi_agent_system, run_manager):
         """

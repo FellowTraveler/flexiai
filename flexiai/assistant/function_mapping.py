@@ -8,6 +8,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 class FunctionMapping:
     """
     Class to handle the function mappings for personal and assistant functions,
@@ -22,6 +23,7 @@ class FunctionMapping:
         self.personal_function_mapping = {}
         self.assistant_function_mapping = {}
         logger.info(f"User directory detected: {self.user_directory}")
+
 
     def _detect_user_directory(self):
         """
@@ -39,6 +41,7 @@ class FunctionMapping:
         if not user_directory.is_dir():
             raise FileNotFoundError(f"User directory {user_directory} not found")
         return str(user_directory)
+
 
     def register_user_functions(self, multi_agent_system, run_manager):
         """
@@ -62,6 +65,7 @@ class FunctionMapping:
         except Exception as e:
             logger.error(f"Failed to register user functions: {e}", exc_info=True)
             raise
+
 
     def _load_user_modules(self):
         """

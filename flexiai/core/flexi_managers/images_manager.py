@@ -46,7 +46,7 @@ class ImagesManager:
             Exception: For any unexpected errors.
         """
         try:
-            self.logger.info(f"Creating image with prompt: {prompt[:50]}...")
+            # self.logger.info(f"Creating image with prompt: {prompt[:50]}...")
             response = self.client.images.generate(
                 prompt=prompt,
                 model=model,

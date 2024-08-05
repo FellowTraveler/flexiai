@@ -110,7 +110,6 @@ class HelperFunctions:
         print(json.dumps(messages_dict, indent=4))
 
 
-
     @staticmethod
     def format_and_track_messages(all_messages, retrieved_messages, USER_ROLE_NAME, ASSISTANT_ROLE_NAME):
         """
@@ -135,4 +134,4 @@ class HelperFunctions:
                 block.text.value for block in msg.content if hasattr(block, 'text') and hasattr(block.text, 'value')
             ]) if msg.content else "No content"
             print(f"{role}: {content_value}")
-            logging.info(f"{role}: {content_value}")
+

@@ -76,7 +76,7 @@ class MultiAgentSystemManager:
             
             # Log the storage operation.
             self.logger.info(f"Processed content stored from assistant ID: {from_assistant_id} to assistant ID: {to_assistant_id}.")
-            self.logger.info(f"Stored content: {processed_content}.")
+            # self.logger.info(f"Stored content: {processed_content}.")
             return True
 
         except Exception as e:
@@ -140,8 +140,9 @@ class MultiAgentSystemManager:
                     self.logger.info(f"No processed content found for from_assistant_id: {from_assistant_id} to assistant ID: {to_assistant_id}.")
                 else:
                     # Log the retrieved content.
-                    self.logger.info(f"Retrieved and cleared processed content from assistant ID: {from_assistant_id} to assistant ID: {to_assistant_id}. Content: {retrieved_content}")
-                
+                    # self.logger.info(f"Retrieved and cleared processed content from assistant ID: {from_assistant_id} to assistant ID: {to_assistant_id}. Content: {retrieved_content}")
+                    self.logger.info(f"Retrieved and cleared processed content from assistant ID: {from_assistant_id} to assistant ID: {to_assistant_id}.")
+                    
                 return retrieved_content
 
         except Exception as e:
@@ -182,7 +183,7 @@ class MultiAgentSystemManager:
         """
         with self.lock:
             if assistant_id not in self.active_threads:
-                self.logger.debug(f"Attempting to create a new thread for assistant ID: {assistant_id}.")
+                self.logger.info(f"Attempting to create a new thread for assistant ID: {assistant_id}.")
                 thread_id = self.thread_manager.create_thread().id
                 if thread_id:
                     self.active_threads[assistant_id] = {
@@ -253,12 +254,12 @@ class MultiAgentSystemManager:
         Returns:
             bool: True if the update is successful, False otherwise.
         """
-        self.logger.debug(f"Updating assistant {assistant_id} in thread {thread_id}.")
+        self.logger.info(f"Updating assistant {assistant_id} in thread {thread_id}.")
         try:
             self.run_manager.wait_for_run_completion(thread_id)
             update_message = f"System message: Initialization. You do not interact directly with users or ask them questions; you solely process the data provided and follow the procedures for data. You will not greet or ask questions, just focus on task processing and delivery."
             self.run_manager.create_and_monitor_run(assistant_id, thread_id, update_message)
-            self.logger.debug(f"Updated assistant {assistant_id} in thread {thread_id}.")
+            self.logger.info(f"Updated assistant {assistant_id} in thread {thread_id}.")
             self.change_thread_status(assistant_id, 'updated')
             return True
         except Exception as e:

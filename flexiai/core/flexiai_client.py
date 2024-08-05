@@ -61,7 +61,7 @@ class FlexiAI:
             personal_function_mapping (dict): Mapping of personal functions loaded from user tasks.
             assistant_function_mapping (dict): Mapping of assistant functions loaded from user tasks.
         """
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger(__name__)   # Use the centralized logger
         self.credential_manager = CredentialManager()
         self.client = self.credential_manager.client
 

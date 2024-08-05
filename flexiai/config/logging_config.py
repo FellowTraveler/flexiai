@@ -3,8 +3,7 @@ import os
 import logging
 from logging.handlers import RotatingFileHandler
 
-
-def setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_level=logging.WARNING):
+def setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_level=logging.INFO, enable_file_logging=True, enable_console_logging=True):
     """
     Configures the logging settings for the application with user-defined log levels.
 
@@ -12,6 +11,8 @@ def setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_leve
     - root_level: Logging level for the root logger.
     - file_level: Logging level for the file handler.
     - console_level: Logging level for the console handler.
+    - enable_file_logging: Boolean flag to enable or disable file logging.
+    - enable_console_logging: Boolean flag to enable or disable console logging.
 
     This function sets up a logger with the following features:
     - Logs messages at the specified levels and above.
@@ -35,13 +36,18 @@ def setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_leve
     more than once.
     """
     
-    # Define log directory and file
-    log_directory = "logs"
+    # Print current working directory to ensure we are in the correct location
+    current_directory = os.getcwd()
+    print(f"Current working directory: {current_directory}")
+
+    # Define log directory and file relative to the project root
+    log_directory = os.path.join(current_directory, "logs")
     log_file = os.path.join(log_directory, "app.log")
 
     # Ensure the log directory exists
     try:
         os.makedirs(log_directory, exist_ok=True)
+        print(f"Log directory '{log_directory}' created/exists.")
     except OSError as e:
         print(f"Error creating log directory {log_directory}: {e}")
         return
@@ -49,12 +55,15 @@ def setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_leve
     # Get the root logger instance
     logger = logging.getLogger()
     
-    # Check if the logger already has handlers to prevent adding duplicate handlers
-    if not logger.hasHandlers():
-        try:
-            # Set the logging level for the root logger
-            logger.setLevel(root_level)
+    # Clear existing handlers to prevent duplication
+    if logger.hasHandlers():
+        logger.handlers.clear()
 
+    try:
+        # Set the logging level for the root logger
+        logger.setLevel(root_level)
+
+        if enable_file_logging:
             # Create a rotating file handler to manage log files
             file_handler = RotatingFileHandler(
                 log_file,                      # Path to the log file
@@ -76,6 +85,7 @@ def setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_leve
             # Add the file handler to the logger
             logger.addHandler(file_handler)
 
+        if enable_console_logging:
             # Create a console handler to output log messages to the console
             console_handler = logging.StreamHandler()
             
@@ -87,5 +97,5 @@ def setup_logging(root_level=logging.INFO, file_level=logging.INFO, console_leve
             
             # Add the console handler to the logger
             logger.addHandler(console_handler)
-        except Exception as e:
-            print(f"Error setting up logging: {e}")
+    except Exception as e:
+        print(f"Error setting up logging: {e}")

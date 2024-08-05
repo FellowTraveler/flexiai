@@ -38,7 +38,7 @@ class EmbeddingManager:
             Exception: For any unexpected errors.
         """
         try:
-            self.logger.info(f"Creating embedding for text: {text[:50]}...")
+            # self.logger.info(f"Creating embedding for text: {text[:50]}...")
             response = self.client.embeddings.create(input=text, model="text-embedding-ada-002")
             self.logger.info("Embedding created successfully.")
             return response.data[0].embedding

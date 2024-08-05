@@ -1,64 +1,115 @@
 // static/js/scripts.js
 let threadId = null;
+let isProcessing = false;
 
 document.getElementById('send-button').addEventListener('click', sendMessage);
-document.getElementById('message-input').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
+
+const messageInput = document.getElementById('message-input');
+messageInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' && event.shiftKey) {
+        const cursorPosition = this.selectionStart;
+        const value = this.value;
+        this.value = value.substring(0, cursorPosition) + "\n" + value.substring(cursorPosition);
+        this.selectionStart = cursorPosition + 1;
+        this.selectionEnd = cursorPosition + 1;
+        event.preventDefault();
+    } else if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
         sendMessage();
     }
+    autoResizeTextarea();
 });
 
+messageInput.addEventListener('input', autoResizeTextarea);
+
+function autoResizeTextarea() {
+    const maxRows = 10;
+    const lineHeight = parseInt(window.getComputedStyle(messageInput).lineHeight);
+    messageInput.style.height = '40px'; // Reset height to calculate new height
+    const currentHeight = messageInput.scrollHeight;
+
+    if (currentHeight > lineHeight * maxRows) {
+        messageInput.style.height = (lineHeight * maxRows) + 'px';
+        messageInput.style.overflowY = 'scroll';
+    } else {
+        messageInput.style.height = currentHeight + 'px';
+        messageInput.style.overflowY = 'hidden';
+    }
+}
+
+autoResizeTextarea();
+
 function sendMessage() {
-    const messageInput = document.getElementById('message-input');
     const message = messageInput.value.trim();
-    if (message === '') return;
 
-    console.log('Sending message:', message);
+    if (message === '') {
+        alert('Message cannot be empty or whitespace.');
+        return;
+    }
 
-    // Add user message to chat directly without retrieval
-    addMessage('You', message, 'user');
+    if (isProcessing) {
+        alert('Please wait for the assistant to respond before sending a new message.');
+        return;
+    }
 
-    // Send message to server
+    addMessage('You', message, 'user', true);
+
+    messageInput.value = '';
+    autoResizeTextarea();
+
+    isProcessing = true;
+
     fetch('/api/run', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: message, thread_id: threadId })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
     .then(data => {
-        console.log('Received response:', data); // Log the response to debug
+        // console.log('Received data from backend:', data);
         if (data.success) {
             threadId = data.thread_id;
-            updateChat(data.messages);
+            updateChat(data.messages).then(() => {
+                isProcessing = false;
+                addCopyButtons();
+                if (typeof MathJax !== 'undefined') {
+                    MathJax.typesetPromise();  // Re-render MathJax after updating the chat
+                } else {
+                    console.error('MathJax is not loaded.');
+                }
+            });
         } else {
             addMessage('Error', 'Failed to get response from assistant.', 'error');
+            isProcessing = false;
         }
     })
     .catch(error => {
         console.error('Fetch error:', error);
         addMessage('Error', 'An error occurred: ' + error.message, 'error');
+        isProcessing = false;
     });
-
-    // Clear input
-    messageInput.value = '';
 }
 
-function addMessage(role, text, className) {
-    console.log('Adding message:', role, text);
+function addMessage(role, text, className, isUserMessage = false) {
+    // console.log('Adding message:', { role, text, className, isUserMessage });
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${className}`;
 
-    const messageElement = document.createElement('li');
-    messageElement.className = className;
-
-    // Determine avatar based on role
     const avatar = role === 'You' ? '/static/images/user.png' : '/static/images/assistant.png';
 
-    // Convert markdown to HTML
+    const formattedText = isUserMessage ? text.replace(/\n/g, '<br>') : text;
+
     try {
-        const htmlContent = window.marked.parse(text);
-        console.log('HTML Content:', htmlContent); // Log the HTML content to debug
+        const htmlContent = window.marked.parse(formattedText);
+        // console.log('HTML content after marked parsing:', htmlContent);
         messageElement.innerHTML = `
             <div class="message-container">
-                <div class="avatar"><img src="${avatar}" alt="${role}" /></div>
+                <div class="avatar"><img src="${avatar}" alt="${role}"></div>
                 <div class="message-content">
                     <div class="markdown-content">${htmlContent}</div>
                 </div>
@@ -67,9 +118,9 @@ function addMessage(role, text, className) {
         console.error('Markdown conversion error:', error);
         messageElement.innerHTML = `
             <div class="message-container">
-                <div class="avatar"><img src="${avatar}" alt="${role}" /></div>
+                <div class="avatar"><img src="${avatar}" alt="${role}"></div>
                 <div class="message-content">
-                    <div class="markdown-content">${text}</div>
+                    <div class="markdown-content">${formattedText}</div>
                 </div>
             </div>`;
     }
@@ -77,19 +128,44 @@ function addMessage(role, text, className) {
     const messagesContainer = document.getElementById('messages');
     messagesContainer.appendChild(messageElement);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    if (typeof MathJax !== 'undefined') {
+        MathJax.typesetPromise();  // Re-render MathJax after adding the new message
+    } else {
+        console.error('MathJax is not loaded.');
+    }
 }
 
 function updateChat(messages) {
-    messages.forEach(msg => {
-        if (msg.role === 'Assistant') {
-            addMessage('Assistant', msg.message, 'assistant');
-        }
+    return new Promise((resolve) => {
+        messages.forEach(msg => {
+            // console.log('Updating chat with message:', msg);
+            if (msg.role === 'Assistant') {
+                addMessage('Assistant', msg.message, 'assistant');
+            }
+        });
+        resolve();
     });
 }
 
-// Test if marked is available
-if (typeof window.marked !== 'undefined') {
-    console.log('Marked library is loaded');
-} else {
-    console.error('Marked library is not loaded');
+function addCopyButtons() {
+    document.querySelectorAll('pre code').forEach((block) => {
+        if (block.parentNode.querySelector('.copy-code-button')) {
+            return;
+        }
+        const copyButton = document.createElement('button');
+        copyButton.innerText = 'Copy';
+        copyButton.className = 'copy-code-button';
+        copyButton.addEventListener('click', () => {
+            navigator.clipboard.writeText(block.innerText).then(() => {
+                copyButton.innerText = 'Copied!';
+                setTimeout(() => {
+                    copyButton.innerText = 'Copy';
+                }, 2000);
+            });
+        });
+        const pre = block.parentNode;
+        pre.style.position = 'relative';
+        pre.insertBefore(copyButton, block);
+    });
 }

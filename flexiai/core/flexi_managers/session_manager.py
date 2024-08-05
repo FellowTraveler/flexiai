@@ -1,5 +1,5 @@
 # flexiai/core/flexi_managers/session_manager.py
-from flask import session, jsonify
+from flask import session
 
 
 class SessionManager:
@@ -41,7 +41,7 @@ class SessionManager:
         try:
             self.logger.info(f"Creating or updating session with ID: {session_id}")
             session[session_id] = data
-            self.logger.info(f"Session data: {data}")
+            # self.logger.info(f"Session data: {data}")
             return session[session_id]
         except Exception as e:
             self.logger.error(f"An unexpected error occurred while creating/updating session {session_id}: {str(e)}", exc_info=True)
@@ -67,7 +67,7 @@ class SessionManager:
             data = session.get(session_id)
             if data is None:
                 raise KeyError(f"Session ID {session_id} not found.")
-            self.logger.info(f"Retrieved session data: {data}")
+            # self.logger.info(f"Retrieved session data: {data}")
             return data
         except KeyError as e:
             self.logger.error(f"Session ID {session_id} not found: {str(e)}", exc_info=True)
@@ -94,7 +94,7 @@ class SessionManager:
             self.logger.info(f"Deleting session with ID: {session_id}")
             if session_id in session:
                 session.pop(session_id)
-                self.logger.info(f"Deleted session with ID: {session_id}")
+                # self.logger.info(f"Deleted session with ID: {session_id}")
                 return True
             else:
                 self.logger.warning(f"Session ID {session_id} not found.")
@@ -114,7 +114,7 @@ class SessionManager:
         try:
             self.logger.info("Retrieving all sessions")
             all_sessions = session.items()
-            self.logger.info(f"All sessions data: {all_sessions}")
+            # self.logger.info(f"All sessions data: {all_sessions}")
             return dict(all_sessions)
         except Exception as e:
             self.logger.error(f"An unexpected error occurred while retrieving all sessions: {str(e)}", exc_info=True)
@@ -131,7 +131,7 @@ class SessionManager:
         try:
             self.logger.info("Clearing all sessions")
             session.clear()
-            self.logger.info("All sessions cleared successfully")
+            # self.logger.info("All sessions cleared successfully")
             return True
         except Exception as e:
             self.logger.error(f"An unexpected error occurred while clearing all sessions: {str(e)}", exc_info=True)
