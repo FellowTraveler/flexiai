@@ -14,7 +14,7 @@ setup_logging(
     file_level=logging.INFO,
     console_level=logging.INFO,
     enable_file_logging=True,       # Set to False to disable file logging
-    enable_console_logging=False    # Set to False to disable console logging
+    enable_console_logging=True     # Set to False to disable console logging
 )
 
 # Initialize Flask application with static and template folders
