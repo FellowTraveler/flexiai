@@ -206,23 +206,13 @@ This document provides a comprehensive overview and mapping of the FlexiAI proje
 
 ```plaintext
 📦user_flexiai_flask_app
+ ┣ 📂logs
  ┣ 📂routes
  ┃ ┗ 📜api.py
  ┣ 📂static
  ┃ ┣ 📂css
  ┃ ┃ ┗ 📜styles.css
  ┃ ┣ 📂images
- ┃ ┃ ┣ 📂other_images
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161351.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161358.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161449.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 163324.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165158.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165318.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165338.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165350.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165358.png
- ┃ ┃ ┃ ┗ 📜Screenshot 2024-07-12 165558.png
  ┃ ┃ ┣ 📜assistant.png
  ┃ ┃ ┗ 📜user.png
  ┃ ┣ 📂js
@@ -230,8 +220,17 @@ This document provides a comprehensive overview and mapping of the FlexiAI proje
  ┃ ┗ 📜favicon.ico
  ┣ 📂templates
  ┃ ┗ 📜index.html
+ ┣ 📂user_flexiai_rag
+ ┃ ┣ 📂data
+ ┃ ┣ 📜__init__.py
+ ┃ ┣ 📜user_function_mapping.py
+ ┃ ┣ 📜user_helpers.py
+ ┃ ┗ 📜user_task_manager.py
+ ┣ 📂utils
+ ┃ ┗ 📜markdown_converter.py
+ ┣ 📜.env
  ┣ 📜app.py
- ┗ 📜run.py
+ ┗ 📜requirements.txt
 ```
 
 ---
