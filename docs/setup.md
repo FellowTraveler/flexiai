@@ -1290,7 +1290,9 @@ Here's an overview of the created structure for the RAG extension:
  ┃ ┗ 📜user_task_manager.py
  ┣ 📂logs
  ┣ 📜requirements.txt
- ┗ 📜.env
+ ┣ 📜.env
+ ┃
+ ┗ ...
 ```
 
 ### FlexiAI Basic Flask Chat Application
@@ -1302,27 +1304,36 @@ Here's an overview of the created structure for the Flask app:
 ```plaintext
 📦your_project
  ┃
- ┣ 📂user_flexiai_flask_app
- ┃ ┣ 📂routes
- ┃ ┃ ┗ 📜api.py
- ┃ ┣ 📂static
- ┃ ┃ ┣ 📂css
- ┃ ┃ ┃ ┗ 📜styles.css
- ┃ ┃ ┣ 📂images
- ┃ ┃ ┃ ┣ 📂other_images
- ┃ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161351.png
- ┃ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161358.png
- ┃ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165358.png
- ┃ ┃ ┃ ┃ ┗ 📜...
+ ┣ 📂logs
+ ┃ ┗ 📜app.log
+ ┣ 📂routes
+ ┃ ┗ 📜api.py
+ ┣ 📂static
+ ┃ ┣ 📂css
+ ┃ ┃ ┗ 📜styles.css
+ ┃ ┣ 📂images
+ ┃ ┃ ┣ 📂other_images
+ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161351.png
+ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161358.png
+ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161449.png
+ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165158.png
+ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165318.png
+ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165338.png
+ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165350.png
+ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165358.png
+ ┃ ┃ ┃ ┗ 📜Screenshot 2024-07-12 165558.png
  ┃ ┃ ┣ 📜assistant.png
  ┃ ┃ ┗ 📜user.png
  ┃ ┣ 📂js
  ┃ ┃ ┗ 📜scripts.js
  ┃ ┗ 📜favicon.ico
  ┣ 📂templates
- ┃ ┃ ┗ 📜index.html
+ ┃ ┗ 📜index.html
+ ┣ 📂utils
+ ┃ ┗ 📜markdown_converter.py
  ┣ 📜app.py
- ┗ 📜run.py
+ ┃
+ ┗ ...
 ```
 
 #### Post-Installation Steps
@@ -1366,7 +1377,7 @@ Before using FlexiAI, set up your environment variables. The `flexiai_rag_extens
 
 ### Example .env File
 
-```bash
+```console
 # ============================================================================================ #
 #                                      OpenAI Configuration                                    #
 # ============================================================================================ #
