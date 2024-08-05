@@ -19,13 +19,13 @@ def create_user_flexiai_rag_folder(project_root):
         '__init__.py': "# user_flexiai_rag/__init__.py\n",
         'user_function_mapping.py': '''# user_flexiai_rag/user_function_mapping.py
 import logging
-from user_flexiai_rag.user_task_manager import UserTaskManager
+from user__rag.user_task_manager import UserTaskManager
 
 logger = logging.getLogger(__name__)
 
 def register_user_tasks(multi_agent_system, run_manager):
     """
-    Registers user-defined tasks with the FlexiAI framework.
+    Registers user-defined tasks with the  framework.
 
     This function initializes the UserTaskManager and sets up mappings for personal and assistant functions.
     It logs the registration process and returns the function mappings.
@@ -61,16 +61,16 @@ def register_user_tasks(multi_agent_system, run_manager):
 
     return user_personal_functions, user_assistant_functions
 ''',
-        'user_helpers.py': "# user_flexiai_rag/user_helpers.py\n",
-        'user_task_manager.py': '''# user_flexiai_rag/user_task_manager.py
+        'user_helpers.py': "# user__rag/user_helpers.py\n",
+        'user_task_manager.py': '''# user__rag/user_task_manager.py
 import logging
 import urllib.parse
 import subprocess
 from threading import Lock
-from flexiai.core.flexi_managers.run_manager import RunManager
-from flexiai.core.flexi_managers.thread_manager import ThreadManager
-from flexiai.core.flexi_managers.message_manager import MessageManager
-from flexiai.core.flexi_managers.multi_agent_system import MultiAgentSystemManager
+from .core.flexi_managers.run_manager import RunManager
+from .core.flexi_managers.thread_manager import ThreadManager
+from .core.flexi_managers.message_manager import MessageManager
+from .core.flexi_managers.multi_agent_system import MultiAgentSystemManager
 
 
 class UserTaskManager:
@@ -303,7 +303,7 @@ def create_requirements_file(project_root):
                 "distro==1.9.0\n"
                 "docutils==0.21.2\n"
                 "Flask==3.0.3\n"
-                "flexiai==1.0.9\n"
+                "flexiai==1.1.0\n"
                 "glob2==0.7\n"
                 "h11==0.14.0\n"
                 "httpcore==1.0.5\n"
