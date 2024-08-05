@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 def register_user_tasks(multi_agent_system, run_manager):
     """
-    Registers user-defined tasks with the  framework.
+    Registers user-defined tasks with the FlexiAI framework.
 
     This function initializes the UserTaskManager and sets up mappings for personal and assistant functions.
     It logs the registration process and returns the function mappings.
