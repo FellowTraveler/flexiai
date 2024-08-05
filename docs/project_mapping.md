@@ -220,13 +220,6 @@ This document provides a comprehensive overview and mapping of the FlexiAI proje
  ┃ ┗ 📜favicon.ico
  ┣ 📂templates
  ┃ ┗ 📜index.html
- ┣ 📂user_flexiai_rag
- ┃ ┣ 📂data
- ┃ ┣ 📜__init__.py
- ┃ ┣ 📜user_function_mapping.py
- ┃ ┣ 📜user_helpers.py
- ┃ ┗ 📜user_task_manager.py
- ┣ 📂utils
  ┃ ┗ 📜markdown_converter.py
  ┣ 📜.env
  ┣ 📜app.py
