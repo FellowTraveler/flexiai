@@ -1377,7 +1377,7 @@ Before using FlexiAI, set up your environment variables. The `flexiai_rag_extens
 
 ### Example .env File
 
-```console
+```bash
 # ============================================================================================ #
 #                                      OpenAI Configuration                                    #
 # ============================================================================================ #
