@@ -111,15 +111,16 @@ This document provides a comprehensive overview and mapping of the FlexiAI proje
  ┃ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161351.png
  ┃ ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161358.png
  ┃ ┃ ┃ ┃ ┗ ...
- ┃ ┃ ┣ 📜assistant.png
- ┃ ┃ ┗ 📜user.png
- ┃ ┣ 📂js
- ┃ ┃ ┗ 📜scripts.js
- ┃ ┗ 📜favicon.ico
+ ┃ ┃ ┃ ┣ 📜assistant.png
+ ┃ ┃ ┃ ┗ 📜user.png
+ ┃ ┃ ┣ 📂js
+ ┃ ┃ ┃ ┗ 📜scripts.js
+ ┃ ┃ ┗ 📜favicon.ico
  ┃ ┣ 📂templates
  ┃ ┃ ┗ 📜index.html
- ┃ ┣ 📜app.py
- ┃ ┗ 📜run.py
+ ┃ ┣ 📂utils
+ ┃ ┃ ┗ 📜markdown_converter.py
+ ┃ ┗ 📜app.py
  ┣ 📂user_flexiai_rag
  ┃ ┣ 📂data
  ┃ ┃ ┣ 📂audio
@@ -220,6 +221,7 @@ This document provides a comprehensive overview and mapping of the FlexiAI proje
  ┃ ┗ 📜favicon.ico
  ┣ 📂templates
  ┃ ┗ 📜index.html
+ ┃ 📂utils
  ┃ ┗ 📜markdown_converter.py
  ┣ 📜.env
  ┣ 📜app.py
