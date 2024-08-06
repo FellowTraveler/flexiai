@@ -12,7 +12,7 @@ FlexiAI is a dynamic and modular AI framework designed to leverage the power of 
 
 Learn more about FlexiAI by watching the following introductory video:
 
-[![Watch the video](https://img.youtube.com/vi/KveLqPBLhUE/0.jpg)](https://www.youtube.com/watch?v=WI5HkM7XVO0)
+[![Watch the video](https://img.youtube.com/vi/KveLqPBLhUE/0.jpg)](https://www.youtube.com/watch?v=XHkXnQcblPM)
 
 ## Table of Contents
 
