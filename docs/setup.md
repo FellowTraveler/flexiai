@@ -8,7 +8,7 @@ This guide will help you set up FlexiAI in your project, including installation 
   - [Create a Virtual Environment](#create-a-virtual-environment)
     - [Using PowerShell](#using-powershell)
     - [Using Conda](#using-conda)
-  - [Install FlexiAI with `pip`](#install-flexiai-with-pip)
+  - [Install FlexiAI](#install-flexiai-with-pip)
   - [Post-Installation Setup](#post-installation-setup)
     - [Enable Retrieval-Augmented Generation (RAG)](#enable-retrieval-augmented-generation-rag)
     - [FlexiAI Basic Flask Chat Application](#flexiai-basic-flask-chat-application)
@@ -39,7 +39,7 @@ conda activate flexi_env
 
 ### Install FlexiAI with pip
 
-To install the FlexiAI framework using `pip`, run:
+To install the FlexiAI framework using pip, run:
 
 ```powershell
 pip install flexiai
@@ -49,8 +49,8 @@ pip install flexiai
 
 After installing, copy the `flexiai_rag_extension.py` and `flexiai_basic_flask_app.py` files to your project root directory and run them manually to set up additional necessary directories and files.
 
-- [Download flexiai_rag_extension.py](https://github.com/SavinRazvan/flexiai/blob/main/flexiai_rag_extension.py): This script sets up the necessary structure and files for enabling Retrieval-Augmented Generation (RAG) capabilities in your FlexiAI project.
-- [Download flexiai_basic_flask_app.py](https://github.com/SavinRazvan/flexiai/blob/main/flexiai_basic_flask_app.py): This script creates a basic Flask application structure, including routes, static files, templates, and main application files, to facilitate running a web server for your FlexiAI project.
+- [Download flexiai_rag_extension.py](https://github.com/SavinRazvan/flexiai/blob/main/post_install/flexiai_rag_extension.py): This script sets up the necessary structure and files for enabling Retrieval-Augmented Generation (RAG) capabilities in your FlexiAI project.
+- [Download flexiai_basic_flask_app.py](https://github.com/SavinRazvan/flexiai/blob/main/post_install/flexiai_basic_flask_app.py): This script creates a basic Flask application structure, including routes, static files, templates, and main application files, to facilitate running a web server for your FlexiAI project.
 
 #### Or create new files `flexiai_rag_extension.py` and `flexiai_basic_flask_app.py` in the root directory of your project.
 
