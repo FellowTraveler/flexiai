@@ -1,3 +1,6 @@
+ # Need updates and will be used when will add new env variable and change the RAG
+
+
 # flexiai/scripts/flexiai_basic_flask_app.py
 import os
 from pathlib import Path

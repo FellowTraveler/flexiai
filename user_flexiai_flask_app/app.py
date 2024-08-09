@@ -74,5 +74,5 @@ if __name__ == '__main__':
     console_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
     root_logger.addHandler(console_handler)
 
-    # Run the Flask application on host 0.0.0.0 and port 5000
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    # Run the Flask application on host 127.0.0.1 and port 5000
+    app.run(host='127.0.0.1', port=5000, debug=False)

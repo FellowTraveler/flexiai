@@ -10,7 +10,7 @@ def read_readme():
 
 setup(
     name='flexiai',
-    version='1.1.0',
+    version='1.1.1',
     packages=find_packages(include=['flexiai', 'flexiai.*']),
     include_package_data=True,
     package_data={
@@ -33,7 +33,6 @@ setup(
         'azure-identity==1.17.1',
         'azure-mgmt-core==1.4.0',
         'azure-mgmt-resource==23.1.1',
-        'blinker==1.8.2',
         'certifi==2024.7.4',
         'cffi==1.16.0',
         'charset-normalizer==3.3.2',
@@ -74,12 +73,14 @@ setup(
         'typing_extensions==4.12.2',
         'urllib3==2.2.2',
         'Werkzeug==3.0.3',
+        'faiss-cpu==1.8.0',
     ],
     entry_points={
         'console_scripts': [
-            # To track and fix path
-            'setup-flexiai-rag=flexiai.scripts.flexiai_rag_extension:setup_project',
-            'setup-flexiai-flask-app=flexiai.scripts.flexiai_basic_flask_app:setup_project',
+            # To track and fix path -> Idea: set new env variable for user root, add new variable to credentials..,
+            # change the rag, and add them together and will use the variable to install the flask app and rag starter files..
+            'setup-flexiai-rag=flexiai.scripts.flexiai_rag_extension:setup_project',         # command for installation: setup-flexiai-rag
+            'setup-flexiai-flask-app=flexiai.scripts.flexiai_basic_flask_app:setup_project', # command for installation: setup-flexiai-flask-app
         ],
     },
     author='Savin Ionut Razvan',

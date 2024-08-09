@@ -10,10 +10,20 @@ def create_logs_folder(project_root):
 def create_user_flexiai_rag_folder(project_root):
     dst_folder = os.path.join(project_root, 'user_flexiai_rag')
     data_folder = os.path.join(dst_folder, 'data')
-    
+
+    # List of subdirectories to create inside 'data'
+    data_subfolders = ['audio', 'corpus', 'csv', 'images', 'vectors_store']
+
     if not os.path.exists(data_folder):
         os.makedirs(data_folder)
         print(f"Created directory: {data_folder}")
+    
+    # Create the subdirectories under 'data'
+    for subfolder in data_subfolders:
+        subfolder_path = os.path.join(data_folder, subfolder)
+        if not os.path.exists(subfolder_path):
+            os.makedirs(subfolder_path)
+            print(f"Created directory: {subfolder_path}")
     
     files_content = {
         '__init__.py': "# user_flexiai_rag/__init__.py\n",
@@ -293,7 +303,6 @@ def create_requirements_file(project_root):
                 "azure-mgmt-core==1.4.0\n"
                 "azure-mgmt-resource==23.1.1\n"
                 "bleach==6.1.0\n"
-                "blinker==1.8.2\n"
                 "build==1.2.1\n"
                 "certifi==2024.7.4\n"
                 "cffi==1.16.0\n"
@@ -328,6 +337,8 @@ def create_requirements_file(project_root):
                 "nest-asyncio==1.6.0\n"
                 "nh3==0.2.18\n"
                 "numpy==2.0.1\n"
+                "nltk==3.8.1\n"
+                "faiss-cpu==1.8.0\n"
                 "openai==1.35.0\n"
                 "packaging==24.1\n"
                 "pillow==10.4.0\n"

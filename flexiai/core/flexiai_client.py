@@ -7,6 +7,7 @@ from flexiai.core.flexi_managers.run_manager import RunManager
 from flexiai.core.flexi_managers.session_manager import SessionManager
 from flexiai.core.flexi_managers.thread_manager import ThreadManager
 from flexiai.core.flexi_managers.vector_store_manager import VectorStoreManager
+from flexiai.core.flexi_managers.local_vector_store_manager import LocalVectorStoreManager
 from flexiai.core.flexi_managers.multi_agent_system import MultiAgentSystemManager
 from flexiai.core.flexi_managers.embedding_manager import EmbeddingManager
 from flexiai.core.flexi_managers.images_manager import ImagesManager
@@ -52,6 +53,7 @@ class FlexiAI:
             multi_agent_system (MultiAgentSystemManager): Manager for handling multi-agent systems.
             session_manager (SessionManager): Manager for handling sessions.
             vector_store_manager (VectorStoreManager): Manager for handling vector stores.
+            local_vector_store_manager (LocalVectorStoreManager): Manager for handling local vector stores.
             speech_to_text_manager (SpeechToTextManager): Manager for speech-to-text operations.
             text_to_speech_manager (TextToSpeechManager): Manager for text-to-speech operations.
             audio_transcription_manager (AudioTranscriptionManager): Manager for audio transcription operations.
@@ -109,7 +111,7 @@ class FlexiAI:
         
         self.session_manager = SessionManager(self.client, self.logger)
         self.vector_store_manager = VectorStoreManager(self.client, self.logger)
-
+        self.local_vector_store_manager = LocalVectorStoreManager(self.client, self.logger, self.embedding_manager)
 
 
     def create_thread(self):
@@ -779,22 +781,36 @@ class FlexiAI:
         return self.audio_translation_manager.translate_audio(audio_file_path, model)
 
 
-    def create_text_embedding(self, text):
+    def create_embeddings(self, text, model="text-embedding-ada-002", chunk_size=1000):
         """
-        Creates an embedding for the given text using the EmbeddingManager.
+        Creates embeddings for the given text using OpenAI's embedding model.
+        Text is split into chunks if it exceeds the chunk size.
 
         Args:
-            text (str): The text to create an embedding for.
+            text (str): The text to create embeddings for.
+            chunk_size (int): The maximum number of tokens in each chunk.
 
         Returns:
-            list: The generated embedding.
-
-        Raises:
-            OpenAIError: If the embedding API call fails.
-            Exception: For any unexpected errors.
+            list: The combined embedding for the text.
         """
-        return self.embedding_manager.create_embedding(text)
+        return self.embedding_manager.create_embeddings(text, model, chunk_size)
 
+
+    def create_embeddings_for_faiss(self, texts, model="text-embedding-ada-002", chunk_size=1000):
+        """
+        Create embeddings for a list of texts and add them to a FAISS index.
+
+        Args:
+            texts (list of str): List of texts to create embeddings for.
+            flexiai (FlexiAI): Instance of the FlexiAI client.
+            model (str): The model to use for creating embeddings. Default is "text-embedding-ada-002".
+            chunk_size (int): The maximum number of tokens in each chunk.
+
+        Returns:
+            tuple: A tuple containing the FAISS index and the list of successfully embedded texts.
+        """
+        return self.embedding_manager.create_embeddings_for_faiss(texts, model, chunk_size)
+        
 
     def create_image(self, prompt, n=1, size="1024x1024", model="dall-e-3", response_format="url"):
         """

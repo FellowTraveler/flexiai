@@ -70,10 +70,20 @@ def create_logs_folder(project_root):
 def create_user_flexiai_rag_folder(project_root):
     dst_folder = os.path.join(project_root, 'user_flexiai_rag')
     data_folder = os.path.join(dst_folder, 'data')
-    
+
+    # List of subdirectories to create inside 'data'
+    data_subfolders = ['audio', 'corpus', 'csv', 'images', 'vectors_store']
+
     if not os.path.exists(data_folder):
         os.makedirs(data_folder)
         print(f"Created directory: {data_folder}")
+    
+    # Create the subdirectories under 'data'
+    for subfolder in data_subfolders:
+        subfolder_path = os.path.join(data_folder, subfolder)
+        if not os.path.exists(subfolder_path):
+            os.makedirs(subfolder_path)
+            print(f"Created directory: {subfolder_path}")
     
     files_content = {
         '__init__.py': "# user_flexiai_rag/__init__.py\n",
@@ -353,7 +363,6 @@ def create_requirements_file(project_root):
                 "azure-mgmt-core==1.4.0\n"
                 "azure-mgmt-resource==23.1.1\n"
                 "bleach==6.1.0\n"
-                "blinker==1.8.2\n"
                 "build==1.2.1\n"
                 "certifi==2024.7.4\n"
                 "cffi==1.16.0\n"
@@ -388,6 +397,8 @@ def create_requirements_file(project_root):
                 "nest-asyncio==1.6.0\n"
                 "nh3==0.2.18\n"
                 "numpy==2.0.1\n"
+                "nltk==3.8.1\n"
+                "faiss-cpu==1.8.0\n"
                 "openai==1.35.0\n"
                 "packaging==24.1\n"
                 "pillow==10.4.0\n"
@@ -1245,8 +1256,8 @@ if __name__ == '__main__':
     console_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
     root_logger.addHandler(console_handler)
 
-    # Run the Flask application on host 0.0.0.0 and port 5000
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    # Run the Flask application on host 127.0.0.1 and port 5000
+    app.run(host='127.0.0.1', port=5000, debug=False)
 '''
     }
     
@@ -1274,19 +1285,40 @@ if __name__ == '__main__':
 
 Running the `flexiai_rag_extension.py` script will automatically create the necessary structure and files to enable the Retrieval-Augmented Generation (RAG) module in your project.
 
-Here's an overview of the created structure for the RAG extension:
+Here's an overview of the created structure for the RAG extension (some files are as examples, will receive recieve empty folders to set your files):
 
 ```plaintext
 📦your_project
- ┃
+ ┃ 
  ┣ 📂user_flexiai_rag
  ┃ ┣ 📂data
  ┃ ┃ ┣ 📂audio
+ ┃ ┃ ┃ ┣ 📜Travelers_of_the_Cosmos.mp3
+ ┃ ┃ ┃ ┣ 📜output.mp3
+ ┃ ┃ ┃ ┣ 📜output_hd.mp3
+ ┃ ┃ ┃ ┗ 📜test_output.wav
+ ┃ ┃ ┣ 📂corpus
+ ┃ ┃ ┃ ┣ 📂another_folder
+ ┃ ┃ ┃ ┃ ┣ 📜probability.txt
+ ┃ ┃ ┃ ┃ ┗ 📜python.txt
+ ┃ ┃ ┃ ┣ 📜artificial_intelligence.txt
+ ┃ ┃ ┃ ┣ 📜machine_learning.txt
+ ┃ ┃ ┃ ┣ 📜natural_language_processing.txt
+ ┃ ┃ ┃ ┗ 📜neural_network.txt
  ┃ ┃ ┣ 📂csv
- ┃ ┃ ┗ 📂images
+ ┃ ┃ ┃ ┣ 📜identify_person.csv
+ ┃ ┃ ┃ ┗ 📜products.csv
+ ┃ ┃ ┣ 📂images
+ ┃ ┃ ┃ ┣ 📜generated_image_1aec1dd8-b386-43d1-9a6c-ae6a7d5aeb21.png
+ ┃ ┃ ┃ ┗ 📜generated_image_1bc706cc-85e5-4b53-b6f7-af3810d79177.png
+ ┃ ┃ ┗ 📂vectors_store
+ ┃ ┃ ┃ ┣ 📜updated_vector_store_after_replacement.index
+ ┃ ┃ ┃ ┣ 📜updated_vector_store_after_replacement.index.meta
+ ┃ ┃ ┃ ┣ 📜vector_store.index
+ ┃ ┃ ┃ ┗ 📜vector_store.index.meta
  ┃ ┣ 📜__init__.py
- ┃ ┣ 📜user_function_mapping.py
- ┃ ┣ 📜user_helpers.py             
+ ┃ ┣ 📜user_function_mapping.py                  
+ ┃ ┣ 📜user_helpers.py
  ┃ ┗ 📜user_task_manager.py
  ┣ 📂logs
  ┣ 📜requirements.txt

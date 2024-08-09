@@ -1,3 +1,6 @@
+ # Need updates and will be used when will add new env variable and change the RAG
+
+
 # flexiai/scripts/flexiai_rag_extension.py
 import os
 from pathlib import Path
