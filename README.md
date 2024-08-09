@@ -1,7 +1,7 @@
 # FlexiAI
 
 [![CI](https://github.com/SavinRazvan/flexiai/actions/workflows/workflow.yml/badge.svg)](https://github.com/SavinRazvan/flexiai/actions/workflows/workflow.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-228B22.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-000000.svg)](https://opensource.org/licenses/MIT)
 [![Python Versions](https://img.shields.io/pypi/pyversions/flexiai.svg)](https://pypi.org/project/flexiai/)
 [![PyPI version](https://badge.fury.io/py/flexiai.svg?v=1.1.1)](https://badge.fury.io/py/flexiai)
 [![Downloads](https://static.pepy.tech/badge/flexiai)](https://pepy.tech/project/flexiai)
