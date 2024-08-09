@@ -3,7 +3,7 @@
 [![CI](https://github.com/SavinRazvan/flexiai/actions/workflows/workflow.yml/badge.svg)](https://github.com/SavinRazvan/flexiai/actions/workflows/workflow.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-228B22.svg)](https://opensource.org/licenses/MIT)
 [![Python Versions](https://img.shields.io/pypi/pyversions/flexiai.svg)](https://pypi.org/project/flexiai/)
-[![PyPI version](https://badge.fury.io/py/flexiai.svg?v=1.1.1.2)](https://badge.fury.io/py/flexiai)
+[![PyPI version](https://badge.fury.io/py/flexiai.svg?v=1.1.1)](https://badge.fury.io/py/flexiai)
 [![Downloads](https://static.pepy.tech/badge/flexiai)](https://pepy.tech/project/flexiai)
 
 FlexiAI is a dynamic and modular AI framework designed to leverage the power of Multi-Agent Systems and Retrieval Augmented Generation (RAG). This framework is ideal for developers seeking to integrate AI capabilities into their applications with ease and flexibility. With FlexiAI, you can harness the power of both OpenAI and Azure OpenAI services to create intelligent agents that can manage tasks, process data, and provide advanced AI-driven solutions.
