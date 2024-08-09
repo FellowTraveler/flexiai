@@ -17,7 +17,7 @@ Learn more about FlexiAI by watching the following introductory video:
 ## Table of Contents
 
 - [Features](#features)
-- [Installation](#installation)
+- [Installation](https://github.com/SavinRazvan/flexiai/blob/main/docs/setup.md#table-of-contents)
 - [Documentation](#documentation)
 - [Examples](#examples)
 - [Contributing](#contributing)
