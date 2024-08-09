@@ -312,7 +312,6 @@ def create_requirements_file(project_root):
                 "distro==1.9.0\n"
                 "docutils==0.21.2\n"
                 "Flask==3.0.3\n"
-                "flexiai==1.1.0\n"
                 "glob2==0.7\n"
                 "h11==0.14.0\n"
                 "httpcore==1.0.5\n"
