@@ -55,7 +55,6 @@ setup(
         'nest-asyncio==1.6.0',
         'openai==1.35.0',
         'packaging==24.1',
-        'pillow==10.4.0',
         'platformdirs==3.7.0',
         'pluggy==1.5.0',
         'portalocker==2.10.1',
@@ -74,6 +73,7 @@ setup(
         'urllib3==2.2.2',
         'Werkzeug==3.0.3',
         'faiss-cpu==1.8.0',
+        'numpy==1.26.4',
     ],
     entry_points={
         'console_scripts': [
