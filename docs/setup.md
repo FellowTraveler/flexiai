@@ -395,7 +395,7 @@ def create_requirements_file(project_root):
                 "msal-extensions==1.2.0\n"
                 "nest-asyncio==1.6.0\n"
                 "nh3==0.2.18\n"
-                "numpy==2.0.1\n"
+                "numpy==1.26.4\n"
                 "nltk==3.8.1\n"
                 "faiss-cpu==1.8.0\n"
                 "openai==1.35.0\n"
