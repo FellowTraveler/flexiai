@@ -241,7 +241,7 @@ class UserTaskManager:
             }
 
     # Here you will add your other functions used by your Assistant/s (personal functions or 
-    # calling other assistants functions -> those names must end with 'assistant)'
+    # calling other assistants functions -> those names must end with '_assistant)'
 ''',
     }
     
