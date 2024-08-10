@@ -77,10 +77,8 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            # To track and fix path -> Idea: set new env variable for user root, add new variable to credentials..,
-            # change the rag, and add them together and will use the variable to install the flask app and rag starter files..
-            'setup-flexiai-rag=flexiai.scripts.flexiai_rag_extension:setup_project',         # command for installation: setup-flexiai-rag
-            'setup-flexiai-flask-app=flexiai.scripts.flexiai_basic_flask_app:setup_project', # command for installation: setup-flexiai-flask-app
+            'setup-flexiai-rag=flexiai.scripts.flexiai_rag_extension:setup_project',         
+            'setup-flexiai-flask-app=flexiai.scripts.flexiai_basic_flask_app:setup_project', 
         ],
     },
     author='Savin Ionut Razvan',
