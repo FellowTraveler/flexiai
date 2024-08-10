@@ -341,7 +341,7 @@ def create_requirements_file(project_root):
                 "nh3==0.2.18\n"
                 "nltk==3.8.1\n"
                 "numpy==1.26.4\n"
-                "openai==1.35.0\n"
+                "openai==1.40.2\n"
                 "packaging==24.1\n"
                 "pillow==10.4.0\n"
                 "pip-upgrade-outdated==1.5\n"

@@ -11,6 +11,7 @@ from flexiai.core.flexi_managers.local_vector_store_manager import LocalVectorSt
 from flexiai.core.flexi_managers.multi_agent_system import MultiAgentSystemManager
 from flexiai.core.flexi_managers.embedding_manager import EmbeddingManager
 from flexiai.core.flexi_managers.images_manager import ImagesManager
+from flexiai.core.flexi_managers.completions_manager import CompletionsManager
 from flexiai.core.flexi_managers.audio_manager import (
     SpeechToTextManager, 
     TextToSpeechManager, 
@@ -113,6 +114,9 @@ class FlexiAI:
         self.vector_store_manager = VectorStoreManager(self.client, self.logger)
         self.local_vector_store_manager = LocalVectorStoreManager(self.client, self.logger, self.embedding_manager)
 
+        # Initialize the CompletionsManager
+        self.completions_manager = CompletionsManager(self.client, self.logger)
+        
 
     def create_thread(self):
         """

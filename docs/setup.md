@@ -398,7 +398,7 @@ def create_requirements_file(project_root):
                 "numpy==1.26.4\n"
                 "nltk==3.8.1\n"
                 "faiss-cpu==1.8.0\n"
-                "openai==1.35.0\n"
+                "openai==1.40.2\n"
                 "packaging==24.1\n"
                 "pillow==10.4.0\n"
                 "pip-upgrade-outdated==1.5\n"

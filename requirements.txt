@@ -43,7 +43,7 @@ nest-asyncio==1.6.0
 nh3==0.2.18
 nltk==3.8.1
 numpy==1.26.4
-openai==1.35.0
+openai==1.40.2
 packaging==24.1
 pillow==10.4.0
 pip-upgrade-outdated==1.5
