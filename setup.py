@@ -33,6 +33,7 @@ setup(
         'azure-identity==1.17.1',
         'azure-mgmt-core==1.4.0',
         'azure-mgmt-resource==23.1.1',
+        'blinker==1.8.2',
         'certifi==2024.7.4',
         'cffi==1.16.0',
         'charset-normalizer==3.3.2',
@@ -53,7 +54,7 @@ setup(
         'msal==1.30.0',
         'msal-extensions==1.2.0',
         'nest-asyncio==1.6.0',
-        'openai==1.35.0',
+        'openai==1.40.2',
         'packaging==24.1',
         'platformdirs==3.7.0',
         'pluggy==1.5.0',
@@ -77,10 +78,8 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            # To track and fix path -> Idea: set new env variable for user root, add new variable to credentials..,
-            # change the rag, and add them together and will use the variable to install the flask app and rag starter files..
-            'setup-flexiai-rag=flexiai.scripts.flexiai_rag_extension:setup_project',         # command for installation: setup-flexiai-rag
-            'setup-flexiai-flask-app=flexiai.scripts.flexiai_basic_flask_app:setup_project', # command for installation: setup-flexiai-flask-app
+            'setup-flexiai-rag=flexiai.scripts.flexiai_rag_extension:setup_project',
+            'setup-flexiai-flask-app=flexiai.scripts.flexiai_basic_flask_app:setup_project',
         ],
     },
     author='Savin Ionut Razvan',
