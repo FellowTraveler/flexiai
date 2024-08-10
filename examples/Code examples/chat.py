@@ -4,21 +4,26 @@ from flexiai.core.flexiai_client import FlexiAI
 from flexiai.config.logging_config import setup_logging
 from flexiai.core.utils.helpers import HelperFunctions
 
-
 # Define global variables for role names
 USER_ROLE_NAME = "You"
-ASSISTANT_ROLE_NAME = "Alpha"
+ASSISTANT_ROLE_NAME = "Assistant"
 
 
 def main():
     # Set up logging using your custom configuration
-    setup_logging()
+    setup_logging(
+    root_level=logging.INFO, 
+    file_level=logging.INFO, 
+    console_level=logging.INFO, 
+    enable_file_logging=True, 
+    enable_console_logging=False
+    )
     
     # Initialize FlexiAI
     flexiai = FlexiAI()
 
     # Use the given assistant ID
-    assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'  # Change it with your Main Assistant ID
+    assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXX'  # Update with your Assistant ID
 
     # Initialize MultiAgentSystemManager
     multi_agent_system = flexiai.multi_agent_system
@@ -53,7 +58,7 @@ def main():
             print("Exiting...")
             break
 
-        logging.info(f"User message: {user_message}")
+        # logging.info(f"User message: {user_message}")
 
         # Run the thread and handle required actions
         try:
@@ -73,3 +78,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
