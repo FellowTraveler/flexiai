@@ -14,7 +14,7 @@ def main():
     setup_logging(
     root_level=logging.DEBUG, 
     file_level=logging.DEBUG, 
-    console_level=logging.INFO, 
+    console_level=logging.ERROR, 
     enable_file_logging=True, 
     enable_console_logging=False
     )
