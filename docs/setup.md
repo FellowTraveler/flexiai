@@ -33,7 +33,7 @@ source .flexi_env/bin/activate
 #### Using Conda
 
 ```powershell
-conda create --name flexi_env python=3.12.4
+conda create --name flexi_env
 conda activate flexi_env
 ```
 
@@ -240,6 +240,11 @@ def create_env_file(project_root):
                 "# ============================================================================================ #\n"
                 "# Set this to 'openai' if you are using OpenAI, or 'azure' if you are using Azure OpenAI.\n"
                 "CREDENTIAL_TYPE=openai\n\n"
+                "# ============================================================================================ #\n"
+                "#                                      User Project Configuration                              #\n"
+                "# ============================================================================================ #\n"
+                "# Define the root directory of the user's project to integrate custom functions into FlexiAI.\n"
+                "USER_PROJECT_ROOT_DIR=/your/path/to_your/project_root_directory\n\n"
             )
         print(f"Created file: {env_file}")
 
@@ -1341,6 +1346,14 @@ AZURE_OPENAI_API_VERSION=your_azure_openai_api_version_here
 # ============================================================================================ #
 # Set this to 'openai' if you are using OpenAI, or 'azure' if you are using Azure OpenAI.
 CREDENTIAL_TYPE=openai
+
+
+# ============================================================================================ #
+#                                      User Project Configuration                              #
+# ============================================================================================ #
+# Define the root directory of the user's project to integrate custom functions into FlexiAI.
+USER_PROJECT_ROOT_DIR=/your/path/to_your/project_root_directory
+
 
 ```
 

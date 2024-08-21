@@ -1,548 +1,537 @@
- # Need updates and will be used when will add new env variable and change the RAG
-
-
 # flexiai/scripts/flexiai_basic_flask_app.py
 import os
-from pathlib import Path
 
-def _detect_project_root():
-    """
-    Detects the project root directory based on a known file or structure.
-
-    Returns:
-        str: The detected project root directory path.
-    """
-    current_dir = Path.cwd()
-    project_root = current_dir
-    return str(project_root)
-
-def create_logs_folder(project_root):
-    log_folder = os.path.join(project_root, 'logs')
-    if not os.path.exists(log_folder):
-        os.makedirs(log_folder)
-        print(f"Created directory: {log_folder}")
-
-def create_routes_folder(project_root):
-    routes_folder = os.path.join(project_root, 'routes')
-    if not os.path.exists(routes_folder):
-        os.makedirs(routes_folder)
-        print(f"Created directory: {routes_folder}")
-
-    api_file = os.path.join(routes_folder, 'api.py')
-    if not os.path.exists(api_file):
-        with open(api_file, 'w') as f:
-            f.write(
-                "from flask import Blueprint, request, jsonify, session as flask_session\n"
-                "from flexiai import FlexiAI\n"
-                "from flexiai.config.logging_config import setup_logging\n"
-                "import uuid\n\n"
-                "api_bp = Blueprint('api', __name__)\n"
-                "flexiai = FlexiAI()\n\n"
-                "# setup_logging() # Check logs -> app.log file after you activate this\n\n"
-                "def message_to_dict(message):\n"
-                "    \"\"\"\n"
-                "    Convert a message object to a dictionary, including nested TextContentBlock objects.\n"
-                "    \"\"\"\n"
-                "    message_dict = {\n"
-                "        'id': message.id,\n"
-                "        'role': message.role,\n"
-                "        'content': [block.text.value for block in message.content if hasattr(block, 'text') and hasattr(block.text, 'value')]\n"
-                "    }\n"
-                "    return message_dict\n\n"
-                "@api_bp.route('/run', methods=['POST'])\n"
-                "def run():\n"
-                "    data = request.json\n"
-                "    user_message = data['message']\n"
-                "    assistant_id = 'asst_bxt62YG46C5wn4t5U1ESqJZf'  # Updated assistant ID\n"
-                "    thread_id = data.get('thread_id')\n\n"
-                "    # Use a session ID if available, else create a new one\n"
-                "    session_id = flask_session.get('session_id')\n"
-                "    if not session_id:\n"
-                "        session_id = str(uuid.uuid4())  # Generate a new session ID\n"
-                "        flask_session['session_id'] = session_id\n"
-                "        flexiai.session_manager.create_session(session_id, {\"thread_id\": thread_id, \"seen_message_ids\": []})\n"
-                "    else:\n"
-                "        session_data = flexiai.session_manager.get_session(session_id)\n"
-                "        thread_id = session_data.get(\"thread_id\", thread_id)\n\n"
-                "    if not thread_id:\n"
-                "        thread = flexiai.create_thread()\n"
-                "        thread_id = thread.id\n"
-                "        flexiai.session_manager.create_session(session_id, {\"thread_id\": thread_id, \"seen_message_ids\": []})\n\n"
-                "    last_retrieved_id = None\n"
-                "    flexiai.create_advanced_run(assistant_id, thread_id, user_message)\n"
-                "    messages = flexiai.retrieve_messages_dynamically(thread_id, limit=20, retrieve_all=False, last_retrieved_id=last_retrieved_id)\n\n"
-                "    # Retrieve seen message IDs from the session\n"
-                "    session_data = flexiai.session_manager.get_session(session_id)\n"
-                "    seen_message_ids = set(session_data.get(\"seen_message_ids\", []))\n\n"
-                "    filtered_messages = []\n"
-                "    new_seen_message_ids = list(seen_message_ids)  # Make a list for session update\n\n"
-                "    for msg in messages:\n"
-                "        if msg.id not in seen_message_ids:  # Access the id attribute directly\n"
-                "            filtered_messages.append({\n"
-                "                \"role\": \"You\" if msg.role == \"user\" else \"Assistant\",  # Access the role and content attributes directly\n"
-                "                \"message\": \" \".join([block.text.value for block in msg.content if hasattr(block, 'text') and hasattr(block.text, 'value')])\n"
-                "            })\n"
-                "            new_seen_message_ids.append(msg.id)\n\n"
-                "    # Update session with new seen message IDs\n"
-                "    flexiai.session_manager.create_session(session_id, {\"thread_id\": thread_id, \"seen_message_ids\": new_seen_message_ids})\n\n"
-                "    return jsonify(success=True, thread_id=thread_id, messages=filtered_messages)\n\n"
-                "@api_bp.route('/thread/<thread_id>/messages', methods=['GET'])\n"
-                "def get_thread_messages(thread_id):\n"
-                "    session_id = flask_session.get('session_id')\n"
-                "    if not session_id:\n"
-                "        return jsonify(success=False, message=\"Session not found\"), 404\n\n"
-                "    messages = flexiai.retrieve_messages(thread_id, limit=20)\n"
-                "    formatted_messages = [\n"
-                "        {\n"
-                "            \"role\": \"You\" if msg.role == \"user\" else \"Assistant\",  # Access the role and content attributes directly\n"
-                "            \"message\": \" \".join([block.text.value for block in msg.content if hasattr(block, 'text') and hasattr(block.text, 'value')])\n"
-                "        }\n"
-                "        for msg in messages\n"
-                "    ]\n"
-                "    return jsonify(success=True, thread_id=thread_id, messages=formatted_messages)\n\n"
-                "# Session management routes\n"
-                "@api_bp.route('/session', methods=['POST'])\n"
-                "def create_session():\n"
-                "    data = request.json\n"
-                "    session_id = data['session_id']\n"
-                "    session_data = data['data']\n"
-                "    session = flexiai.session_manager.create_session(session_id, session_data)\n"
-                "    return jsonify(success=True, session=session)\n\n"
-                "@api_bp.route('/session/<session_id>', methods=['GET'])\n"
-                "def get_session(session_id):\n"
-                "    try:\n"
-                "        session_data = flexiai.session_manager.get_session(session_id)\n"
-                "        return jsonify(success=True, session=session_data)\n"
-                "    except KeyError:\n"
-                "        return jsonify(success=False, message=\"Session not found\"), 404\n\n"
-                "@api_bp.route('/session/<session_id>', methods=['DELETE'])\n"
-                "def delete_session(session_id):\n"
-                "    success = flexiai.session_manager.delete_session(session_id)\n"
-                "    return jsonify(success=success)\n\n"
-                "@api_bp.route('/sessions', methods=['GET'])\n"
-                "def get_all_sessions():\n"
-                "    sessions = flexiai.session_manager.get_all_sessions()\n"
-                "    return jsonify(success=True, sessions=sessions)\n\n"
-                "@api_bp.route('/sessions', methods=['DELETE'])\n"
-                "def clear_all_sessions():\n"
-                "    success = flexiai.session_manager.clear_all_sessions()\n"
-                "    return jsonify(success=success)\n"
-            )
-        print(f"Created file: {api_file}")
-
-def create_static_folder(project_root):
-    static_folder = os.path.join(project_root, 'static')
-    if not os.path.exists(static_folder):
-        os.makedirs(static_folder)
-        print(f"Created directory: {static_folder}")
-
-    subfolders = ['css', 'images', 'js']
-    for subfolder in subfolders:
-        folder_path = os.path.join(static_folder, subfolder)
+def create_folder_structure(project_root):
+    folder_structure = {
+        'logs': [],
+        'routes': ['api.py'],
+        'static/css': ['styles.css'],
+        'static/images': [],
+        'static/js': ['scripts.js'],
+        'templates': ['index.html'],
+        'utils': ['markdown_converter.py']
+    }
+    
+    for folder, files in folder_structure.items():
+        folder_path = os.path.join(project_root, folder)
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
             print(f"Created directory: {folder_path}")
+        
+        for file in files:
+            file_path = os.path.join(folder_path, file)
+            if not os.path.exists(file_path):
+                with open(file_path, 'w') as f:
+                    f.write('')
+                print(f"Created file: {file_path}")
 
-    css_file = os.path.join(static_folder, 'css', 'styles.css')
-    if not os.path.exists(css_file):
-        with open(css_file, 'w') as f:
-            f.write(
-                "/* static/css/styles.css */\n"
-                "/* Import Open Sans Font */\n"
-                "@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');\n"
-                "/* Base Styles */\n"
-                "body {\n"
-                "    font-family: 'Open Sans', sans-serif;\n"
-                "    margin: 0;\n"
-                "    padding: 0;\n"
-                "    background-color: #535353;\n"
-                "    display: flex;\n"
-                "    justify-content: center;\n"
-                "    align-items: flex-start;\n"
-                "    height: 100vh;\n"
-                "}\n"
-                "/* Chat Container */\n"
-                "#chat-container {\n"
-                "    width: 100%;\n"
-                "    max-width: 680px;\n"
-                "    height: calc(100vh - 2rem);\n"
-                "    display: flex;\n"
-                "    flex-direction: column;\n"
-                "    background-color: #ffffff;\n"
-                "    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);\n"
-                "    border-radius: 8px;\n"
-                "    margin: 1rem 0;\n"
-                "    overflow: hidden;\n"
-                "}\n"
-                "/* Links */\n"
-                "a {\n"
-                "    color: #89e600;\n"
-                "}\n"
-                "/* Messages List */\n"
-                "#messages {\n"
-                "    list-style-type: none;\n"
-                "    padding: 1rem;\n"
-                "    flex: 1;\n"
-                "    overflow-y: auto;\n"
-                "    margin: 0;\n"
-                "    color: #e1e1e6;\n"
-                "}\n"
-                "/* Message Item */\n"
-                "#messages li {\n"
-                "    padding: 0.5rem 0;\n"
-                "    margin: 0.5rem 0;\n"
-                "    border-radius: 4px;\n"
-                "    word-wrap: break-word;\n"
-                "    display: flex;\n"
-                "    align-items: flex-start;\n"
-                "    animation: fadeIn 0.5s ease-in-out;\n"
-                "}\n"
-                "/* Animation for messages */\n"
-                "@keyframes fadeIn {\n"
-                "    from { opacity: 0; transform: translateY(10px); }\n"
-                "    to { opacity: 1; transform: translateY(0); }\n"
-                "}\n"
-                "/* Message Container */\n"
-                ".message-container {\n"
-                "    display: flex;\n"
-                "    align-items: flex-start;\n"
-                "    width: 100%;\n"
-                "}\n"
-                "/* Avatar */\n"
-                ".avatar {\n"
-                "    width: 45px;\n"
-                "    height: 45px;\n"
-                "    border-radius: 50%;\n"
-                "    background-color: #25272a;\n"
-                "    display: flex;\n"
-                "    justify-content: center;\n"
-                "    align-items: center;\n"
-                "    margin-right: 10px;\n"
-                "    font-size: 1.2em;\n"
-                "    color: #ffffff;\n"
-                "    border: 1px solid #c6c6c6;\n"
-                "    overflow: hidden;\n"
-                "}\n"
-                "/* Avatar Images */\n"
-                ".avatar img {\n"
-                "    width: 100%;\n"
-                "    height: 100%;\n"
-                "    border-radius: 50%;\n"
-                "}\n"
-                "/* Message Content */\n"
-                ".message-content {\n"
-                "    flex: 1;\n"
-                "    padding: 0.75rem 1rem;\n"
-                "    border-radius: 4px;\n"
-                "    font-size: 0.9em;\n"
-                "    background-color: #3a3f4b;\n"
-                "    color: #e1e1e6;\n"
-                "    position: relative;\n"
-                "}\n"
-                "/* User Message */\n"
-                ".user .message-content {\n"
-                "    background-color: #3a3a3a;\n"
-                "    text-align: left;\n"
-                "    color: #e1e1e6;\n"
-                "}\n"
-                "/* Assistant Message */\n"
-                ".assistant .message-content {\n"
-                "    background-color: #404a63;\n"
-                "    text-align: left;\n"
-                "}\n"
-                "/* Error Message */\n"
-                "#error {\n"
-                "    background-color: #ff4c4c;\n"
-                "    text-align: center;\n"
-                "    color: #fff;\n"
-                "}\n"
-                "#error-message {\n"
-                "    color: #fff;\n"
-                "}\n"
-                "/* Input Container */\n"
-                "#input-container {\n"
-                "    display: flex;\n"
-                "    align-items: center;\n"
-                "    padding: 0.75rem 1rem;\n"
-                "    border-top: 1px solid #353940;\n"
-                "    background-color: #ffffff;\n"
-                "}\n"
-                "/* Message Input */\n"
-                "#message-input {\n"
-                "    flex: 1;\n"
-                "    padding: 0.75rem;\n"
-                "    border: 1px solid #484e5c;\n"
-                "    border-radius: 20px;\n"
-                "    margin-right: 0.5rem;\n"
-                "    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);\n"
-                "    transition: border-color 0.3s;\n"
-                "    background-color: #3a3a3a;\n"
-                "    color: #e1e1e6;\n"
-                "    width: 100%;\n"
-                "    box-sizing: border-box;\n"
-                "}\n"
-                "#message-input:focus {\n"
-                "    border-color: #5a5a5a;\n"
-                "    outline: none;\n"
-                "}\n"
-                "/* Send Button */\n"
-                "#send-button {\n"
-                "    padding: 0.75rem 1rem;\n"
-                "    border: none;\n"
-                "    border-radius: 20px;\n"
-                "    background-color: #404a63;\n"
-                "    color: white;\n"
-                "    cursor: pointer;\n"
-                "    transition: background-color 0.3s, transform 0.1s;\n"
-                "    flex-shrink: 0;\n"
-                "}\n"
-                "#send-button:hover {\n"
-                "    background-color: #2a3552;\n"
-                "}\n"
-                "#send-button:active {\n"
-                "    transform: scale(0.95);\n"
-                "}\n"
-                "/* Markdown Content */\n"
-                ".markdown-content {\n"
-                "    font-size: 0.9em;\n"
-                "    line-height: 1.4em;\n"
-                "    margin: 0;\n"
-                "}\n"
-                ".markdown-content h1, .markdown-content h2, .markdown-content h3 {\n"
-                "    border-bottom: 1px solid #444;\n"
-                "    padding-bottom: 0.3em;\n"
-                "    margin-top: 0.5em;\n"
-                "    font-size: 1.1em;\n"
-                "}\n"
-                ".markdown-content p {\n"
-                "    margin: 0.5em 0;\n"
-                "}\n"
-                ".markdown-content code {\n"
-                "    background-color: #2e2e2e;\n"
-                "    border-radius: 3px;\n"
-                "    padding: 0.2em 0.4em;\n"
-                "    color: #e1e1e6;\n"
-                "}\n"
-                ".markdown-content pre {\n"
-                "    background-color: #2e2e2e;\n"
-                "    padding: 1em;\n"
-                "    border-radius: 3px;\n"
-                "    overflow-x: auto;\n"
-                "    font-size: 0.85em;\n"
-                "    color: #e1e1e6;\n"
-                "}\n"
-                ".markdown-content ol, .markdown-content ul {\n"
-                "    margin-left: -1em;\n"
-                "    padding-left: 1.5em;\n"
-                "}\n"
-                "/* Responsive Design */\n"
-                "@media (max-width: 600px) {\n"
-                "    #chat-container {\n"
-                "        height: calc(100vh - 2rem);\n"
-                "    }\n"
-                "    #message-input {\n"
-                "        padding: 0.75rem;\n"
-                "    }\n"
-                "    #send-button {\n"
-                "        padding: 0.75rem 1rem;\n"
-                "    }\n"
-                "    .avatar {\n"
-                "        width: 30px;\n"
-                "        height: 30px;\n"
-                "        font-size: 1em;\n"
-                "    }\n"
-                "    .message-content {\n"
-                "        font-size: 0.85em;\n"
-                "        padding: 0.75rem 1rem;\n"
-                "    }\n"
-                "    .markdown-content {\n"
-                "        font-size: 0.85em;\n"
-                "    }\n"
-                "}\n"
-            )
-        print(f"Created file: {css_file}")
+def write_file_content(project_root):
+    files_content = {
+        'routes/api.py': '''import uuid
+from flexiai import FlexiAI
+from flask import Blueprint, request, jsonify, session as flask_session
+from utils.markdown_converter import convert_markdown_to_html
 
-    js_file = os.path.join(static_folder, 'js', 'scripts.js')
-    if not os.path.exists(js_file):
-        with open(js_file, 'w') as f:
-            f.write(
-                "// static/js/scripts.js\n"
-                "let threadId = null;\n\n"
-                "document.getElementById('send-button').addEventListener('click', sendMessage);\n"
-                "document.getElementById('message-input').addEventListener('keypress', function(event) {\n"
-                "    if (event.key === 'Enter') {\n"
-                "        sendMessage();\n"
-                "    }\n"
-                "});\n\n"
-                "function sendMessage() {\n"
-                "    const messageInput = document.getElementById('message-input');\n"
-                "    const message = messageInput.value.trim();\n"
-                "    if (message === '') return;\n\n"
-                "    console.log('Sending message:', message);\n\n"
-                "    // Add user message to chat directly without retrieval\n"
-                "    addMessage('You', message, 'user');\n\n"
-                "    // Send message to server\n"
-                "    fetch('/api/run', {\n"
-                "        method: 'POST',\n"
-                "        headers: { 'Content-Type': 'application/json' },\n"
-                "        body: JSON.stringify({ message: message, thread_id: threadId })\n"
-                "    })\n"
-                "    .then(response => response.json())\n"
-                "    .then(data => {\n"
-                "        console.log('Received response:', data); // Log the response to debug\n"
-                "        if (data.success) {\n"
-                "            threadId = data.thread_id;\n"
-                "            updateChat(data.messages);\n"
-                "        } else {\n"
-                "            addMessage('Error', 'Failed to get response from assistant.', 'error');\n"
-                "        }\n"
-                "    })\n"
-                "    .catch(error => {\n"
-                "        console.error('Fetch error:', error);\n"
-                "        addMessage('Error', 'An error occurred: ' + error.message, 'error');\n"
-                "    });\n\n"
-                "    // Clear input\n"
-                "    messageInput.value = '';\n"
-                "}\n\n"
-                "function addMessage(role, text, className) {\n"
-                "    console.log('Adding message:', role, text);\n\n"
-                "    const messageElement = document.createElement('li');\n"
-                "    messageElement.className = className;\n\n"
-                "    // Determine avatar based on role\n"
-                "    const avatar = role === 'You' ? '/static/images/user.png' : '/static/images/assistant.png';\n\n"
-                "    // Convert markdown to HTML\n"
-                "    try {\n"
-                "        const htmlContent = window.marked.parse(text);\n"
-                "        console.log('HTML Content:', htmlContent); // Log the HTML content to debug\n"
-                "        messageElement.innerHTML = `\n"
-                "            <div class=\"message-container\">\n"
-                "                <div class=\"avatar\"><img src=\"${avatar}\" alt=\"${role}\" /></div>\n"
-                "                <div class=\"message-content\">\n"
-                "                    <div class=\"markdown-content\">${htmlContent}</div>\n"
-                "                </div>\n"
-                "            </div>`;\n"
-                "    } catch (error) {\n"
-                "        console.error('Markdown conversion error:', error);\n"
-                "        messageElement.innerHTML = `\n"
-                "            <div class=\"message-container\">\n"
-                "                <div class=\"avatar\"><img src=\"${avatar}\" alt=\"${role}\" /></div>\n"
-                "                <div class=\"message-content\">\n"
-                "                    <div class=\"markdown-content\">${text}</div>\n"
-                "                </div>\n"
-                "            </div>`;\n"
-                "    }\n\n"
-                "    const messagesContainer = document.getElementById('messages');\n"
-                "    messagesContainer.appendChild(messageElement);\n"
-                "    messagesContainer.scrollTop = messagesContainer.scrollHeight;\n"
-                "}\n\n"
-                "function updateChat(messages) {\n"
-                "    messages.forEach(msg => {\n"
-                "        if (msg.role === 'Assistant') {\n"
-                "            addMessage('Assistant', msg.message, 'assistant');\n"
-                "        }\n"
-                "    });\n"
-                "}\n\n"
-                "// Test if marked is available\n"
-                "if (typeof window.marked !== 'undefined') {\n"
-                "    console.log('Marked library is loaded');\n"
-                "} else {\n"
-                "    console.error('Marked library is not loaded');\n"
-                "}\n"
-            )
-        print(f"Created file: {js_file}")
 
-def create_templates_folder(project_root):
-    templates_folder = os.path.join(project_root, 'templates')
-    if not os.path.exists(templates_folder):
-        os.makedirs(templates_folder)
-        print(f"Created directory: {templates_folder}")
+# Create a Blueprint for the API routes
+api_bp = Blueprint('api', __name__)
+flexiai = FlexiAI()
 
-    index_file = os.path.join(templates_folder, 'index.html')
-    if not os.path.exists(index_file):
-        with open(index_file, 'w') as f:
-            f.write(
-                "<!-- templates/index.html -->\n"
-                "<!DOCTYPE html>\n"
-                "<html lang=\"en\">\n"
-                "<head>\n"
-                "    <meta charset=\"UTF-8\">\n"
-                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
-                "    <title>FlexiAI Chat Application</title>\n"
-                "    <link rel=\"stylesheet\" href=\"{{ url_for('static', filename='css/styles.css') }}\">\n"
-                "    <link rel=\"icon\" href=\"{{ url_for('static', filename='favicon.ico') }}\" type=\"image/x-icon\">\n"
-                "</head>\n"
-                "<body>\n"
-                "    <div id=\"chat-container\">\n"
-                "        <ul id=\"messages\"></ul>\n"
-                "        <div id=\"input-container\">\n"
-                "            <input type=\"text\" id=\"message-input\" placeholder=\"Type your message here...\">\n"
-                "            <button id=\"send-button\">Send</button>\n"
-                "        </div>\n"
-                "    </div>\n\n"
-                "    <!-- Include the Marked.js library -->\n"
-                "    <script src=\"https://cdn.jsdelivr.net/npm/marked/marked.min.js\"></script>\n"
-                "    <!-- Custom JavaScript file -->\n"
-                "    <script src=\"{{ url_for('static', filename='js/scripts.js') }}\"></script>\n"
-                "</body>\n"
-                "</html>\n"
-            )
-        print(f"Created file: {index_file}")
 
-def create_app_file(project_root):
-    app_file = os.path.join(project_root, 'app.py')
-    if not os.path.exists(app_file):
-        with open(app_file, 'w') as f:
-            f.write(
-                "# app.py\n"
-                "import os\n"
-                "from flask import Flask, session, render_template\n"
-                "from datetime import timedelta\n"
-                "from routes.api import api_bp\n"
-                "from flexiai import FlexiAI\n\n"
-                "app = Flask(__name__, static_folder='static', template_folder='templates')\n"
-                "app.secret_key = os.urandom(24)  # Secure the session with a secret key\n"
-                "app.register_blueprint(api_bp, url_prefix='/api')\n\n"
-                "flexiai = FlexiAI()\n\n"
-                "@app.before_request\n"
-                "def before_request():\n"
-                "    session.permanent = True\n"
-                "    app.permanent_session_lifetime = timedelta(minutes=30)  # Set session lifetime\n\n"
-                "@app.route('/')\n"
-                "def index():\n"
-                "    return render_template('index.html')\n\n"
-                "if __name__ == '__main__':\n"
-                "    app.run(host='0.0.0.0', port=5000, debug=False)\n"
-            )
-        print(f"Created file: {app_file}")
+def message_to_dict(message):
+    """
+    Convert a message object to a dictionary, including nested TextContentBlock objects.
 
-def create_run_file(project_root):
-    run_file = os.path.join(project_root, 'run.py')
-    if not os.path.exists(run_file):
-        with open(run_file, 'w') as f:
-            f.write(
-                "# run.py\n"
-                "import os\n"
-                "from dotenv import load_dotenv\n"
-                "from app import app\n\n"
-                "# Load environment variables from .env file\n"
-                "load_dotenv()\n\n"
-                "# Set Flask-related environment variables programmatically\n"
-                "os.environ['FLASK_APP'] = 'run.py'\n"
-                "os.environ['FLASK_ENV'] = 'development'\n"
-                "os.environ['FLASK_DEBUG'] = '1'\n\n"
-                "if __name__ == '__main__':\n"
-                "    app.run(host='0.0.0.0', port=5000, debug=False)\n"
-            )
-        print(f"Created file: {run_file}")
+    Args:
+        message (object): The message object to convert.
 
-def setup_project():
-    project_root = _detect_project_root()
-    create_logs_folder(project_root)
-    create_routes_folder(project_root)
-    create_static_folder(project_root)
-    create_templates_folder(project_root)
-    create_app_file(project_root)
-    create_run_file(project_root)
+    Returns:
+        dict: The converted message dictionary.
+    """
+    message_dict = {
+        'id': message.id,
+        'role': message.role,
+        'content': [block.text.value for block in message.content if hasattr(block, 'text') and hasattr(block.text, 'value')]
+    }
+    return message_dict
+
+
+@api_bp.route('/run', methods=['POST'])
+def run():
+    """
+    Route to handle running the assistant with the user's message.
+
+    Retrieves the user's message from the request, manages session and thread IDs,
+    sends the message to the assistant, retrieves the responses, converts them to HTML,
+    and returns the responses as JSON.
+
+    Returns:
+        Response: JSON response containing success status, thread ID, and messages.
+    """
+    data = request.json
+    user_message = data['message']
+    assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXXX'  # Update with your assistant ID
+    thread_id = data.get('thread_id')
+
+    session_id = flask_session.get('session_id')
+    if not session_id:
+        session_id = str(uuid.uuid4())
+        flask_session['session_id'] = session_id
+        flexiai.session_manager.create_session(session_id, {"thread_id": thread_id, "seen_message_ids": []})
+    else:
+        session_data = flexiai.session_manager.get_session(session_id)
+        thread_id = session_data.get("thread_id", thread_id)
+
+    if not thread_id:
+        thread_id = flexiai.multi_agent_system.thread_initialization(assistant_id)
+        flexiai.session_manager.create_session(session_id, {"thread_id": thread_id, "seen_message_ids": []})
+
+    last_retrieved_id = None
+    flexiai.create_advanced_run(assistant_id, thread_id, user_message)
+    messages = flexiai.retrieve_messages_dynamically(thread_id, limit=20, retrieve_all=False, last_retrieved_id=last_retrieved_id)
+
+    session_data = flexiai.session_manager.get_session(session_id)
+    seen_message_ids = set(session_data.get("seen_message_ids", []))
+
+    filtered_messages = []
+    new_seen_message_ids = list(seen_message_ids)
+
+    for msg in messages:
+        if msg.id not in seen_message_ids:
+            content = " ".join([block.text.value for block in msg.content if hasattr(block, 'text') and hasattr(block.text, 'value')])
+            html_content = convert_markdown_to_html(content)
+            filtered_messages.append({
+                "role": "You" if msg.role == "user" else "Assistant",
+                "message": html_content
+            })
+            new_seen_message_ids.append(msg.id)
+
+    flexiai.session_manager.create_session(session_id, {"thread_id": thread_id, "seen_message_ids": new_seen_message_ids})
+
+    response_data = {
+        'success': True,
+        'thread_id': thread_id,
+        'messages': filtered_messages
+    }
+
+    flexiai.logger.debug(f"Sending response data: {response_data}")
+    return jsonify(response_data)
+''',
+
+        'static/css/styles.css': '''/* Base Styles */
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #535353;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+}
+
+/* Chat Container */
+#chat-container {
+    width: 100%;
+    max-width: 680px;
+    height: calc(100vh - 2rem);
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+/* Links */
+a {
+    color: #89e600;
+}
+
+/* Messages Container */
+#messages {
+    padding: 1rem;
+    flex: 1;
+    overflow-y: auto;
+    margin: 0;
+    color: #e1e1e6;
+}
+
+/* Message Item */
+.message {
+    padding: 0.5rem 0;
+    margin: 0.5rem 0;
+    border-radius: 4px;
+    word-wrap: break-word;
+    display: flex;
+    align-items: flex-start;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Avatar */
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #25272a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    font-size: 1.2em;
+    color: #ffffff;
+    border: 1px solid #c6c6c6;
+    overflow: hidden;
+}
+
+/* Message Content */
+.message-content {
+    flex: 1;
+    padding: 0.5rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.7em;
+    line-height: 1.5rem;
+    background-color: #3a3f4b;
+    color: #e1e1e6;
+    position: relative;
+    word-break: break-word;
+    overflow: hidden;
+}
+
+/* User Message */
+.user .message-content {
+    background-color: #3a3a3a;
+    text-align: left;
+    color: #e1e1e6;
+}
+
+/* Assistant Message */
+.assistant .message-content {
+    background-color: #404a63;
+    text-align: left;
+}
+
+/* Error Message */
+.error .message-content {
+    background-color: #ff4c4c;
+    text-align: center;
+    color: #fff;
+}
+''',
+
+        'static/js/scripts.js': '''// static/js/scripts.js
+let threadId = null;
+let isProcessing = false;
+
+document.getElementById('send-button').addEventListener('click', sendMessage);
+
+const messageInput = document.getElementById('message-input');
+messageInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' && event.shiftKey) {
+        const cursorPosition = this.selectionStart;
+        const value = this.value;
+        this.value = value.substring(0, cursorPosition) + "\\n" + value.substring(cursorPosition);
+        this.selectionStart = cursorPosition + 1;
+        this.selectionEnd = cursorPosition + 1;
+        event.preventDefault();
+    } else if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+    }
+    autoResizeTextarea();
+});
+
+messageInput.addEventListener('input', autoResizeTextarea);
+
+function autoResizeTextarea() {
+    const maxRows = 10;
+    const lineHeight = parseInt(window.getComputedStyle(messageInput).lineHeight);
+    messageInput.style.height = '40px'; // Reset height to calculate new height
+    const currentHeight = messageInput.scrollHeight;
+
+    if (currentHeight > lineHeight * maxRows) {
+        messageInput.style.height = (lineHeight * maxRows) + 'px';
+        messageInput.style.overflowY = 'scroll';
+    } else {
+        messageInput.style.height = currentHeight + 'px';
+        messageInput.style.overflowY = 'hidden';
+    }
+}
+
+autoResizeTextarea();
+
+function sendMessage() {
+    const message = messageInput.value.trim();
+
+    if (message === '') {
+        alert('Message cannot be empty or whitespace.');
+        return;
+    }
+
+    if (isProcessing) {
+        alert('Please wait for the assistant to respond before sending a new message.');
+        return;
+    }
+
+    addMessage('You', message, 'user', true);
+
+    messageInput.value = '';
+    autoResizeTextarea();
+
+    isProcessing = true;
+
+    fetch('/api/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message, thread_id: threadId })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            threadId = data.thread_id;
+            updateChat(data.messages).then(() => {
+                isProcessing = false;
+                addCopyButtons();
+            });
+        } else {
+            addMessage('Error', 'Failed to get response from assistant.', 'error');
+            isProcessing = false;
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        addMessage('Error', 'An error occurred: ' + error.message, 'error');
+        isProcessing = false;
+    });
+}
+
+function addMessage(role, text, className, isUserMessage = false) {
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${className}`;
+
+    const avatar = role === 'You' ? '/static/images/user.png' : '/static/images/assistant.png';
+
+    const formattedText = isUserMessage ? text.replace(/\\n/g, '<br>') : text;
+
+    try {
+        const htmlContent = window.marked.parse(formattedText);
+        messageElement.innerHTML = `
+            <div class="message-container">
+                <div class="avatar"><img src="${avatar}" alt="${role}"></div>
+                <div class="message-content">
+                    <div class="markdown-content">${htmlContent}</div>
+                </div>
+            </div>`;
+    } catch (error) {
+        console.error('Markdown conversion error:', error);
+        messageElement.innerHTML = `
+            <div class="message-container">
+                <div class="avatar"><img src="${avatar}" alt="${role}"></div>
+                <div class="message-content">
+                    <div class="markdown-content">${formattedText}</div>
+                </div>
+            </div>`;
+    }
+
+    const messagesContainer = document.getElementById('messages');
+    messagesContainer.appendChild(messageElement);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function updateChat(messages) {
+    return new Promise((resolve) => {
+        messages.forEach(msg => {
+            if (msg.role === 'Assistant') {
+                addMessage('Assistant', msg.message, 'assistant');
+            }
+        });
+        resolve();
+    });
+}
+
+function addCopyButtons() {
+    document.querySelectorAll('pre code').forEach((block) => {
+        if (block.parentNode.querySelector('.copy-code-button')) {
+            return;
+        }
+        const copyButton = document.createElement('button');
+        copyButton.innerText = 'Copy';
+        copyButton.className = 'copy-code-button';
+        copyButton.addEventListener('click', () => {
+            navigator.clipboard.writeText(block.innerText).then(() => {
+                copyButton.innerText = 'Copied!';
+                setTimeout(() => {
+                    copyButton.innerText = 'Copy';
+                }, 2000);
+            });
+        });
+        const pre = block.parentNode;
+        pre.style.position = 'relative';
+        pre.insertBefore(copyButton, block);
+    });
+}
+''',
+
+        'templates/index.html': '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlexiAI Chat Application</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="messages"></div>
+        <div id="input-container">
+            <textarea id="message-input" placeholder="Type your message here..."></textarea>
+            <button id="send-button"></button>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
+''',
+
+        'utils/markdown_converter.py': '''# utils/markdown_converter.py
+import subprocess
+import logging
+
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+
+def preprocess_markdown(markdown_text):
+    """
+    Preprocess markdown text to ensure LaTeX formulas are correctly formatted for Pandoc.
+
+    Args:
+        markdown_text (str): The markdown text to preprocess.
+
+    Returns:
+        str: The preprocessed markdown text.
+    """
+    preprocessed_text = markdown_text.replace("\\[", "$$").replace("\\]", "$$")
+    return preprocessed_text
+
+
+def convert_markdown_to_html(markdown_text):
+    """
+    Convert markdown text to HTML using the Pandoc tool and ensure the output is properly handled.
+
+    Args:
+        markdown_text (str): The markdown text to convert.
+
+    Returns:
+        str: The converted HTML text. If conversion fails, returns the original markdown text.
+    """
+    try:
+        preprocessed_text = preprocess_markdown(markdown_text)
+
+        process = subprocess.Popen(['pandoc', '-f', 'markdown', '-t', 'html', '--mathjax'],
+                                   stdin=subprocess.PIPE,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate(input=preprocessed_text.encode('utf-8'))
+
+        if process.returncode != 0:
+            raise subprocess.CalledProcessError(process.returncode, stderr.decode('utf-8'))
+
+        html_output = stdout.decode('utf-8')
+
+        return html_output
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Pandoc conversion failed: {e}")
+        return markdown_text
+    except Exception as e:
+        logger.error(f"Error converting markdown to HTML: {e}")
+        return markdown_text
+''',
+
+        'app.py': '''import os
+import logging
+from flask import Flask, session, render_template
+from datetime import timedelta
+from routes.api import api_bp
+from flexiai import FlexiAI
+from flexiai.config.logging_config import setup_logging
+
+
+# Initialize application-specific logging
+setup_logging(
+    root_level=logging.INFO,
+    file_level=logging.INFO,
+    console_level=logging.INFO,
+    enable_file_logging=True,
+    enable_console_logging=True
+)
+
+app = Flask(__name__, static_folder='static', template_folder='templates')
+
+app.secret_key = os.urandom(24)
+
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
+app.register_blueprint(api_bp, url_prefix='/api')
+
+flexiai = FlexiAI()
+
+
+@app.before_request
+def before_request():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=60)
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 if __name__ == '__main__':
-    setup_project()
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+
+    if root_logger.hasHandlers():
+        root_logger.handlers.clear()
+
+    loggers = ['werkzeug', 'httpx', 'flexiai', 'user_function_mapping']
+    for logger_name in loggers:
+        logger = logging.getLogger(logger_name)
+        logger.setLevel(logging.INFO)
+        logger.propagate = False
+        if logger.hasHandlers():
+            logger.handlers.clear()
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+    root_logger.addHandler(console_handler)
+
+    app.run(host='127.0.0.1', port=5000, debug=False)
+'''
+    }
+    
+    for relative_path, content in files_content.items():
+        file_path = os.path.join(project_root, relative_path)
+        with open(file_path, 'w') as file:
+            file.write(content)
+            print(f"Written content to: {file_path}")
+
+if __name__ == '__main__':
+    project_root = os.getcwd()
+
+    try:
+        create_folder_structure(project_root)
+        write_file_content(project_root)
+    except Exception as e:
+        print(f"Post-installation step failed: {e}")
