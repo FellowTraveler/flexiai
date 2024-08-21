@@ -1,6 +1,7 @@
 # flexiai/core/flexiai_client.py
+import asyncio
 import logging
-from flexiai.assistant.task_manager import TaskManager
+from flexiai.assistant.functions_registry import FunctionRegistry
 from flexiai.credentials.credential_manager import CredentialManager
 from flexiai.core.flexi_managers.message_manager import MessageManager
 from flexiai.core.flexi_managers.run_manager import RunManager
@@ -11,112 +12,67 @@ from flexiai.core.flexi_managers.local_vector_store_manager import LocalVectorSt
 from flexiai.core.flexi_managers.multi_agent_system import MultiAgentSystemManager
 from flexiai.core.flexi_managers.embedding_manager import EmbeddingManager
 from flexiai.core.flexi_managers.images_manager import ImagesManager
-from flexiai.core.flexi_managers.completions_manager import CompletionsManager
 from flexiai.core.flexi_managers.audio_manager import (
-    SpeechToTextManager, 
-    TextToSpeechManager, 
-    AudioTranscriptionManager, 
+    SpeechToTextManager,
+    TextToSpeechManager,
+    AudioTranscriptionManager,
     AudioTranslationManager
 )
+from flexiai.config.config import Config
 
 
 class FlexiAI:
     """
-    FlexiAI class is the central hub for managing different AI-related operations such as thread management,
-    message management, run management, session management, vector store management, and image generation.
-
-    This class initializes various managers and loads user-defined tasks to facilitate the interactions with
-    AI assistants.
-    
-    Link: https://github.com/SavinRazvan/flexiai/blob/main/flexiai/core/flexiai_client.py
+    FlexiAI class is the central hub for managing different AI-related operations
+    such as thread management, message management, run management, session management,
+    vector store management, and image generation.
     """
 
     def __init__(self):
         """
-        Initializes the FlexiAI class.
-
-        Sets up logging, initializes the CredentialManager to handle credentials, and initializes various managers
-        including TaskManager, ThreadManager, MessageManager, RunManager, MultiAgentSystemManager, SessionManager,
-        VectorStoreManager, SpeechToTextManager, TextToSpeechManager, AudioTranscriptionManager, AudioTranslationManager,
-        EmbeddingManager, and ImagesManager.
-
-        The function mappings are updated after loading user tasks to ensure that all user-defined tasks are properly
-        registered.
-
-        Attributes:
-            logger (logging.Logger): Logger for logging information, warnings, and errors.
-            credential_manager (CredentialManager): Manager for handling credentials.
-            client (object): Client object initialized by the CredentialManager.
-            task_manager (TaskManager): Manager for handling tasks.
-            thread_manager (ThreadManager): Manager for handling threads.
-            message_manager (MessageManager): Manager for handling messages.
-            run_manager (RunManager): Manager for handling runs.
-            multi_agent_system (MultiAgentSystemManager): Manager for handling multi-agent systems.
-            session_manager (SessionManager): Manager for handling sessions.
-            vector_store_manager (VectorStoreManager): Manager for handling vector stores.
-            local_vector_store_manager (LocalVectorStoreManager): Manager for handling local vector stores.
-            speech_to_text_manager (SpeechToTextManager): Manager for speech-to-text operations.
-            text_to_speech_manager (TextToSpeechManager): Manager for text-to-speech operations.
-            audio_transcription_manager (AudioTranscriptionManager): Manager for audio transcription operations.
-            audio_translation_manager (AudioTranslationManager): Manager for audio translation operations.
-            embedding_manager (EmbeddingManager): Manager for handling text embeddings.
-            images_manager (ImagesManager): Manager for generating and manipulating images.
-            personal_function_mapping (dict): Mapping of personal functions loaded from user tasks.
-            assistant_function_mapping (dict): Mapping of assistant functions loaded from user tasks.
+        Initializes the FlexiAI class and its associated managers.
         """
-        self.logger = logging.getLogger(__name__)   # Use the centralized logger
+        self.logger = logging.getLogger(__name__)
+        self.config = Config()  # Load configuration
+        self.logger.info("Configuration loaded successfully.")
+
+        # Phase 1: Create core components
         self.credential_manager = CredentialManager()
         self.client = self.credential_manager.client
 
-        # Initialize EmbeddingManager
-        self.embedding_manager = EmbeddingManager(self.client, self.logger)
-        
-        # Initialize ImagesManager
-        self.images_manager = ImagesManager(self.client, self.logger)
-
-        # Initialize TaskManager and load user-defined tasks
-        self.task_manager = TaskManager()
-        
-        # Initialize other managers
+        # Initialize managers that don't depend on run_manager yet
         self.thread_manager = ThreadManager(self.client, self.logger)
-        self.message_manager = MessageManager(self.client, self.logger, {}, {})
-        self.run_manager = RunManager(self.client, self.logger, {}, {}, self.message_manager)
-        
-        # Initialize MultiAgentSystemManager
+        self.message_manager = MessageManager(self.client, self.logger)
+
+        # Initialize the multi-agent system manager and function registry without run_manager for now
         self.multi_agent_system = MultiAgentSystemManager(
-            self.client, self.logger, self.thread_manager, self.run_manager, self.message_manager
+            self.client, self.logger, self.thread_manager, None, self.message_manager
         )
-        
-        # Initialize audio managers
+        self.function_registry = FunctionRegistry(self.multi_agent_system, None)
+
+        # Phase 2: Now create RunManager and inject dependencies into function_registry and multi_agent_system
+        self.run_manager = RunManager(self.client, self.logger, self.message_manager, self.function_registry)
+
+        # Inject run_manager back into the other components
+        self.function_registry.run_manager = self.run_manager
+        self.multi_agent_system.run_manager = self.run_manager
+
+        # Phase 3: Initialize the function registry after all dependencies are set
+        asyncio.run(self.function_registry.initialize_registry())
+
+        # Initialize other managers
+        self.embedding_manager = EmbeddingManager(self.client, self.logger)
+        self.images_manager = ImagesManager(self.client, self.logger)
         self.speech_to_text_manager = SpeechToTextManager(self.client, self.logger)
         self.text_to_speech_manager = TextToSpeechManager(self.client, self.logger)
         self.audio_transcription_manager = AudioTranscriptionManager(self.client, self.logger)
         self.audio_translation_manager = AudioTranslationManager(self.client, self.logger)
-        
-        # Load user tasks after initializing all managers to ensure proper registration
-        self.task_manager.load_user_tasks(self.multi_agent_system, self.run_manager)
-        
-        # Update function mappings after loading user tasks
-        self.personal_function_mapping = self.task_manager.personal_function_mapping
-        self.assistant_function_mapping = self.task_manager.assistant_function_mapping
-        
-        # Update the function mappings in run_manager and message_manager
-        self.run_manager.personal_function_mapping = self.personal_function_mapping
-        self.run_manager.assistant_function_mapping = self.assistant_function_mapping
-        self.message_manager.personal_function_mapping = self.personal_function_mapping
-        self.message_manager.assistant_function_mapping = self.assistant_function_mapping
-        
-        # Reinitialize run_manager and message_manager with updated mappings
-        self.run_manager = RunManager(self.client, self.logger, self.personal_function_mapping, self.assistant_function_mapping, self.message_manager)
-        self.message_manager = MessageManager(self.client, self.logger, self.personal_function_mapping, self.assistant_function_mapping)
-        
         self.session_manager = SessionManager(self.client, self.logger)
         self.vector_store_manager = VectorStoreManager(self.client, self.logger)
         self.local_vector_store_manager = LocalVectorStoreManager(self.client, self.logger, self.embedding_manager)
 
-        # Initialize the CompletionsManager
-        self.completions_manager = CompletionsManager(self.client, self.logger)
-        
+        self.logger.info("FlexiAI initialized successfully.")
+
 
     def create_thread(self):
         """

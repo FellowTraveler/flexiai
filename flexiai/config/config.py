@@ -17,7 +17,8 @@ class Config(BaseSettings):
     AZURE_OPENAI_ENDPOINT: str
     AZURE_OPENAI_API_VERSION: str
     CREDENTIAL_TYPE: str
-
+    USER_PROJECT_ROOT_DIR: str
+    
     class Config:
         env_file = ".env"
 

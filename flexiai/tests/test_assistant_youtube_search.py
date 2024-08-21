@@ -1,11 +1,11 @@
 # flexiai/tests/test_assistant_youtube_search.py
 import pytest
 import subprocess
-from user_flexiai_rag.user_task_manager import UserTaskManager
+from user_flexiai_rag.user_functions_manager import FunctionsManager
 
 @pytest.fixture
 def task_manager():
-    return UserTaskManager()
+    return FunctionsManager()
 
 def test_search_youtube_with_valid_query(task_manager, mocker):
     mock_subprocess_run = mocker.patch('subprocess.run')

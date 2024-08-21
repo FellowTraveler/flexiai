@@ -1,10 +1,5 @@
 # flexiai/assistant/__init__.py
-from flexiai.assistant.task_manager import TaskManager
+from flexiai.assistant.functions_manager import FunctionsManager
+from flexiai.assistant.functions_registry import FunctionRegistry
 
-# Initialize TaskManager
-task_manager = TaskManager()
-
-__all__ = [
-    'TaskManager',
-    'task_manager',
-]
+__all__ = ['FunctionsManager', 'FunctionRegistry']

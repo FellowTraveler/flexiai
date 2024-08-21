@@ -1,31 +1,41 @@
 # flexiai/core/flexi_managers/run_manager.py
+import asyncio
 import time
 import json
-import asyncio
 import nest_asyncio
 from openai import OpenAIError
 
-
 class RunManager:
-
-    def __init__(self, client, logger, personal_function_mapping, assistant_function_mapping, message_manager):
+    def __init__(self, client, logger, message_manager, function_registry):
         """
         Initializes the RunManager.
-
-        Args:
-            client (object): The OpenAI client instance.
-            logger (object): The logger instance for logging information.
-            personal_function_mapping (dict): A dictionary mapping personal function names to their implementations.
-            assistant_function_mapping (dict): A dictionary mapping assistant function names to their implementations.
-            message_manager (object): The message manager instance.
         """
         self.client = client
         self.logger = logger
+        self.message_manager = message_manager
+        self.personal_function_mapping = {}
+        self.assistant_function_mapping = {}
+
+        # RunManager will not initialize the function_registry immediately. It will be done after initialization.
+        self.logger.info("RunManager initialized.")
+
+
+    def initialize_function_registry(self):
+        """
+        Initialize the function registry, loading core and user functions.
+        """
+        asyncio.run(self.function_registry.initialize_registry())
+        self.logger.info("RunManager initialized with function mappings.")
+
+
+    def update_function_mappings(self, personal_function_mapping, assistant_function_mapping):
+        """
+        Updates the function mappings for personal and assistant functions.
+        """
         self.personal_function_mapping = personal_function_mapping
         self.assistant_function_mapping = assistant_function_mapping
-        self.message_manager = message_manager
-        self.logger.info(f"Initialized RunManager with personal functions: {list(personal_function_mapping.keys())}")
-        self.logger.info(f"Initialized RunManager with assistant functions: {list(assistant_function_mapping.keys())}")
+        self.logger.info(f"RunManager updated with personal functions: {list(personal_function_mapping.keys())}")
+        self.logger.info(f"RunManager updated with assistant functions: {list(assistant_function_mapping.keys())}")
 
 
     def create_and_monitor_run(self, assistant_id, thread_id, user_message=None, role=None, metadata=None):
@@ -357,7 +367,7 @@ class RunManager:
         if callable(func):
             try:
                 result = func(**arguments)
-                # self.logger.info(f"Personal Function {function_name} executed.")
+                self.logger.info(f"Personal Function {function_name} executed.")
                 return result
             except Exception as e:
                 self.logger.error(f"Error executing {function_name}: {str(e)}", exc_info=True)

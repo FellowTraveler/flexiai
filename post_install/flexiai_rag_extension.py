@@ -1,4 +1,4 @@
-# flexiai_rag_extension.py
+# post_install/flexiai_rag_extension.py
 import os
 
 def create_logs_folder(project_root):
@@ -27,159 +27,55 @@ def create_user_flexiai_rag_folder(project_root):
     
     files_content = {
         '__init__.py': "# user_flexiai_rag/__init__.py\n",
-        'user_function_mapping.py': '''# user_flexiai_rag/user_function_mapping.py
+        'user_functions_mapping.py': '''# user_flexiai_rag/user_functions_mapping.py
 import logging
-from user_flexiai_rag.user_task_manager import UserTaskManager
+from user_flexiai_rag.user_functions_manager import FunctionsManager
 
 logger = logging.getLogger(__name__)
 
-def register_user_tasks(multi_agent_system, run_manager):
+async def map_user_functions():
     """
-    Registers user-defined tasks with the FlexiAI framework.
-
-    This function initializes the UserTaskManager and sets up mappings for personal and assistant functions.
-    It logs the registration process and returns the function mappings.
-
-    Args:
-        multi_agent_system (MultiAgentSystemManager): The multi-agent system manager instance.
-        run_manager (RunManager): The run manager instance.
-
-    Returns:
-        tuple: A tuple containing two dictionaries:
-            - user_personal_functions (dict): Mapping of personal function names to their implementations.
-            - user_assistant_functions (dict): Mapping of assistant function names to their implementations.
+    Maps user-defined functions to FlexiAI asynchronously and efficiently, ready for future calls.
+    
+    This function should be awaited when called by the FunctionMapping class.
     """
-    task_manager = UserTaskManager(multi_agent_system, run_manager)
+    logger.info("Mapping user-defined functions...")
 
+    # Initialize the FunctionsManager
+    user_functions_manager = FunctionsManager()
+
+    # Map user-defined personal and assistant functions
     user_personal_functions = {
-        # MAS functions for each agent:
-        'save_processed_content': task_manager.save_processed_content,
-        'load_processed_content': task_manager.load_processed_content,
-        'initialize_agent': task_manager.initialize_agent,
-        # Functions used by your assistants
-        'search_youtube': task_manager.search_youtube,
+        'search_youtube': user_functions_manager.search_youtube,
     }
 
     user_assistant_functions = {
-       'communicate_with_assistant': task_manager.continue_conversation_with_assistant,
-       # Other designs for MAS or other assistants
+        #  Functions to call other assistants, must end with '_assistant'
     }
 
-    logger.info("Registering user tasks")
-    logger.debug(f"User personal functions: {list(user_personal_functions.keys())}")
-    logger.debug(f"User assistant functions: {list(user_assistant_functions.keys())}")
+    logger.info(f"User personal functions are: {list(user_personal_functions.keys())}")
+    logger.info(f"User assistant functions are: {list(user_assistant_functions.keys())}")
 
+    # Return the mappings
     return user_personal_functions, user_assistant_functions
 ''',
-        'user_helpers.py': "# user_flexiai_rag/user_helpers.py\n",
-        'user_task_manager.py': '''# user_flexiai_rag/user_task_manager.py
+        'user_functions_manager.py': '''# user_flexiai_rag/user_functions_manager.py
 import logging
 import urllib.parse
 import subprocess
-from threading import Lock
-from flexiai.core.flexi_managers.run_manager import RunManager
-from flexiai.core.flexi_managers.thread_manager import ThreadManager
-from flexiai.core.flexi_managers.message_manager import MessageManager
-from flexiai.core.flexi_managers.multi_agent_system import MultiAgentSystemManager
 
-
-class UserTaskManager:
+class FunctionsManager:
     """
-    UserTaskManager class handles user-defined tasks for AI assistants, enabling 
-    Retrieval-Augmented Generation (RAG) capabilities and interaction within the 
-    Multi-Agent System.
-
-    This class provides methods to save and load processed content, continue conversations 
-    with assistants, initialize agents, and perform specific tasks such as YouTube searches.
+    FunctionsManager handles user-defined tasks, enabling RAG capabilities, interactions,
+    and async operations for tasks such as saving/loading content, initializing agents,
+    and YouTube searches.
     """
 
-    def __init__(self, multi_agent_system: MultiAgentSystemManager, run_manager: RunManager):
+    def __init__(self):
         """
-        Initializes the UserTaskManager instance, setting up the logger and a lock for thread safety.
-
-        Args:
-            multi_agent_system (MultiAgentSystemManager): The multi-agent system manager instance.
-            run_manager (RunManager): The run manager instance.
+        Initializes the FunctionsManager instance.
         """
         self.logger = logging.getLogger(__name__)
-        self.lock = Lock()
-        self.multi_agent_system = multi_agent_system
-        self.run_manager = run_manager
-        self.message_manager = multi_agent_system.message_manager
-
-
-    def log_function_call(self, func_name, params=None):
-        """
-        Logs the function call.
-        
-        Args:
-            func_name (str): The name of the function being called.
-            params (dict, optional): Parameters passed to the function.
-        """
-        param_str = f" with params: {params}" if params else ""
-        self.logger.info(f"Function called: {func_name}{param_str}")
-
-
-    def save_processed_content(self, from_assistant_id, to_assistant_id, processed_content):
-        """
-        Saves the processed user content for RAG purposes, allowing AI assistants to 
-        store and retrieve contextual information.
-
-        Args:
-            from_assistant_id (str): The assistant identifier from which the content originates.
-            to_assistant_id (str): The assistant identifier to which the content is directed.
-            processed_content (str): The processed content to store.
-
-        Returns:
-            bool: True if content is saved successfully, False otherwise.
-        """
-        return self.multi_agent_system.save_processed_content(from_assistant_id, to_assistant_id, processed_content)
-
-
-    def load_processed_content(self, from_assistant_id, to_assistant_id, multiple_retrieval):
-        """
-        Loads the stored processed user content, enabling AI assistants to access 
-        previously stored information for enhanced context and continuity in RAG.
-
-        Args:
-            from_assistant_id (str): The assistant identifier from which the content originates.
-            to_assistant_id (str): The assistant identifier to which the content is directed.
-            multiple_retrieval (bool): Whether to retrieve content from all sources, not just the specified to_assistant_id.
-
-        Returns:
-            list: A list of stored user content if found, otherwise an empty list.
-        """
-        return self.multi_agent_system.load_processed_content(from_assistant_id, to_assistant_id, multiple_retrieval)
-
-
-    def continue_conversation_with_assistant(self, assistant_id, user_content):
-        """
-        Continues the conversation with an assistant by submitting user content 
-        and managing the resulting run, allowing dynamic and contextually aware interactions.
-
-        Args:
-            assistant_id (str): The unique identifier for the assistant.
-            user_content (str): The content submitted by the user.
-
-        Returns:
-            tuple: A tuple containing a success status, a message detailing the outcome, and the processed content.
-        """
-        return self.multi_agent_system.continue_conversation_with_assistant(assistant_id, user_content)
-
-
-    def initialize_agent(self, assistant_id):
-        """
-        Initializes an agent for the given assistant ID. If a thread already exists for the assistant ID,
-        it returns a message indicating the existing thread. Otherwise, it creates a new thread and returns
-        a message indicating successful initialization.
-
-        Args:
-            assistant_id (str): The unique identifier for the assistant.
-
-        Returns:
-            str: A message indicating the result of the initialization.
-        """
-        return self.multi_agent_system.initialize_agent(assistant_id)
 
 
     def search_youtube(self, query):
@@ -194,7 +90,7 @@ class UserTaskManager:
         Returns:
             dict: A dictionary containing the status, message, and result (URL)
         """
-        self.log_function_call('search_youtube', {'query': query})
+        self.logger.info(f"Executing search on YouTube with query: {query}")
 
         if not query:
             return {
@@ -204,19 +100,11 @@ class UserTaskManager:
             }
 
         try:
-            # Normalize spaces to ensure consistent encoding
-            query_normalized = query.replace(" ", "+")
-            query_encoded = urllib.parse.quote(query_normalized)
-            youtube_search_url = (
-                f"https://www.youtube.com/results?search_query={query_encoded}"
-            )
+            query_encoded = urllib.parse.quote(query)
+            youtube_search_url = f"https://www.youtube.com/results?search_query={query_encoded}"
             self.logger.info(f"Opening YouTube search for query: {query}")
 
-            # Use PowerShell to open the URL
-            subprocess.run(
-                ['powershell.exe', '-Command', 'Start-Process', youtube_search_url],
-                check=True
-            )
+            subprocess.run(['powershell.exe', '-Command', 'Start-Process', youtube_search_url], check=True)
             self.logger.info("YouTube search page opened successfully.")
             return {
                 "status": True,
@@ -240,11 +128,15 @@ class UserTaskManager:
                 "result": None
             }
 
-    # Here you will add your other functions used by your Assistant/s (personal functions or 
-    # calling other assistants functions -> those names must end with '_assistant)'
+    # Add your other functions to be used by assistants. Functions are of these types:
+    # - personal functions: functions used by your assistant for personal tasks (execute actions 
+    #                       or gather information to provide accurate results)
+    # - assistant functions: functions that call other assistants in the Multi-Agent System, 
+    #                        must end with '_assistant'
+
 ''',
     }
-    
+
     for filename, content in files_content.items():
         file_path = os.path.join(dst_folder, filename)
         if not os.path.exists(file_path):
@@ -303,7 +195,6 @@ def create_requirements_file(project_root):
                 "azure-mgmt-core==1.4.0\n"
                 "azure-mgmt-resource==23.1.1\n"
                 "bleach==6.1.0\n"
-                "blinker==1.8.2\n"
                 "build==1.2.1\n"
                 "certifi==2024.7.4\n"
                 "cffi==1.16.0\n"
@@ -312,9 +203,7 @@ def create_requirements_file(project_root):
                 "cryptography==43.0.0\n"
                 "distro==1.9.0\n"
                 "docutils==0.21.2\n"
-                "faiss-cpu==1.8.0\n"
                 "Flask==3.0.3\n"
-                "flexiai==1.1.1\n"
                 "glob2==0.7\n"
                 "h11==0.14.0\n"
                 "httpcore==1.0.5\n"
@@ -329,7 +218,6 @@ def create_requirements_file(project_root):
                 "jaraco.functools==4.0.1\n"
                 "jeepney==0.8.0\n"
                 "Jinja2==3.1.4\n"
-                "joblib==1.4.2\n"
                 "keyring==25.2.1\n"
                 "markdown-it-py==3.0.0\n"
                 "MarkupSafe==2.1.5\n"
@@ -339,8 +227,9 @@ def create_requirements_file(project_root):
                 "msal-extensions==1.2.0\n"
                 "nest-asyncio==1.6.0\n"
                 "nh3==0.2.18\n"
-                "nltk==3.8.1\n"
                 "numpy==1.26.4\n"
+                "nltk==3.8.1\n"
+                "faiss-cpu==1.8.0\n"
                 "openai==1.40.2\n"
                 "packaging==24.1\n"
                 "pillow==10.4.0\n"
@@ -359,7 +248,6 @@ def create_requirements_file(project_root):
                 "pytest==8.3.1\n"
                 "python-dotenv==1.0.1\n"
                 "readme_renderer==44.0\n"
-                "regex==2024.7.24\n"
                 "requests==2.32.3\n"
                 "requests-toolbelt==1.0.0\n"
                 "rfc3986==2.0.0\n"

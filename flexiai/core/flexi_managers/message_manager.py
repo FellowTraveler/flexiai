@@ -4,20 +4,16 @@ from openai import OpenAIError
 
 class MessageManager:
     
-    def __init__(self, client, logger, personal_function_mapping, assistant_function_mapping):
+    def __init__(self, client, logger):
         """
         Initializes the MessageManager class.
 
         Args:
             client (object): The OpenAI client instance.
             logger (object): The logger instance.
-            personal_function_mapping (dict): The mapping of personal functions.
-            assistant_function_mapping (dict): The mapping of assistant functions.
         """
         self.client = client
         self.logger = logger
-        self.personal_function_mapping = personal_function_mapping
-        self.assistant_function_mapping = assistant_function_mapping
 
 
     def add_user_message(self, thread_id, user_message):
