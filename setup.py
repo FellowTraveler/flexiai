@@ -66,6 +66,7 @@ setup(
         'PyJWT==2.8.0',
         'pytest==8.3.1',
         'python-dotenv==1.0.1',
+        'pillow==10.4.0',
         'requests==2.32.3',
         'six==1.16.0',
         'sniffio==1.3.1',
