@@ -45,6 +45,63 @@ To install the FlexiAI framework using pip, run:
 pip install flexiai
 ```
 
+
+### **Install Pandoc on Different Platforms**
+
+#### **Linux (Ubuntu/Debian):**
+```bash
+sudo apt-get install pandoc
+```
+
+#### **macOS (using Homebrew):**
+```bash
+brew install pandoc
+```
+
+#### **macOS (using PowerShell with Homebrew):**
+```powershell
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install pandoc
+```
+
+#### **Windows (using Command Prompt with Chocolatey):**
+```cmd
+choco install pandoc
+```
+
+#### **Windows (using PowerShell with Chocolatey):**
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1')); choco install pandoc
+``` 
+
+### Post-Installation Setup
+
+After installing FlexiAI, there are two post-installation setup commands you can run to enable key functionality.
+
+#### Enable Retrieval-Augmented Generation (RAG)
+
+To set up the RAG module, run the following command in your terminal or command prompt:
+
+```bash
+setup-flexiai-rag
+```
+
+This will automatically create the necessary folder structure and files for RAG in your project, including data storage and utility scripts for user-defined functions.
+
+#### FlexiAI Basic Flask Chat Application
+
+To set up the basic Flask chat application, run the following command in your terminal or command prompt:
+
+```bash
+setup-flexiai-flask-app
+```
+
+This will automatically create the necessary folder structure and files for a basic Flask chat application, including static files (CSS, JS, images), routes, and templates.
+
+
+
+
+
 ### Post-Installation Setup
 
 After installing, copy the `flexiai_rag_extension.py` and `flexiai_basic_flask_app.py` files to your project root directory and run them manually to set up additional necessary directories and files.
@@ -1243,12 +1300,7 @@ Here's an overview of the created structure for the Flask app:
  ┃ ┃ ┣ 📂other_images
  ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161351.png
  ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161358.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 161449.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165158.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165318.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165338.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165350.png
- ┃ ┃ ┃ ┣ 📜Screenshot 2024-07-12 165358.png
+ ┃ ┃ ┃ ┣ 📜...
  ┃ ┃ ┃ ┗ 📜Screenshot 2024-07-12 165558.png
  ┃ ┃ ┣ 📜assistant.png
  ┃ ┃ ┗ 📜user.png
