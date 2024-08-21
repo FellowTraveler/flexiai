@@ -1,7 +1,25 @@
 # flexiai/scripts/flexiai_basic_flask_app.py
 import os
+from pathlib import Path
+
+def _detect_project_root():
+    """
+    Detects the project root directory based on the current working directory.
+
+    Returns:
+        str: The detected project root directory path.
+    """
+    current_dir = Path.cwd()
+    project_root = current_dir
+    return str(project_root)
 
 def create_folder_structure(project_root):
+    """
+    Creates the folder structure for the Flask application.
+
+    Args:
+        project_root (str): The root directory of the project.
+    """
     folder_structure = {
         'logs': [],
         'routes': ['api.py'],
@@ -11,40 +29,44 @@ def create_folder_structure(project_root):
         'templates': ['index.html'],
         'utils': ['markdown_converter.py']
     }
-    
+
     for folder, files in folder_structure.items():
         folder_path = os.path.join(project_root, folder)
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
             print(f"Created directory: {folder_path}")
-        
+
         for file in files:
             file_path = os.path.join(folder_path, file)
             if not os.path.exists(file_path):
                 with open(file_path, 'w') as f:
-                    f.write('')
+                    f.write('')  # Creates an empty file
                 print(f"Created file: {file_path}")
 
 def write_file_content(project_root):
+    """
+    Writes predefined content to specific files in the folder structure.
+
+    Args:
+        project_root (str): The root directory of the project.
+    """
     files_content = {
         'routes/api.py': '''import uuid
 from flexiai import FlexiAI
 from flask import Blueprint, request, jsonify, session as flask_session
 from utils.markdown_converter import convert_markdown_to_html
 
-
 # Create a Blueprint for the API routes
 api_bp = Blueprint('api', __name__)
 flexiai = FlexiAI()
 
-
 def message_to_dict(message):
     """
     Convert a message object to a dictionary, including nested TextContentBlock objects.
-
+    
     Args:
         message (object): The message object to convert.
-
+    
     Returns:
         dict: The converted message dictionary.
     """
@@ -55,16 +77,15 @@ def message_to_dict(message):
     }
     return message_dict
 
-
 @api_bp.route('/run', methods=['POST'])
 def run():
     """
     Route to handle running the assistant with the user's message.
-
+    
     Retrieves the user's message from the request, manages session and thread IDs,
     sends the message to the assistant, retrieves the responses, converts them to HTML,
     and returns the responses as JSON.
-
+    
     Returns:
         Response: JSON response containing success status, thread ID, and messages.
     """
@@ -169,6 +190,19 @@ a {
     animation: fadeIn 0.5s ease-in-out;
 }
 
+/* Animation for messages */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Message Container */
+.message-container {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+
 /* Avatar */
 .avatar {
     width: 45px;
@@ -183,6 +217,13 @@ a {
     color: #ffffff;
     border: 1px solid #c6c6c6;
     overflow: hidden;
+}
+
+/* Avatar Images */
+.avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
 }
 
 /* Message Content */
@@ -218,7 +259,227 @@ a {
     text-align: center;
     color: #fff;
 }
-''',
+
+/* Input Container */
+#input-container {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid #353940;
+    background-color: #ffffff;
+    position: relative;
+}
+
+/* Message Input */
+#message-input {
+    width: 91%;
+    height: 40px;
+    max-height: calc(1.5rem * 10);
+    padding: 0.75rem;
+    border: 1px solid #484e5c;
+    border-radius: 20px;
+    margin-right: 0.5rem;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: border-color 0.3s;
+    background-color: #3a3a3a;
+    color: #e1e1e6;
+    resize: none;
+    overflow-y: hidden;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+#message-input:focus {
+    border-color: #5a5a5a;
+    outline: none;
+}
+
+/* Send Button */
+#send-button {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background-color: #404a63;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    position: absolute;
+    right: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+#send-button::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 12px solid white;
+    transition: transform 0.3s;
+}
+#send-button:hover::before {
+    animation: bounce 0.3s infinite alternate;
+}
+#send-button:hover {
+    background-color: #2a3552;
+}
+#send-button:active {
+    transform: scale(0.95);
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-3px);
+    }
+}
+
+/* Markdown Content */
+.markdown-content {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin: 0;
+    word-break: break-word;
+}
+
+.markdown-content h1, .markdown-content h2, .markdown-content h3 {
+    border-bottom: 1px solid #444;
+    padding-bottom: 0.3em;
+    margin-top: 0.5em;
+    font-size: 1.2em;
+    color: #ffffff;
+}
+
+.markdown-content p {
+    margin: 0.5em 0;
+}
+
+.markdown-content code {
+    background-color: #2e2e2e;
+    border-radius: 3px;
+    padding: 0.2em 0.4em;
+    color: #e1e1e6;
+}
+
+.markdown-content pre {
+    background-color: #2e2e2e;
+    padding: 6px;
+    border-radius: 3px;
+    overflow-x: auto;
+    font-size: 0.95em;
+    color: #e1e1e6;
+    position: relative;
+}
+
+.markdown-content ol, .markdown-content ul {
+    margin-left: 1em;
+    padding-left: 0.5em;
+    list-style-position: outside !important;
+}
+
+.markdown-content ol {
+    list-style-type: decimal !important;
+}
+
+.markdown-content ul {
+    list-style-type: disc !important;
+}
+
+.markdown-content li {
+    list-style: inherit !important;
+    margin: 0.5em 0;
+}
+
+.markdown-content blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 1em;
+    margin-left: 0;
+    color: #666;
+}
+
+.markdown-content a {
+    color: #89e600;
+    text-decoration: none;
+}
+
+.markdown-content a:hover {
+    text-decoration: underline;
+}
+
+/* Headers in Messages */
+.message-content h3 {
+    margin: 0;
+    padding: 0.5rem 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* Markdown Headers */
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+    border-bottom: 1px solid #444;
+    padding-bottom: 0.3em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.2em;
+    color: #ffffff;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    #chat-container {
+        height: calc(100vh - 2rem);
+    }
+    #message-input {
+        padding: 0.75rem;
+    }
+    #send-button {
+        padding: 0.75rem;
+        width: 40px;
+        height: 40px;
+    }
+    .avatar {
+        width: 30px;
+        height: 30px;
+        font-size: 1em;
+    }
+    .message-content {
+        font-size: 0.7em;
+        padding: 0.5rem 0.9rem;
+    }
+    .markdown-content {
+        font-size: 0.85em;
+    }
+}
+
+.copy-code-button {
+    background-color: #373737;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border-radius: 2px;
+}
+
+.copy-code-button:hover {
+    background-color: #333131;
+}
+
+pre.sourceCode {
+    position: relative;
+}''',
 
         'static/js/scripts.js': '''// static/js/scripts.js
 let threadId = null;
@@ -387,6 +648,7 @@ function addCopyButtons() {
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div id="chat-container">
@@ -405,11 +667,9 @@ function addCopyButtons() {
 import subprocess
 import logging
 
-
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-
 
 def preprocess_markdown(markdown_text):
     """
@@ -423,7 +683,6 @@ def preprocess_markdown(markdown_text):
     """
     preprocessed_text = markdown_text.replace("\\[", "$$").replace("\\]", "$$")
     return preprocessed_text
-
 
 def convert_markdown_to_html(markdown_text):
     """
@@ -466,7 +725,6 @@ from routes.api import api_bp
 from flexiai import FlexiAI
 from flexiai.config.logging_config import setup_logging
 
-
 # Initialize application-specific logging
 setup_logging(
     root_level=logging.INFO,
@@ -486,12 +744,10 @@ app.register_blueprint(api_bp, url_prefix='/api')
 
 flexiai = FlexiAI()
 
-
 @app.before_request
 def before_request():
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=60)
-
 
 @app.route('/')
 def index():
@@ -500,7 +756,7 @@ def index():
 if __name__ == '__main__':
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.INFO)
-
+    
     if root_logger.hasHandlers():
         root_logger.handlers.clear()
 
@@ -520,18 +776,24 @@ if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=False)
 '''
     }
-    
+
     for relative_path, content in files_content.items():
         file_path = os.path.join(project_root, relative_path)
         with open(file_path, 'w') as file:
             file.write(content)
             print(f"Written content to: {file_path}")
 
-if __name__ == '__main__':
-    project_root = os.getcwd()
+def setup_project():
+    """
+    Sets up the project by detecting the project root and creating the necessary folder structure and files.
+    """
+    project_root = _detect_project_root()
+    create_folder_structure(project_root)
+    write_file_content(project_root)
 
+if __name__ == '__main__':
     try:
-        create_folder_structure(project_root)
-        write_file_content(project_root)
+        setup_project()
     except Exception as e:
         print(f"Post-installation step failed: {e}")
+
