@@ -1,4 +1,4 @@
-# chat.py
+# chat.py (This is for quick tests in console)
 import logging
 from flexiai.core.flexiai_client import FlexiAI
 from flexiai.config.logging_config import setup_logging
@@ -23,8 +23,7 @@ def main():
     flexiai = FlexiAI()
 
     # Use the given assistant ID
-    # assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXX'  # Update with your Assistant ID
-    assistant_id = 'asst_bxt62YG46C5wn4t5U1ESqJZf'
+    # assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXX'  # Update with your Assistant ID
 
     # Initialize MultiAgentSystemManager
     multi_agent_system = flexiai.multi_agent_system
@@ -58,8 +57,6 @@ def main():
         if user_message.lower() == 'exit':
             print("Exiting...")
             break
-
-        # logging.info(f"User message: {user_message}")
 
         # Run the thread and handle required actions
         try:
