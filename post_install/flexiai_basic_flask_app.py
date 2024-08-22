@@ -67,7 +67,7 @@ def run():
     \"\"\"
     data = request.json
     user_message = data['message']
-    assistant_id = 'asst_bxt62YG46C5wn4t5U1ESqJZf'  # Update with your assistant ID
+    assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'  # Update with your Assistant ID
     thread_id = data.get('thread_id')
 
     session_id = flask_session.get('session_id')
