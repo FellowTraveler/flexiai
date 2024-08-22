@@ -753,18 +753,21 @@ def convert_markdown_to_html(markdown_text):
 #         return markdown_text
 ''',
 
-        'app.py': '''import os
+        'app.py': '''# app.py
+import os
 import logging
+import pypandoc
 from flask import Flask, session, render_template
 from datetime import timedelta
 from routes.api import api_bp
 from flexiai import FlexiAI
 from flexiai.config.logging_config import setup_logging
 
+
 # Initialize application-specific logging
 setup_logging(
-    root_level=logging.INFO,
-    file_level=logging.INFO,
+    root_level=logging.DEBUG,
+    file_level=logging.DEBUG,
     console_level=logging.INFO,
     enable_file_logging=True,
     enable_console_logging=True
@@ -779,6 +782,17 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.register_blueprint(api_bp, url_prefix='/api')
 
 flexiai = FlexiAI()
+
+
+# Check if Pandoc is installed on the system and log an instruction if it's missing
+try:
+    pypandoc.get_pandoc_version()
+    app.logger.info("Pandoc is installed and available.")
+except OSError:
+    app.logger.info("Pandoc is not installed. Please install Pandoc manually on your system for full functionality.")
+    # Instructions for installation
+    app.logger.info("To install Pandoc, visit https://pandoc.org/installing.html or run 'sudo apt-get install pandoc' on Debian-based systems.")
+
 
 @app.before_request
 def before_request():
