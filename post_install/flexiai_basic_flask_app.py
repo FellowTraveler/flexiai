@@ -32,22 +32,20 @@ from flexiai import FlexiAI
 from flask import Blueprint, request, jsonify, session as flask_session
 from utils.markdown_converter import convert_markdown_to_html
 
-
 # Create a Blueprint for the API routes
 api_bp = Blueprint('api', __name__)
 flexiai = FlexiAI()
 
-
 def message_to_dict(message):
-    """
+    \"\"\"
     Convert a message object to a dictionary, including nested TextContentBlock objects.
-
+    
     Args:
         message (object): The message object to convert.
-
+    
     Returns:
         dict: The converted message dictionary.
-    """
+    \"\"\"
     message_dict = {
         'id': message.id,
         'role': message.role,
@@ -55,22 +53,21 @@ def message_to_dict(message):
     }
     return message_dict
 
-
 @api_bp.route('/run', methods=['POST'])
 def run():
-    """
+    \"\"\"
     Route to handle running the assistant with the user's message.
-
+    
     Retrieves the user's message from the request, manages session and thread IDs,
     sends the message to the assistant, retrieves the responses, converts them to HTML,
     and returns the responses as JSON.
-
+    
     Returns:
         Response: JSON response containing success status, thread ID, and messages.
-    """
+    \"\"\"
     data = request.json
     user_message = data['message']
-    assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXXX'  # Update with your assistant ID
+    assistant_id = 'asst_bxt62YG46C5wn4t5U1ESqJZf'  # Update with your assistant ID
     thread_id = data.get('thread_id')
 
     session_id = flask_session.get('session_id')
@@ -533,17 +530,11 @@ function sendMessage() {
         return response.json();
     })
     .then(data => {
-        // console.log('Received data from backend:', data);
         if (data.success) {
             threadId = data.thread_id;
             updateChat(data.messages).then(() => {
                 isProcessing = false;
                 addCopyButtons();
-                if (typeof MathJax !== 'undefined') {
-                    MathJax.typesetPromise();  // Re-render MathJax after updating the chat
-                } else {
-                    console.error('MathJax is not loaded.');
-                }
             });
         } else {
             addMessage('Error', 'Failed to get response from assistant.', 'error');
@@ -558,7 +549,6 @@ function sendMessage() {
 }
 
 function addMessage(role, text, className, isUserMessage = false) {
-    // console.log('Adding message:', { role, text, className, isUserMessage });
     const messageElement = document.createElement('div');
     messageElement.className = `message ${className}`;
 
@@ -568,7 +558,6 @@ function addMessage(role, text, className, isUserMessage = false) {
 
     try {
         const htmlContent = window.marked.parse(formattedText);
-        // console.log('HTML content after marked parsing:', htmlContent);
         messageElement.innerHTML = `
             <div class="message-container">
                 <div class="avatar"><img src="${avatar}" alt="${role}"></div>
@@ -591,17 +580,17 @@ function addMessage(role, text, className, isUserMessage = false) {
     messagesContainer.appendChild(messageElement);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-    if (typeof MathJax !== 'undefined') {
-        MathJax.typesetPromise();  // Re-render MathJax after adding the new message
-    } else {
-        console.error('MathJax is not loaded.');
+    // Trigger MathJax to process any new LaTeX content
+    if (window.MathJax) {
+        MathJax.typesetPromise([messageElement]).catch(function (err) {
+            console.error('MathJax error:', err.message);
+        });
     }
 }
 
 function updateChat(messages) {
     return new Promise((resolve) => {
         messages.forEach(msg => {
-            // console.log('Updating chat with message:', msg);
             if (msg.role === 'Assistant') {
                 addMessage('Assistant', msg.message, 'assistant');
             }
@@ -657,66 +646,35 @@ function addCopyButtons() {
 </html>
 ''',
 
-        'utils/markdown_converter.py': '''# utils/markdown_converter.py
-import subprocess
+        'utils/markdown_converter.py': '''import pypandoc
 import logging
 
-
-# Configure logging
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-
 def preprocess_markdown(markdown_text):
-    """
+    \"\"\"
     Preprocess markdown text to ensure LaTeX formulas are correctly formatted for Pandoc.
-
-    Args:
-        markdown_text (str): The markdown text to preprocess.
-
-    Returns:
-        str: The preprocessed markdown text.
-    """
-    # Ensure LaTeX formulas are correctly formatted
-    preprocessed_text = markdown_text.replace("\\[", "$$").replace("\\]", "$$")
+    \"\"\"
+    preprocessed_text = markdown_text.replace("\\\\[", "$$").replace("\\\\]", "$$")
     return preprocessed_text
 
-
 def convert_markdown_to_html(markdown_text):
-    """
-    Convert markdown text to HTML using the Pandoc tool and ensure the output is properly handled.
+    \"\"\"
+    Convert markdown text to HTML using the pypandoc library.
 
     Args:
         markdown_text (str): The markdown text to convert.
 
     Returns:
         str: The converted HTML text. If conversion fails, returns the original markdown text.
-    """
-    # logger.debug(f"Converting markdown text: {markdown_text}")
+    \"\"\"
     try:
-        # Preprocess markdown to ensure LaTeX formulas are recognized
         preprocessed_text = preprocess_markdown(markdown_text)
-        # logger.debug(f"Preprocessed markdown text: {preprocessed_text}")
-
-        # Execute the Pandoc command to convert markdown to HTML with LaTeX support
-        process = subprocess.Popen(['pandoc', '-f', 'markdown', '-t', 'html', '--mathjax'],
-                                   stdin=subprocess.PIPE,
-                                   stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
-        stdout, stderr = process.communicate(input=preprocessed_text.encode('utf-8'))
-
-        # Check if the Pandoc command executed successfully
-        if process.returncode != 0:
-            raise subprocess.CalledProcessError(process.returncode, stderr.decode('utf-8'))
-
-        # Decode the output from bytes to string
-        html_output = stdout.decode('utf-8')
-        # logger.debug(f"Pandoc conversion output: {html_output}")
-
+        
+        # Convert markdown to HTML using pypandoc
+        html_output = pypandoc.convert_text(preprocessed_text, 'html', format='md', extra_args=['--mathjax'])
+        
         return html_output
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Pandoc conversion failed: {e}")
-        return markdown_text
     except Exception as e:
         logger.error(f"Error converting markdown to HTML: {e}")
         return markdown_text
@@ -724,65 +682,57 @@ def convert_markdown_to_html(markdown_text):
 
         'app.py': '''import os
 import logging
+import pypandoc
 from flask import Flask, session, render_template
 from datetime import timedelta
 from routes.api import api_bp
 from flexiai import FlexiAI
 from flexiai.config.logging_config import setup_logging
 
-
 # Initialize application-specific logging
 setup_logging(
     root_level=logging.INFO,
     file_level=logging.INFO,
     console_level=logging.INFO,
-    enable_file_logging=True,       # Set to False to disable file logging
-    enable_console_logging=True     # Set to False to disable console logging
+    enable_file_logging=True,
+    enable_console_logging=True
 )
 
-# Initialize Flask application with static and template folders
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
-# Secure the session with a secret key
 app.secret_key = os.urandom(24)
 
-# Set session cookie attributes
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # or 'Strict'
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
-# Register the API blueprint with a URL prefix
 app.register_blueprint(api_bp, url_prefix='/api')
 
-# Initialize FlexiAI instance
 flexiai = FlexiAI()
 
+# Check if Pandoc is installed on the system and log an instruction if it's missing
+try:
+    pypandoc.get_pandoc_version()
+    app.logger.info("Pandoc is installed and available.")
+except OSError:
+    app.logger.info("Pandoc is not installed. Please install Pandoc manually on your system for full functionality.")
+    # Instructions for installation
+    app.logger.info("To install Pandoc, visit https://pandoc.org/installing.html or run 'sudo apt-get install pandoc' on Debian-based systems.")
 
 @app.before_request
 def before_request():
-    """
-    Function to run before each request to ensure sessions are permanent
-    and set the session lifetime to 60 minutes.
-    """
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=60)
 
-
 @app.route('/')
 def index():
-    """
-    Route for the index page, rendering the index.html template.
-    """
     return render_template('index.html')
 
 if __name__ == '__main__':
-    # Configure the root logger to log at INFO level
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.INFO)
     
-    # Clear existing handlers from the root logger to prevent duplicate logs
     if root_logger.hasHandlers():
         root_logger.handlers.clear()
 
-    # Configure specific loggers to log at INFO level
     loggers = ['werkzeug', 'httpx', 'flexiai', 'user_function_mapping']
     for logger_name in loggers:
         logger = logging.getLogger(logger_name)
@@ -791,13 +741,11 @@ if __name__ == '__main__':
         if logger.hasHandlers():
             logger.handlers.clear()
 
-    # Add console handler to the root logger
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.INFO)
     console_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
     root_logger.addHandler(console_handler)
 
-    # Run the Flask application on host 127.0.0.1 and port 5000
     app.run(host='127.0.0.1', port=5000, debug=False)
 '''
     }
