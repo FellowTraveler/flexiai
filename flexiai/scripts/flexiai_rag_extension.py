@@ -218,7 +218,6 @@ def create_requirements_file(project_root):
                 "click==8.1.7\n"
                 "cryptography==43.0.0\n"
                 "Flask==3.0.3\n"
-                "glob2==0.7\n"
                 "h11==0.14.0\n"
                 "httpcore==1.0.5\n"
                 "httpx==0.27.0\n"

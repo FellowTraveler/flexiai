@@ -10,7 +10,7 @@ def read_readme():
 
 setup(
     name='flexiai',
-    version='1.1.4',
+    version='1.1.6',
     packages=find_packages(include=['flexiai', 'flexiai.*']),
     include_package_data=True,
     package_data={
@@ -41,7 +41,6 @@ setup(
         'cryptography==43.0.0',
         'distro==1.9.0',
         'Flask==3.0.3',
-        'glob2==0.7',
         'h11==0.14.0',
         'httpcore==1.0.5',
         'httpx==0.27.0',
