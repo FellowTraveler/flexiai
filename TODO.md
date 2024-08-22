@@ -29,6 +29,10 @@
 ### 6. Added Starter Files for RAG and Flask App
 - [x] Added `console_scripts` to generate starter files for Flexi RAG and Flexi Flask App using simple commands.
 
+### 7. Fixed Starter Files for RAG and Flask App
+- [x] Updated requirements.txt
+- [x] In Flask App -> Fixed Pandoc, LaTeX, MathJax to display correct equations in chat
+
 ---
 
 ## Pending Tasks (To Do)
@@ -61,4 +65,4 @@
 - [ ] Create and add video demonstrations for Flexi Installation, and the demonstration of and alignment processes. (no public code here)
 
 ### 9. Fix Console Scripts for Starter Files
-- [ ] Fix the `console_scripts` to help users easily create starter files for Flexi RAG and Flexi Flask App with only two commands.
+- [x] Fix the `console_scripts` to help users easily create starter files for Flexi RAG and Flexi Flask App with only two commands.
