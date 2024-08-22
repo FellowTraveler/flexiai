@@ -492,7 +492,7 @@ messageInput.addEventListener('keydown', function(event) {
     if (event.key === 'Enter' && event.shiftKey) {
         const cursorPosition = this.selectionStart;
         const value = this.value;
-        this.value = value.substring(0, cursorPosition) + "\\n" + value.substring(cursorPosition);
+        this.value = value.substring(0, cursorPosition) + "\n" + value.substring(cursorPosition);
         this.selectionStart = cursorPosition + 1;
         this.selectionEnd = cursorPosition + 1;
         event.preventDefault();
@@ -578,7 +578,7 @@ function addMessage(role, text, className, isUserMessage = false) {
 
     const avatar = role === 'You' ? '/static/images/user.png' : '/static/images/assistant.png';
 
-    const formattedText = isUserMessage ? text.replace(/\\n/g, '<br>') : text;
+    const formattedText = isUserMessage ? text.replace(/\n/g, '<br>') : text;
 
     try {
         const htmlContent = window.marked.parse(formattedText);
@@ -603,6 +603,13 @@ function addMessage(role, text, className, isUserMessage = false) {
     const messagesContainer = document.getElementById('messages');
     messagesContainer.appendChild(messageElement);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    // Trigger MathJax to process any new LaTeX content
+    if (window.MathJax) {
+        MathJax.typesetPromise([messageElement]).catch(function (err) {
+            console.error('MathJax error:', err.message);
+        });
+    }
 }
 
 function updateChat(messages) {
