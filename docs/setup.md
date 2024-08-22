@@ -43,7 +43,7 @@ conda activate flexi_env
 To install the FlexiAI framework using pip, run:
 
 ```powershell
-pip install flexiai
+pip install --upgrade flexiai
 ```
 
 ### Install Pandoc on Different Platforms
