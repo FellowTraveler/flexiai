@@ -58,7 +58,7 @@
 - [ ] Ensure that all parallel executions work as intended with user-defined functions.
 
 ### 8. Video Demonstration
-- [ ] Create and add video demonstrations of the various features, including the installation and alignment processes.
+- [ ] Create and add video demonstrations for Flexi Installation, and the demonstration of and alignment processes. (no public code here)
 
 ### 9. Fix Console Scripts for Starter Files
 - [ ] Fix the `console_scripts` to help users easily create starter files for Flexi RAG and Flexi Flask App with only two commands.
