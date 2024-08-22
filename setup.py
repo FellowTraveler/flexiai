@@ -10,7 +10,7 @@ def read_readme():
 
 setup(
     name='flexiai',
-    version='1.1.6',
+    version='1.1.7',
     packages=find_packages(include=['flexiai', 'flexiai.*']),
     include_package_data=True,
     package_data={
@@ -66,6 +66,7 @@ setup(
         'pytest==8.3.1',
         'python-dotenv==1.0.1',
         'pillow==10.4.0',
+        'pypandoc==1.13',
         'requests==2.32.3',
         'six==1.16.0',
         'sniffio==1.3.1',

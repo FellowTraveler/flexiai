@@ -67,8 +67,9 @@ class FunctionsManager:
                 "result": None
             }
 
-    # Add your other functions to be used by assistants. Functions are this types:
-    # - personal functions => functions used by your assistant to do his personal tasks (execute actions
-    #                         or reinforce himself with information to provide accurate results)
-    # - assistant functions => to call other assistants this will be used in Multi Agent System, this functions 
-    #                         must end with '_assistant'
+    # Add your other functions to be used by assistants. Functions are of these types:
+    # - personal functions: functions used by your assistant for personal tasks (execute actions 
+    #                       or gather information to provide accurate results)
+    # - assistant functions: functions that call other assistants in the Multi-Agent System, 
+    #                        must end with '_assistant'
+

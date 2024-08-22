@@ -13,10 +13,10 @@ flexiai = FlexiAI()
 def message_to_dict(message):
     """
     Convert a message object to a dictionary, including nested TextContentBlock objects.
-
+    
     Args:
         message (object): The message object to convert.
-
+    
     Returns:
         dict: The converted message dictionary.
     """
@@ -32,17 +32,17 @@ def message_to_dict(message):
 def run():
     """
     Route to handle running the assistant with the user's message.
-
+    
     Retrieves the user's message from the request, manages session and thread IDs,
     sends the message to the assistant, retrieves the responses, converts them to HTML,
     and returns the responses as JSON.
-
+    
     Returns:
         Response: JSON response containing success status, thread ID, and messages.
     """
     data = request.json
     user_message = data['message']
-    assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXXX'  # Update with your assistant ID
+    assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'  # Update with your Assistant ID
     thread_id = data.get('thread_id')
 
     session_id = flask_session.get('session_id')

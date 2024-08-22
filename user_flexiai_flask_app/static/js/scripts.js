@@ -71,17 +71,11 @@ function sendMessage() {
         return response.json();
     })
     .then(data => {
-        // console.log('Received data from backend:', data);
         if (data.success) {
             threadId = data.thread_id;
             updateChat(data.messages).then(() => {
                 isProcessing = false;
                 addCopyButtons();
-                if (typeof MathJax !== 'undefined') {
-                    MathJax.typesetPromise();  // Re-render MathJax after updating the chat
-                } else {
-                    console.error('MathJax is not loaded.');
-                }
             });
         } else {
             addMessage('Error', 'Failed to get response from assistant.', 'error');
@@ -96,7 +90,6 @@ function sendMessage() {
 }
 
 function addMessage(role, text, className, isUserMessage = false) {
-    // console.log('Adding message:', { role, text, className, isUserMessage });
     const messageElement = document.createElement('div');
     messageElement.className = `message ${className}`;
 
@@ -106,7 +99,6 @@ function addMessage(role, text, className, isUserMessage = false) {
 
     try {
         const htmlContent = window.marked.parse(formattedText);
-        // console.log('HTML content after marked parsing:', htmlContent);
         messageElement.innerHTML = `
             <div class="message-container">
                 <div class="avatar"><img src="${avatar}" alt="${role}"></div>
@@ -129,17 +121,17 @@ function addMessage(role, text, className, isUserMessage = false) {
     messagesContainer.appendChild(messageElement);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-    if (typeof MathJax !== 'undefined') {
-        MathJax.typesetPromise();  // Re-render MathJax after adding the new message
-    } else {
-        console.error('MathJax is not loaded.');
+    // Trigger MathJax to process any new LaTeX content
+    if (window.MathJax) {
+        MathJax.typesetPromise([messageElement]).catch(function (err) {
+            console.error('MathJax error:', err.message);
+        });
     }
 }
 
 function updateChat(messages) {
     return new Promise((resolve) => {
         messages.forEach(msg => {
-            // console.log('Updating chat with message:', msg);
             if (msg.role === 'Assistant') {
                 addMessage('Assistant', msg.message, 'assistant');
             }

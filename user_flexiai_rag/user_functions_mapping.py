@@ -12,7 +12,7 @@ async def map_user_functions():
     """
     logger.info("Mapping user-defined functions...")
 
-    # Initialize the FunctionsManager without run_manager
+    # Initialize the FunctionsManager
     user_functions_manager = FunctionsManager()
 
     # Map user-defined personal and assistant functions
