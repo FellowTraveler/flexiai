@@ -222,19 +222,19 @@ pip install -r requirements.txt
 
 ### **Update the Assistant ID**
 
-    Open the `routes/api.py` file and replace the Assistant ID with your main assistant ID.
-    > Should look like this: assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'  # Update with your Assistant ID
+  Open the `routes/api.py` file and replace the Assistant ID with your main assistant ID.
+  > Should look like this: assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'  # Update with your Assistant ID
 
-    ```python
-    assistant_id = 'your_main_assistant_id'
-    ```
+  ```python
+  assistant_id = 'your_main_assistant_id'
+  ```
 
 ###  **Add Images**
 
-    In the `static` folder:
-    - Add an `favicon.ico` image.
-    - In the `static/images` folder, add `assistant.png` and `user.png` for the chat avatars.
+  In the `static` folder:
+  - Add an `favicon.ico` image.
+  - In the `static/images` folder, add `assistant.png` and `user.png` for the chat avatars.
 
-    This ensures that your chat application has the necessary visual elements.
+  This ensures that your chat application has the necessary visual elements.
 
 This will install all the necessary packages required for FlexiAI to function properly.
