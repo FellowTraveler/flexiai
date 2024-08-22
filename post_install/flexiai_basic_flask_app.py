@@ -1,4 +1,4 @@
-# post_install/flexiai_basic_flask_app.py
+# flexiai/scripts/flexiai_basic_flask_app.py
 import os
 
 def create_folder_structure(project_root):
