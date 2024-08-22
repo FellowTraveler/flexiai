@@ -61,15 +61,6 @@ api_bp = Blueprint('api', __name__)
 flexiai = FlexiAI()
 
 def message_to_dict(message):
-    """
-    Convert a message object to a dictionary, including nested TextContentBlock objects.
-    
-    Args:
-        message (object): The message object to convert.
-    
-    Returns:
-        dict: The converted message dictionary.
-    """
     message_dict = {
         'id': message.id,
         'role': message.role,
@@ -79,19 +70,9 @@ def message_to_dict(message):
 
 @api_bp.route('/run', methods=['POST'])
 def run():
-    """
-    Route to handle running the assistant with the user's message.
-    
-    Retrieves the user's message from the request, manages session and thread IDs,
-    sends the message to the assistant, retrieves the responses, converts them to HTML,
-    and returns the responses as JSON.
-    
-    Returns:
-        Response: JSON response containing success status, thread ID, and messages.
-    """
     data = request.json
     user_message = data['message']
-    assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'  # Update with your assistant ID
+    assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
     thread_id = data.get('thread_id')
 
     session_id = flask_session.get('session_id')
@@ -492,7 +473,7 @@ messageInput.addEventListener('keydown', function(event) {
     if (event.key === 'Enter' && event.shiftKey) {
         const cursorPosition = this.selectionStart;
         const value = this.value;
-        this.value = value.substring(0, cursorPosition) + "\n" + value.substring(cursorPosition);
+        this.value = value.substring(0, cursorPosition) + "\\n" + value.substring(cursorPosition);
         this.selectionStart = cursorPosition + 1;
         this.selectionEnd = cursorPosition + 1;
         event.preventDefault();
@@ -578,7 +559,7 @@ function addMessage(role, text, className, isUserMessage = false) {
 
     const avatar = role === 'You' ? '/static/images/user.png' : '/static/images/assistant.png';
 
-    const formattedText = isUserMessage ? text.replace(/\n/g, '<br>') : text;
+    const formattedText = isUserMessage ? text.replace(/\\n/g, '<br>') : text;
 
     try {
         const htmlContent = window.marked.parse(formattedText);
@@ -604,7 +585,6 @@ function addMessage(role, text, className, isUserMessage = false) {
     messagesContainer.appendChild(messageElement);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-    // Trigger MathJax to process any new LaTeX content
     if (window.MathJax) {
         MathJax.typesetPromise([messageElement]).catch(function (err) {
             console.error('MathJax error:', err.message);
@@ -677,87 +657,17 @@ import logging
 logger = logging.getLogger(__name__)
 
 def preprocess_markdown(markdown_text):
-    """
-    Preprocess markdown text to ensure LaTeX formulas are correctly formatted for Pandoc.
-    """
     preprocessed_text = markdown_text.replace("\\[", "$$").replace("\\]", "$$")
     return preprocessed_text
 
 def convert_markdown_to_html(markdown_text):
-    """
-    Convert markdown text to HTML using the pypandoc library.
-
-    Args:
-        markdown_text (str): The markdown text to convert.
-
-    Returns:
-        str: The converted HTML text. If conversion fails, returns the original markdown text.
-    """
     try:
         preprocessed_text = preprocess_markdown(markdown_text)
-        
-        # Convert markdown to HTML using pypandoc
         html_output = pypandoc.convert_text(preprocessed_text, 'html', format='md', extra_args=['--mathjax'])
-        
         return html_output
     except Exception as e:
         logger.error(f"Error converting markdown to HTML: {e}")
         return markdown_text
-
-
-
-
-# # ============================================================================= #
-# # The version using subprocess (you must have pandoc installed in your system   #
-# # and to be on path to work correctly):                                         #
-# # ============================================================================= #
-
-# # utils/markdown_converter.py
-# import subprocess
-# import logging
-
-# logger = logging.getLogger(__name__)
-
-
-# def preprocess_markdown(markdown_text):
-#     """
-#     Preprocess markdown text to ensure LaTeX formulas are correctly formatted for Pandoc.
-#     """
-#     preprocessed_text = markdown_text.replace("\\[", "$$").replace("\\]", "$$")
-#     return preprocessed_text
-
-
-# def convert_markdown_to_html(markdown_text):
-#     """
-#     Convert markdown text to HTML using the Pandoc tool and ensure the output is properly handled.
-
-#     Args:
-#         markdown_text (str): The markdown text to convert.
-
-#     Returns:
-#         str: The converted HTML text. If conversion fails, returns the original markdown text.
-#     """
-#     try:
-#         preprocessed_text = preprocess_markdown(markdown_text)
-
-#         process = subprocess.Popen(['pandoc', '-f', 'markdown', '-t', 'html', '--mathjax'],
-#                                    stdin=subprocess.PIPE,
-#                                    stdout=subprocess.PIPE,
-#                                    stderr=subprocess.PIPE)
-#         stdout, stderr = process.communicate(input=preprocessed_text.encode('utf-8'))
-
-#         if process.returncode != 0:
-#             raise subprocess.CalledProcessError(process.returncode, stderr.decode('utf-8'))
-
-#         html_output = stdout.decode('utf-8')
-
-#         return html_output
-#     except subprocess.CalledProcessError as e:
-#         logger.error(f"Pandoc conversion failed: {e}")
-#         return markdown_text
-#     except Exception as e:
-#         logger.error(f"Error converting markdown to HTML: {e}")
-#         return markdown_text
 ''',
 
         'app.py': '''# app.py
@@ -770,7 +680,6 @@ from routes.api import api_bp
 from flexiai import FlexiAI
 from flexiai.config.logging_config import setup_logging
 
-
 # Initialize application-specific logging
 setup_logging(
     root_level=logging.DEBUG,
@@ -781,25 +690,20 @@ setup_logging(
 )
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
-
 app.secret_key = os.urandom(24)
-
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 app.register_blueprint(api_bp, url_prefix='/api')
 
 flexiai = FlexiAI()
 
-
 # Check if Pandoc is installed on the system and log an instruction if it's missing
 try:
     pypandoc.get_pandoc_version()
     app.logger.info("Pandoc is installed and available.")
 except OSError:
-    app.logger.info("Pandoc is not installed. Please install Pandoc manually on your system for full functionality.")
-    # Instructions for installation
-    app.logger.info("To install Pandoc, visit https://pandoc.org/installing.html or run 'sudo apt-get install pandoc' on Debian-based systems.")
-
+    app.logger.info("Pandoc is not installed. Please install Pandoc manually on your system.")
+    app.logger.info("To install Pandoc, visit https://pandoc.org/installing.html.")
 
 @app.before_request
 def before_request():
