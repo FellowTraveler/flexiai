@@ -13,6 +13,7 @@ from flexiai.core.flexi_managers.multi_agent_system import MultiAgentSystemManag
 from flexiai.core.flexi_managers.embedding_manager import EmbeddingManager
 from flexiai.core.flexi_managers.images_manager import ImagesManager
 from flexiai.core.flexi_managers.completions_manager import CompletionsManager
+from flexiai.core.flexi_managers.assistant_manager import AssistantManager
 from flexiai.core.flexi_managers.audio_manager import (
     SpeechToTextManager,
     TextToSpeechManager,
@@ -45,6 +46,7 @@ class FlexiAI:
         self.thread_manager = ThreadManager(self.client, self.logger)
         self.message_manager = MessageManager(self.client, self.logger)
         self.completions_manager = CompletionsManager(self.client, self.logger)
+        self.assistant_manager = AssistantManager(self.client, self.logger)
 
         # Initialize the multi-agent system manager and function registry without run_manager for now
         self.multi_agent_system = MultiAgentSystemManager(

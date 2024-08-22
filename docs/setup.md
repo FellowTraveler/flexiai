@@ -223,7 +223,7 @@ pip install -r requirements.txt
 ### **Update the Assistant ID**
 
     Open the `routes/api.py` file and replace the Assistant ID with your main assistant ID.
-    > `assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'`
+    > Should look like this: assistant_id = 'asst_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'  # Update with your Assistant ID
 
     ```python
     assistant_id = 'your_main_assistant_id'

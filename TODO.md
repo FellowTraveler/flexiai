@@ -33,6 +33,14 @@
 - [x] Updated requirements.txt
 - [x] In Flask App -> Fixed Pandoc, LaTeX, MathJax to display correct equations in chat
 
+### 8. Fix Console Scripts for Starter Files
+- [x] Fix the `console_scripts` to help users easily create starter files for Flexi RAG and Flexi Flask App with only two commands.
+
+### 9. Add Assistant Manager for AI Assistant Operations
+- [x] Introduced the `AssistantManager`, which is responsible for managing AI assistants through the OpenAI Assistants API. This includes creating, updating, retrieving, and integrating assistants into ongoing threads, allowing for more flexible and configurable AI assistant management. NOTE: Need more updates to make the parameters more flexible.
+
+
+
 ---
 
 ## Pending Tasks (To Do)
@@ -62,7 +70,5 @@
 - [ ] Ensure that all parallel executions work as intended with user-defined functions.
 
 ### 8. Video Demonstration
-- [ ] Create and add video demonstrations for Flexi Installation, and the demonstration of and alignment processes. (no public code here)
-
-### 9. Fix Console Scripts for Starter Files
-- [x] Fix the `console_scripts` to help users easily create starter files for Flexi RAG and Flexi Flask App with only two commands.
+- [ ] Create and add video demonstrations for Flexi Installation, 
+- [ ] Create and add video demonstration for AI Alignment. (no public code here)
