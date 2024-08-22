@@ -1,5 +1,17 @@
-# post_install/flexiai_rag_extension.py
+# flexiai/scripts/flexiai_rag_extension.py
 import os
+from pathlib import Path
+
+def _detect_project_root():
+    """
+    Detects the project root directory based on a known file or structure.
+
+    Returns:
+        str: The detected project root directory path.
+    """
+    current_dir = Path.cwd()
+    project_root = current_dir
+    return str(project_root)
 
 def create_logs_folder(project_root):
     log_folder = os.path.join(project_root, 'logs')
@@ -12,7 +24,7 @@ def create_user_flexiai_rag_folder(project_root):
     data_folder = os.path.join(dst_folder, 'data')
 
     # List of subdirectories to create inside 'data'
-    data_subfolders = ['audio', 'corpus', 'csv', 'images', 'vectors_store']
+    data_subfolders = ['audio', 'csv', 'images', 'vectors_store']
 
     if not os.path.exists(data_folder):
         os.makedirs(data_folder)
@@ -179,6 +191,11 @@ def create_env_file(project_root):
                 "# ============================================================================================ #\n"
                 "# Set this to 'openai' if you are using OpenAI, or 'azure' if you are using Azure OpenAI.\n"
                 "CREDENTIAL_TYPE=openai\n\n"
+                "# ============================================================================================ #\n"
+                "#                                      User Project Configuration                              #\n"
+                "# ============================================================================================ #\n"
+                "# Define the root directory of the user's project to integrate custom functions into FlexiAI.\n"
+                "USER_PROJECT_ROOT_DIR=/your/path/to_your/project_root_directory\n\n"
             )
         print(f"Created file: {env_file}")
 
@@ -195,85 +212,60 @@ def create_requirements_file(project_root):
                 "azure-mgmt-core==1.4.0\n"
                 "azure-mgmt-resource==23.1.1\n"
                 "bleach==6.1.0\n"
-                "build==1.2.1\n"
+                "blinker==1.8.2\n"
                 "certifi==2024.7.4\n"
                 "cffi==1.16.0\n"
                 "charset-normalizer==3.3.2\n"
                 "click==8.1.7\n"
                 "cryptography==43.0.0\n"
                 "distro==1.9.0\n"
-                "docutils==0.21.2\n"
+                "faiss-cpu==1.8.0\n"
                 "Flask==3.0.3\n"
-                "glob2==0.7\n"
                 "h11==0.14.0\n"
                 "httpcore==1.0.5\n"
                 "httpx==0.27.0\n"
                 "idna==3.7\n"
-                "importlib_metadata==8.2.0\n"
                 "iniconfig==2.0.0\n"
                 "isodate==0.6.1\n"
                 "itsdangerous==2.2.0\n"
-                "jaraco.classes==3.4.0\n"
-                "jaraco.context==5.3.0\n"
-                "jaraco.functools==4.0.1\n"
-                "jeepney==0.8.0\n"
                 "Jinja2==3.1.4\n"
-                "keyring==25.2.1\n"
-                "markdown-it-py==3.0.0\n"
+                "jiter==0.5.0\n"
                 "MarkupSafe==2.1.5\n"
-                "mdurl==0.1.2\n"
-                "more-itertools==10.3.0\n"
                 "msal==1.30.0\n"
                 "msal-extensions==1.2.0\n"
                 "nest-asyncio==1.6.0\n"
-                "nh3==0.2.18\n"
                 "numpy==1.26.4\n"
-                "nltk==3.8.1\n"
-                "faiss-cpu==1.8.0\n"
                 "openai==1.40.2\n"
                 "packaging==24.1\n"
                 "pillow==10.4.0\n"
-                "pip-upgrade-outdated==1.5\n"
-                "pkginfo==1.10.0\n"
                 "platformdirs==3.7.0\n"
                 "pluggy==1.5.0\n"
                 "portalocker==2.10.1\n"
                 "pycparser==2.22\n"
-                "pydantic==2.7.4\n"
+                "pydantic==2.8.2\n"
                 "pydantic-settings==2.3.3\n"
-                "pydantic_core==2.18.4\n"
-                "Pygments==2.18.0\n"
+                "pydantic_core==2.20.1\n"
                 "PyJWT==2.8.0\n"
-                "pyproject_hooks==1.1.0\n"
+                "pypandoc==1.13\n"
                 "pytest==8.3.1\n"
                 "python-dotenv==1.0.1\n"
-                "readme_renderer==44.0\n"
                 "requests==2.32.3\n"
-                "requests-toolbelt==1.0.0\n"
-                "rfc3986==2.0.0\n"
-                "rich==13.7.1\n"
-                "SecretStorage==3.3.3\n"
-                "setuptools==69.5.1\n"
                 "six==1.16.0\n"
                 "sniffio==1.3.1\n"
-                "soupsieve==2.5\n"
-                "tinycss2==1.3.0\n"
                 "tqdm==4.66.4\n"
                 "typing_extensions==4.12.2\n"
                 "urllib3==2.2.2\n"
                 "webencodings==0.5.1\n"
                 "Werkzeug==3.0.3\n"
-                "zipp==3.19.2\n"
             )
         print(f"Created file: {requirements_file}")
 
-if __name__ == '__main__':
-    project_root = os.getcwd()
+def setup_project():
+    project_root = _detect_project_root()
+    create_logs_folder(project_root)
+    create_user_flexiai_rag_folder(project_root)
+    create_env_file(project_root)
+    create_requirements_file(project_root)
 
-    try:
-        create_logs_folder(project_root)
-        create_user_flexiai_rag_folder(project_root)
-        create_env_file(project_root)
-        create_requirements_file(project_root)
-    except Exception as e:
-        print(f"Post-installation step failed: {e}")
+if __name__ == '__main__':
+    setup_project()
