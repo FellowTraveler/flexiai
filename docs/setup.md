@@ -73,6 +73,7 @@ Before proceeding with post-installation steps, you need to create and configure
 
 1. Create a `.env` file in the root of your project directory.
 2. Add the following content to the `.env` file, replacing placeholder values with your actual API keys and settings.
+3. Ensure that you set the path to your project, USER_PROJECT_ROOT_DIR, in the .env file before creating starter files with the setup commands.
 
 ### Example .env File
 
